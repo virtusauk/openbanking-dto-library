@@ -19,7 +19,7 @@ type Directdebits struct {
 	DirectdebitStatusCode                  string          `db:"DirectdebitStatusCode"`
 	NameServiceUser                        string          `db:"NameServiceUser"`
 	PreviousPaymentDatetime                time.Time       `db:"PreviousPaymentDatetime"`
-	PreviousPaymentAmount                  float           `db:"PreviousPaymentAmount"`
+	PreviousPaymentAmount                  float64         `db:"PreviousPaymentAmount"`
 	Currency                               string          `db:"Currency"`
 	MakerDate                              time.Time       `db:"MakerDate"`
 	CheckerDate                            time.Time      `db:"CheckerDate"`
