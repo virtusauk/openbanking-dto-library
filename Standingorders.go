@@ -1,10 +1,5 @@
 package dto
 
-import (
-	"database/sql"
-
-	"github.com/lib/pq"
-)
 
 type Standingorders struct {
 	StandingOrderId                        int             `db:"StandingOrderId"`
