@@ -1,5 +1,8 @@
 package dto
 
+import (
+	"time"
+)
 
 type Standingorders struct {
 	StandingOrderId                        int             `db:"StandingOrderId"`
