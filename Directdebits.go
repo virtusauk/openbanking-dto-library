@@ -28,5 +28,7 @@ type Directdebits struct {
 	ModifiedBy                             string         `db:"ModifiedBy"`
 	ModifiedDate                           time.Time     `db:"ModifiedDate"`
 	
-	Account  	          				  Account                  `db:"Account"`
+}
+func (Directdebits) TableName() string {
+	return "Directdebits"
 }
