@@ -445,7 +445,7 @@ func (o *PaymentCheque) Payment(mods ...qm.QueryMod) paymentInitiationQuery {
 }
 
 // Bank pointed to by the foreign key.
-func (o *PaymentCheque) Bank(mods ...qm.QueryMod) bankQuery {
+func (o *PaymentCheque) Bank1(mods ...qm.QueryMod) bankQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("bank_id=?", o.BankID),
 	}

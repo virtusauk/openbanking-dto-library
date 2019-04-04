@@ -851,7 +851,7 @@ func (q paymentQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bo
 }
 
 // PaymentMethodCode pointed to by the foreign key.
-func (o *Payment) PaymentMethodCode(mods ...qm.QueryMod) paymentMethodQuery {
+func (o *Payment) PaymentMethodCode1(mods ...qm.QueryMod) paymentMethodQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("payment_method_code=?", o.PaymentMethodCode),
 	}

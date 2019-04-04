@@ -401,7 +401,7 @@ func (q fundHistoricalReturnCovarianceQuery) Exists(ctx context.Context, exec bo
 }
 
 // FundID1 pointed to by the foreign key.
-func (o *FundHistoricalReturnCovariance) FundID1(mods ...qm.QueryMod) fundDescriptionQuery {
+func (o *FundHistoricalReturnCovariance) FundID11(mods ...qm.QueryMod) fundDescriptionQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("fund_id=?", o.FundID1),
 	}
@@ -415,7 +415,7 @@ func (o *FundHistoricalReturnCovariance) FundID1(mods ...qm.QueryMod) fundDescri
 }
 
 // FundID2 pointed to by the foreign key.
-func (o *FundHistoricalReturnCovariance) FundID2(mods ...qm.QueryMod) fundDescriptionQuery {
+func (o *FundHistoricalReturnCovariance) FundID22(mods ...qm.QueryMod) fundDescriptionQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("fund_id=?", o.FundID2),
 	}

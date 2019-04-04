@@ -454,7 +454,7 @@ func (q tFChargesTxnQuery) Exists(ctx context.Context, exec boil.ContextExecutor
 }
 
 // ChargeCode pointed to by the foreign key.
-func (o *TFChargesTxn) ChargeCode(mods ...qm.QueryMod) tFChargeCodeQuery {
+func (o *TFChargesTxn) ChargeCode1(mods ...qm.QueryMod) tFChargeCodeQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("charge_code=?", o.ChargeCode),
 	}

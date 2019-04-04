@@ -476,7 +476,7 @@ func (o *JournalEntryLine) Account(mods ...qm.QueryMod) accountQuery {
 }
 
 // GLAccountCode pointed to by the foreign key.
-func (o *JournalEntryLine) GLAccountCode(mods ...qm.QueryMod) gLAccountQuery {
+func (o *JournalEntryLine) GLAccountCode1(mods ...qm.QueryMod) gLAccountQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("gl_code=?", o.GLAccountCode),
 	}

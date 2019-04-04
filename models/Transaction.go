@@ -775,7 +775,7 @@ func (o *Transaction) Bank(mods ...qm.QueryMod) bankQuery {
 }
 
 // CurrencyCode pointed to by the foreign key.
-func (o *Transaction) CurrencyCode(mods ...qm.QueryMod) currencyMasterQuery {
+func (o *Transaction) CurrencyCode1(mods ...qm.QueryMod) currencyMasterQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("currency_id=?", o.CurrencyCode),
 	}

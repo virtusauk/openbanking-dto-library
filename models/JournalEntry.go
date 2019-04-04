@@ -434,7 +434,7 @@ func (q journalEntryQuery) Exists(ctx context.Context, exec boil.ContextExecutor
 }
 
 // PostedBankKey pointed to by the foreign key.
-func (o *JournalEntry) PostedBankKey(mods ...qm.QueryMod) bankQuery {
+func (o *JournalEntry) PostedBankKey1(mods ...qm.QueryMod) bankQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("bank_id=?", o.PostedBankKey),
 	}
@@ -448,7 +448,7 @@ func (o *JournalEntry) PostedBankKey(mods ...qm.QueryMod) bankQuery {
 }
 
 // PostedBranchKey pointed to by the foreign key.
-func (o *JournalEntry) PostedBranchKey(mods ...qm.QueryMod) branchQuery {
+func (o *JournalEntry) PostedBranchKey1(mods ...qm.QueryMod) branchQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("branch_id=?", o.PostedBranchKey),
 	}
