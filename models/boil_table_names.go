@@ -41,12 +41,15 @@ var TableNames = struct {
 	DocumentType                   string
 	Emails                         string
 	ExchangeRate                   string
+	FilePayment                    string
 	FiscalYear                     string
+	FundConfirmation               string
 	FundDescription                string
 	FundHistoricalReturn           string
 	FundHistoricalReturnCovariance string
 	FundPrice                      string
 	FxDeals                        string
+	FxPayment                      string
 	GLAccount                      string
 	Gateway                        string
 	GoalMaster                     string
@@ -64,6 +67,8 @@ var TableNames = struct {
 	LoanSchedule                   string
 	MccCode                        string
 	Notifications                  string
+	OBPFundConfirmationConsent     string
+	OBPPaymentConsent              string
 	Offer                          string
 	Organization                   string
 	OrganizationContacts           string
@@ -73,9 +78,11 @@ var TableNames = struct {
 	Payment                        string
 	PaymentAch                     string
 	PaymentBill                    string
+	PaymentCharges                 string
 	PaymentCheque                  string
 	PaymentFxTrade                 string
 	PaymentGateway                 string
+	PaymentInitiation              string
 	PaymentLimit                   string
 	PaymentLoan                    string
 	PaymentMessage                 string
@@ -177,12 +184,15 @@ var TableNames = struct {
 	DocumentType:                   "DocumentType",
 	Emails:                         "Emails",
 	ExchangeRate:                   "ExchangeRate",
+	FilePayment:                    "FilePayment",
 	FiscalYear:                     "FiscalYear",
+	FundConfirmation:               "FundConfirmation",
 	FundDescription:                "FundDescription",
 	FundHistoricalReturn:           "FundHistoricalReturn",
 	FundHistoricalReturnCovariance: "FundHistoricalReturnCovariance",
 	FundPrice:                      "FundPrice",
 	FxDeals:                        "FxDeals",
+	FxPayment:                      "FxPayment",
 	GLAccount:                      "GLAccount",
 	Gateway:                        "Gateway",
 	GoalMaster:                     "GoalMaster",
@@ -200,6 +210,8 @@ var TableNames = struct {
 	LoanSchedule:                   "LoanSchedule",
 	MccCode:                        "MccCode",
 	Notifications:                  "Notifications",
+	OBPFundConfirmationConsent:     "OBPFundConfirmationConsent",
+	OBPPaymentConsent:              "OBPPaymentConsent",
 	Offer:                          "Offer",
 	Organization:                   "Organization",
 	OrganizationContacts:           "OrganizationContacts",
@@ -209,9 +221,11 @@ var TableNames = struct {
 	Payment:                        "Payment",
 	PaymentAch:                     "PaymentAch",
 	PaymentBill:                    "PaymentBill",
+	PaymentCharges:                 "PaymentCharges",
 	PaymentCheque:                  "PaymentCheque",
 	PaymentFxTrade:                 "PaymentFxTrade",
 	PaymentGateway:                 "PaymentGateway",
+	PaymentInitiation:              "PaymentInitiation",
 	PaymentLimit:                   "PaymentLimit",
 	PaymentLoan:                    "PaymentLoan",
 	PaymentMessage:                 "PaymentMessage",

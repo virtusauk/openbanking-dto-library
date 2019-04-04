@@ -215,8 +215,8 @@ type addressL struct{}
 
 var (
 	addressColumns               = []string{"address_id", "party_id", "bank_id", "address_type", "addressline1", "addressline2", "addressline3", "addressline4", "addressline5", "addressline6", "street_name", "building_number", "postcode", "goneaway", "pc_day", "pc_time", "country_sub_division", "country_code", "city", "region", "piority_in_list", "latitude", "longitude", "default_address", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	addressColumnsWithoutDefault = []string{"party_id", "bank_id", "addressline1", "addressline2", "addressline3", "addressline4", "addressline5", "addressline6", "street_name", "building_number", "postcode", "goneaway", "pc_day", "pc_time", "country_sub_division", "country_code", "city", "region", "piority_in_list", "latitude", "longitude", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	addressColumnsWithDefault    = []string{"address_id", "address_type", "default_address"}
+	addressColumnsWithoutDefault = []string{"party_id", "bank_id", "address_type", "addressline1", "addressline2", "addressline3", "addressline4", "addressline5", "addressline6", "street_name", "building_number", "postcode", "goneaway", "pc_day", "pc_time", "country_sub_division", "country_code", "city", "region", "piority_in_list", "latitude", "longitude", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	addressColumnsWithDefault    = []string{"address_id", "default_address"}
 	addressPrimaryKeyColumns     = []string{"address_id"}
 )
 

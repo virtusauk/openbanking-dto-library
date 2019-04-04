@@ -31,7 +31,11 @@ type Payment struct {
 	PaymentSubmissionID                   null.String       `boil:"payment_submission_id" json:"payment_submission_id,omitempty" toml:"payment_submission_id" yaml:"payment_submission_id,omitempty"`
 	SchemePaymentID                       null.String       `boil:"scheme_payment_id" json:"scheme_payment_id,omitempty" toml:"scheme_payment_id" yaml:"scheme_payment_id,omitempty"`
 	InstructionIdentification             string            `boil:"instruction_identification" json:"instruction_identification" toml:"instruction_identification" yaml:"instruction_identification"`
+	InstructionAmount                     types.NullDecimal `boil:"instruction_amount" json:"instruction_amount,omitempty" toml:"instruction_amount" yaml:"instruction_amount,omitempty"`
+	InstructionCurrency                   null.String       `boil:"instruction_currency" json:"instruction_currency,omitempty" toml:"instruction_currency" yaml:"instruction_currency,omitempty"`
 	EndToEndIdentification                string            `boil:"end_to_end_identification" json:"end_to_end_identification" toml:"end_to_end_identification" yaml:"end_to_end_identification"`
+	LocalInstrument                       null.String       `boil:"local_instrument" json:"local_instrument,omitempty" toml:"local_instrument" yaml:"local_instrument,omitempty"`
+	InstructionPriority                   null.String       `boil:"instruction_priority" json:"instruction_priority,omitempty" toml:"instruction_priority" yaml:"instruction_priority,omitempty"`
 	TransactionAmount                     types.Decimal     `boil:"transaction_amount" json:"transaction_amount" toml:"transaction_amount" yaml:"transaction_amount"`
 	TransactionCurrency                   string            `boil:"transaction_currency" json:"transaction_currency" toml:"transaction_currency" yaml:"transaction_currency"`
 	FromBankID                            null.Int          `boil:"from_bank_id" json:"from_bank_id,omitempty" toml:"from_bank_id" yaml:"from_bank_id,omitempty"`
@@ -52,6 +56,15 @@ type Payment struct {
 	CreditorAccountIdentification         string            `boil:"creditor_account_identification" json:"creditor_account_identification" toml:"creditor_account_identification" yaml:"creditor_account_identification"`
 	CreditorAccountName                   string            `boil:"creditor_account_name" json:"creditor_account_name" toml:"creditor_account_name" yaml:"creditor_account_name"`
 	CreditorSecondaryIdentification       string            `boil:"creditor_secondary_identification" json:"creditor_secondary_identification" toml:"creditor_secondary_identification" yaml:"creditor_secondary_identification"`
+	CreditorAddressType                   null.String       `boil:"creditor_address_type" json:"creditor_address_type,omitempty" toml:"creditor_address_type" yaml:"creditor_address_type,omitempty"`
+	CreditorDepartment                    null.String       `boil:"creditor_department" json:"creditor_department,omitempty" toml:"creditor_department" yaml:"creditor_department,omitempty"`
+	CreditorStreetName                    null.String       `boil:"creditor_street_name" json:"creditor_street_name,omitempty" toml:"creditor_street_name" yaml:"creditor_street_name,omitempty"`
+	CreditorBuildingNumber                null.String       `boil:"creditor_building_number" json:"creditor_building_number,omitempty" toml:"creditor_building_number" yaml:"creditor_building_number,omitempty"`
+	CreditorTownname                      null.String       `boil:"creditor_townname" json:"creditor_townname,omitempty" toml:"creditor_townname" yaml:"creditor_townname,omitempty"`
+	CreditorAddressline1                  null.String       `boil:"creditor_addressline1" json:"creditor_addressline1,omitempty" toml:"creditor_addressline1" yaml:"creditor_addressline1,omitempty"`
+	CreditorPostcode                      null.String       `boil:"creditor_postcode" json:"creditor_postcode,omitempty" toml:"creditor_postcode" yaml:"creditor_postcode,omitempty"`
+	CreditorCountrysubdivision            null.String       `boil:"creditor_countrysubdivision" json:"creditor_countrysubdivision,omitempty" toml:"creditor_countrysubdivision" yaml:"creditor_countrysubdivision,omitempty"`
+	CreditorCountry                       null.String       `boil:"creditor_country" json:"creditor_country,omitempty" toml:"creditor_country" yaml:"creditor_country,omitempty"`
 	RemittanceReference                   null.String       `boil:"remittance_reference" json:"remittance_reference,omitempty" toml:"remittance_reference" yaml:"remittance_reference,omitempty"`
 	RemittanceUnstructuredReference       null.String       `boil:"remittance_unstructured_reference" json:"remittance_unstructured_reference,omitempty" toml:"remittance_unstructured_reference" yaml:"remittance_unstructured_reference,omitempty"`
 	RiskPaymentContextCode                null.String       `boil:"risk_payment_context_code" json:"risk_payment_context_code,omitempty" toml:"risk_payment_context_code" yaml:"risk_payment_context_code,omitempty"`
@@ -75,16 +88,16 @@ type Payment struct {
 	PaymentNotes                          null.String       `boil:"payment_notes" json:"payment_notes,omitempty" toml:"payment_notes" yaml:"payment_notes,omitempty"`
 	PaymentMethod                         null.String       `boil:"payment_method" json:"payment_method,omitempty" toml:"payment_method" yaml:"payment_method,omitempty"`
 	PaymentMode                           null.String       `boil:"payment_mode" json:"payment_mode,omitempty" toml:"payment_mode" yaml:"payment_mode,omitempty"`
-	PaymentMethodCode                     null.Int          `boil:"payment_method_code" json:"payment_method_code,omitempty" toml:"payment_method_code" yaml:"payment_method_code,omitempty"`
 	PaymentType                           null.String       `boil:"payment_type" json:"payment_type,omitempty" toml:"payment_type" yaml:"payment_type,omitempty"`
+	PaymentMethodCode                     null.Int          `boil:"payment_method_code" json:"payment_method_code,omitempty" toml:"payment_method_code" yaml:"payment_method_code,omitempty"`
 	TransferType                          null.String       `boil:"transfer_type" json:"transfer_type,omitempty" toml:"transfer_type" yaml:"transfer_type,omitempty"`
 	TransferMode                          null.String       `boil:"transfer_mode" json:"transfer_mode,omitempty" toml:"transfer_mode" yaml:"transfer_mode,omitempty"`
 	CreationDateTime                      null.Time         `boil:"creation_date_time" json:"creation_date_time,omitempty" toml:"creation_date_time" yaml:"creation_date_time,omitempty"`
-	AuthorizationStatus                   null.String       `boil:"authorization_status" json:"authorization_status,omitempty" toml:"authorization_status" yaml:"authorization_status,omitempty"`
+	SecondaryIdentification               null.String       `boil:"secondary_identification" json:"secondary_identification,omitempty" toml:"secondary_identification" yaml:"secondary_identification,omitempty"`
 	AuthorizationDecision                 null.String       `boil:"authorization_decision" json:"authorization_decision,omitempty" toml:"authorization_decision" yaml:"authorization_decision,omitempty"`
 	AuthorizationNumber                   null.String       `boil:"authorization_number" json:"authorization_number,omitempty" toml:"authorization_number" yaml:"authorization_number,omitempty"`
 	AuthorizationResponse                 null.String       `boil:"authorization_response" json:"authorization_response,omitempty" toml:"authorization_response" yaml:"authorization_response,omitempty"`
-	SecondaryIdentification               null.String       `boil:"secondary_identification" json:"secondary_identification,omitempty" toml:"secondary_identification" yaml:"secondary_identification,omitempty"`
+	SupplymentaryData                     null.String       `boil:"supplymentary_data" json:"supplymentary_data,omitempty" toml:"supplymentary_data" yaml:"supplymentary_data,omitempty"`
 	OrderNumber                           null.String       `boil:"order_number" json:"order_number,omitempty" toml:"order_number" yaml:"order_number,omitempty"`
 	OrderDateTime                         null.Time         `boil:"order_date_time" json:"order_date_time,omitempty" toml:"order_date_time" yaml:"order_date_time,omitempty"`
 	OrderDescription                      null.String       `boil:"order_description" json:"order_description,omitempty" toml:"order_description" yaml:"order_description,omitempty"`
@@ -125,7 +138,11 @@ var PaymentColumns = struct {
 	PaymentSubmissionID                   string
 	SchemePaymentID                       string
 	InstructionIdentification             string
+	InstructionAmount                     string
+	InstructionCurrency                   string
 	EndToEndIdentification                string
+	LocalInstrument                       string
+	InstructionPriority                   string
 	TransactionAmount                     string
 	TransactionCurrency                   string
 	FromBankID                            string
@@ -146,6 +163,15 @@ var PaymentColumns = struct {
 	CreditorAccountIdentification         string
 	CreditorAccountName                   string
 	CreditorSecondaryIdentification       string
+	CreditorAddressType                   string
+	CreditorDepartment                    string
+	CreditorStreetName                    string
+	CreditorBuildingNumber                string
+	CreditorTownname                      string
+	CreditorAddressline1                  string
+	CreditorPostcode                      string
+	CreditorCountrysubdivision            string
+	CreditorCountry                       string
 	RemittanceReference                   string
 	RemittanceUnstructuredReference       string
 	RiskPaymentContextCode                string
@@ -169,16 +195,16 @@ var PaymentColumns = struct {
 	PaymentNotes                          string
 	PaymentMethod                         string
 	PaymentMode                           string
-	PaymentMethodCode                     string
 	PaymentType                           string
+	PaymentMethodCode                     string
 	TransferType                          string
 	TransferMode                          string
 	CreationDateTime                      string
-	AuthorizationStatus                   string
+	SecondaryIdentification               string
 	AuthorizationDecision                 string
 	AuthorizationNumber                   string
 	AuthorizationResponse                 string
-	SecondaryIdentification               string
+	SupplymentaryData                     string
 	OrderNumber                           string
 	OrderDateTime                         string
 	OrderDescription                      string
@@ -214,7 +240,11 @@ var PaymentColumns = struct {
 	PaymentSubmissionID:                   "payment_submission_id",
 	SchemePaymentID:                       "scheme_payment_id",
 	InstructionIdentification:             "instruction_identification",
+	InstructionAmount:                     "instruction_amount",
+	InstructionCurrency:                   "instruction_currency",
 	EndToEndIdentification:                "end_to_end_identification",
+	LocalInstrument:                       "local_instrument",
+	InstructionPriority:                   "instruction_priority",
 	TransactionAmount:                     "transaction_amount",
 	TransactionCurrency:                   "transaction_currency",
 	FromBankID:                            "from_bank_id",
@@ -235,6 +265,15 @@ var PaymentColumns = struct {
 	CreditorAccountIdentification:         "creditor_account_identification",
 	CreditorAccountName:                   "creditor_account_name",
 	CreditorSecondaryIdentification:       "creditor_secondary_identification",
+	CreditorAddressType:                   "creditor_address_type",
+	CreditorDepartment:                    "creditor_department",
+	CreditorStreetName:                    "creditor_street_name",
+	CreditorBuildingNumber:                "creditor_building_number",
+	CreditorTownname:                      "creditor_townname",
+	CreditorAddressline1:                  "creditor_addressline1",
+	CreditorPostcode:                      "creditor_postcode",
+	CreditorCountrysubdivision:            "creditor_countrysubdivision",
+	CreditorCountry:                       "creditor_country",
 	RemittanceReference:                   "remittance_reference",
 	RemittanceUnstructuredReference:       "remittance_unstructured_reference",
 	RiskPaymentContextCode:                "risk_payment_context_code",
@@ -258,16 +297,16 @@ var PaymentColumns = struct {
 	PaymentNotes:                          "payment_notes",
 	PaymentMethod:                         "payment_method",
 	PaymentMode:                           "payment_mode",
-	PaymentMethodCode:                     "payment_method_code",
 	PaymentType:                           "payment_type",
+	PaymentMethodCode:                     "payment_method_code",
 	TransferType:                          "transfer_type",
 	TransferMode:                          "transfer_mode",
 	CreationDateTime:                      "creation_date_time",
-	AuthorizationStatus:                   "authorization_status",
+	SecondaryIdentification:               "secondary_identification",
 	AuthorizationDecision:                 "authorization_decision",
 	AuthorizationNumber:                   "authorization_number",
 	AuthorizationResponse:                 "authorization_response",
-	SecondaryIdentification:               "secondary_identification",
+	SupplymentaryData:                     "supplymentary_data",
 	OrderNumber:                           "order_number",
 	OrderDateTime:                         "order_date_time",
 	OrderDescription:                      "order_description",
@@ -307,7 +346,11 @@ var PaymentWhere = struct {
 	PaymentSubmissionID                   whereHelpernull_String
 	SchemePaymentID                       whereHelpernull_String
 	InstructionIdentification             whereHelperstring
+	InstructionAmount                     whereHelpertypes_NullDecimal
+	InstructionCurrency                   whereHelpernull_String
 	EndToEndIdentification                whereHelperstring
+	LocalInstrument                       whereHelpernull_String
+	InstructionPriority                   whereHelpernull_String
 	TransactionAmount                     whereHelpertypes_Decimal
 	TransactionCurrency                   whereHelperstring
 	FromBankID                            whereHelpernull_Int
@@ -328,6 +371,15 @@ var PaymentWhere = struct {
 	CreditorAccountIdentification         whereHelperstring
 	CreditorAccountName                   whereHelperstring
 	CreditorSecondaryIdentification       whereHelperstring
+	CreditorAddressType                   whereHelpernull_String
+	CreditorDepartment                    whereHelpernull_String
+	CreditorStreetName                    whereHelpernull_String
+	CreditorBuildingNumber                whereHelpernull_String
+	CreditorTownname                      whereHelpernull_String
+	CreditorAddressline1                  whereHelpernull_String
+	CreditorPostcode                      whereHelpernull_String
+	CreditorCountrysubdivision            whereHelpernull_String
+	CreditorCountry                       whereHelpernull_String
 	RemittanceReference                   whereHelpernull_String
 	RemittanceUnstructuredReference       whereHelpernull_String
 	RiskPaymentContextCode                whereHelpernull_String
@@ -351,16 +403,16 @@ var PaymentWhere = struct {
 	PaymentNotes                          whereHelpernull_String
 	PaymentMethod                         whereHelpernull_String
 	PaymentMode                           whereHelpernull_String
-	PaymentMethodCode                     whereHelpernull_Int
 	PaymentType                           whereHelpernull_String
+	PaymentMethodCode                     whereHelpernull_Int
 	TransferType                          whereHelpernull_String
 	TransferMode                          whereHelpernull_String
 	CreationDateTime                      whereHelpernull_Time
-	AuthorizationStatus                   whereHelpernull_String
+	SecondaryIdentification               whereHelpernull_String
 	AuthorizationDecision                 whereHelpernull_String
 	AuthorizationNumber                   whereHelpernull_String
 	AuthorizationResponse                 whereHelpernull_String
-	SecondaryIdentification               whereHelpernull_String
+	SupplymentaryData                     whereHelpernull_String
 	OrderNumber                           whereHelpernull_String
 	OrderDateTime                         whereHelpernull_Time
 	OrderDescription                      whereHelpernull_String
@@ -396,7 +448,11 @@ var PaymentWhere = struct {
 	PaymentSubmissionID:                   whereHelpernull_String{field: `payment_submission_id`},
 	SchemePaymentID:                       whereHelpernull_String{field: `scheme_payment_id`},
 	InstructionIdentification:             whereHelperstring{field: `instruction_identification`},
+	InstructionAmount:                     whereHelpertypes_NullDecimal{field: `instruction_amount`},
+	InstructionCurrency:                   whereHelpernull_String{field: `instruction_currency`},
 	EndToEndIdentification:                whereHelperstring{field: `end_to_end_identification`},
+	LocalInstrument:                       whereHelpernull_String{field: `local_instrument`},
+	InstructionPriority:                   whereHelpernull_String{field: `instruction_priority`},
 	TransactionAmount:                     whereHelpertypes_Decimal{field: `transaction_amount`},
 	TransactionCurrency:                   whereHelperstring{field: `transaction_currency`},
 	FromBankID:                            whereHelpernull_Int{field: `from_bank_id`},
@@ -417,6 +473,15 @@ var PaymentWhere = struct {
 	CreditorAccountIdentification:         whereHelperstring{field: `creditor_account_identification`},
 	CreditorAccountName:                   whereHelperstring{field: `creditor_account_name`},
 	CreditorSecondaryIdentification:       whereHelperstring{field: `creditor_secondary_identification`},
+	CreditorAddressType:                   whereHelpernull_String{field: `creditor_address_type`},
+	CreditorDepartment:                    whereHelpernull_String{field: `creditor_department`},
+	CreditorStreetName:                    whereHelpernull_String{field: `creditor_street_name`},
+	CreditorBuildingNumber:                whereHelpernull_String{field: `creditor_building_number`},
+	CreditorTownname:                      whereHelpernull_String{field: `creditor_townname`},
+	CreditorAddressline1:                  whereHelpernull_String{field: `creditor_addressline1`},
+	CreditorPostcode:                      whereHelpernull_String{field: `creditor_postcode`},
+	CreditorCountrysubdivision:            whereHelpernull_String{field: `creditor_countrysubdivision`},
+	CreditorCountry:                       whereHelpernull_String{field: `creditor_country`},
 	RemittanceReference:                   whereHelpernull_String{field: `remittance_reference`},
 	RemittanceUnstructuredReference:       whereHelpernull_String{field: `remittance_unstructured_reference`},
 	RiskPaymentContextCode:                whereHelpernull_String{field: `risk_payment_context_code`},
@@ -440,16 +505,16 @@ var PaymentWhere = struct {
 	PaymentNotes:                          whereHelpernull_String{field: `payment_notes`},
 	PaymentMethod:                         whereHelpernull_String{field: `payment_method`},
 	PaymentMode:                           whereHelpernull_String{field: `payment_mode`},
-	PaymentMethodCode:                     whereHelpernull_Int{field: `payment_method_code`},
 	PaymentType:                           whereHelpernull_String{field: `payment_type`},
+	PaymentMethodCode:                     whereHelpernull_Int{field: `payment_method_code`},
 	TransferType:                          whereHelpernull_String{field: `transfer_type`},
 	TransferMode:                          whereHelpernull_String{field: `transfer_mode`},
 	CreationDateTime:                      whereHelpernull_Time{field: `creation_date_time`},
-	AuthorizationStatus:                   whereHelpernull_String{field: `authorization_status`},
+	SecondaryIdentification:               whereHelpernull_String{field: `secondary_identification`},
 	AuthorizationDecision:                 whereHelpernull_String{field: `authorization_decision`},
 	AuthorizationNumber:                   whereHelpernull_String{field: `authorization_number`},
 	AuthorizationResponse:                 whereHelpernull_String{field: `authorization_response`},
-	SecondaryIdentification:               whereHelpernull_String{field: `secondary_identification`},
+	SupplymentaryData:                     whereHelpernull_String{field: `supplymentary_data`},
 	OrderNumber:                           whereHelpernull_String{field: `order_number`},
 	OrderDateTime:                         whereHelpernull_Time{field: `order_date_time`},
 	OrderDescription:                      whereHelpernull_String{field: `order_description`},
@@ -483,40 +548,16 @@ var PaymentWhere = struct {
 // PaymentRels is where relationship names are stored.
 var PaymentRels = struct {
 	PaymentMethodCode      string
-	PaymentPaymentAches    string
-	PaymentPaymentBills    string
-	PaymentPaymentCheques  string
-	PaymentPaymentFxTrades string
 	PaymentPaymentGateways string
-	PaymentPaymentLoans    string
-	PaymentPaymentMessages string
-	PaymentPaymentRtps     string
-	PaymentPaymentWires    string
 }{
 	PaymentMethodCode:      "PaymentMethodCode",
-	PaymentPaymentAches:    "PaymentPaymentAches",
-	PaymentPaymentBills:    "PaymentPaymentBills",
-	PaymentPaymentCheques:  "PaymentPaymentCheques",
-	PaymentPaymentFxTrades: "PaymentPaymentFxTrades",
 	PaymentPaymentGateways: "PaymentPaymentGateways",
-	PaymentPaymentLoans:    "PaymentPaymentLoans",
-	PaymentPaymentMessages: "PaymentPaymentMessages",
-	PaymentPaymentRtps:     "PaymentPaymentRtps",
-	PaymentPaymentWires:    "PaymentPaymentWires",
 }
 
 // paymentR is where relationships are stored.
 type paymentR struct {
 	PaymentMethodCode      *PaymentMethod
-	PaymentPaymentAches    PaymentAchSlice
-	PaymentPaymentBills    PaymentBillSlice
-	PaymentPaymentCheques  PaymentChequeSlice
-	PaymentPaymentFxTrades PaymentFxTradeSlice
 	PaymentPaymentGateways PaymentGatewaySlice
-	PaymentPaymentLoans    PaymentLoanSlice
-	PaymentPaymentMessages PaymentMessageSlice
-	PaymentPaymentRtps     PaymentRtpSlice
-	PaymentPaymentWires    PaymentWireSlice
 }
 
 // NewStruct creates a new relationship struct
@@ -528,8 +569,8 @@ func (*paymentR) NewStruct() *paymentR {
 type paymentL struct{}
 
 var (
-	paymentColumns               = []string{"payment_id", "value_date", "payment_ref_id", "payment_submission_id", "scheme_payment_id", "instruction_identification", "end_to_end_identification", "transaction_amount", "transaction_currency", "from_bank_id", "debtor_bank", "from_party_id", "debtor_agent_scheme_name", "debtor_agent_identification", "debtor_account_schemename", "debtor_account_identification", "debtor_account_secondary_identification", "debtor_account_name", "creditor_bank", "to_party_id", "to_bank_id", "creditor_agent_schemename", "creditor_agent_identification", "creditor_account_schemename", "creditor_account_identification", "creditor_account_name", "creditor_secondary_identification", "remittance_reference", "remittance_unstructured_reference", "risk_payment_context_code", "risk_merchant_category_code", "risk_merchant_customer_identification", "risk_delivery_address_line1", "risk_delivery_address_line2", "risk_delivery_address_streetName", "risk_delivery_address_building_number", "risk_delivery_address_postcode", "risk_delivery_address_townname", "risk_delivery_address_county_subdivision", "risk_delivery_address_country", "internal_status", "internal_status_error_code", "payment_status", "payment_setup_status", "payment_submission_status", "gateway_id", "payment_period", "payment_notes", "payment_method", "payment_mode", "payment_method_code", "payment_type", "transfer_type", "transfer_mode", "creation_date_time", "authorization_status", "authorization_decision", "authorization_number", "authorization_response", "secondary_identification", "order_number", "order_date_time", "order_description", "order_unit_count", "order_currency", "order_currency_exponent", "order_commission_percentage", "order_discount_percentage", "order_vat_percentage", "order_gross_amount", "order_net_amount", "order_vat_amount", "order_home_currency", "order_home_currency_exponent", "order_home_currency_order_amount", "order_exchange_rate", "order_recurring_payment", "order_recurring_frequency", "order_installments", "order_recurring_expiry", "order_recurring_payment_subscription_name", "order_recurring_payment_subscription_code", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	paymentColumnsWithoutDefault = []string{"value_date", "payment_ref_id", "payment_submission_id", "scheme_payment_id", "instruction_identification", "end_to_end_identification", "transaction_amount", "transaction_currency", "from_bank_id", "debtor_bank", "from_party_id", "debtor_agent_scheme_name", "debtor_agent_identification", "debtor_account_schemename", "debtor_account_identification", "debtor_account_secondary_identification", "debtor_account_name", "creditor_bank", "to_party_id", "to_bank_id", "creditor_agent_schemename", "creditor_agent_identification", "creditor_account_schemename", "creditor_account_identification", "creditor_account_name", "creditor_secondary_identification", "remittance_reference", "remittance_unstructured_reference", "risk_payment_context_code", "risk_merchant_category_code", "risk_merchant_customer_identification", "risk_delivery_address_line1", "risk_delivery_address_line2", "risk_delivery_address_streetName", "risk_delivery_address_building_number", "risk_delivery_address_postcode", "risk_delivery_address_townname", "risk_delivery_address_county_subdivision", "risk_delivery_address_country", "internal_status", "internal_status_error_code", "payment_status", "payment_setup_status", "payment_submission_status", "gateway_id", "payment_period", "payment_notes", "payment_method", "payment_mode", "payment_method_code", "payment_type", "transfer_type", "transfer_mode", "creation_date_time", "authorization_status", "authorization_decision", "authorization_number", "authorization_response", "secondary_identification", "order_number", "order_date_time", "order_description", "order_unit_count", "order_currency", "order_currency_exponent", "order_commission_percentage", "order_discount_percentage", "order_vat_percentage", "order_gross_amount", "order_net_amount", "order_vat_amount", "order_home_currency", "order_home_currency_exponent", "order_home_currency_order_amount", "order_exchange_rate", "order_recurring_payment", "order_recurring_frequency", "order_installments", "order_recurring_expiry", "order_recurring_payment_subscription_name", "order_recurring_payment_subscription_code", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	paymentColumns               = []string{"payment_id", "value_date", "payment_ref_id", "payment_submission_id", "scheme_payment_id", "instruction_identification", "instruction_amount", "instruction_currency", "end_to_end_identification", "local_instrument", "instruction_priority", "transaction_amount", "transaction_currency", "from_bank_id", "debtor_bank", "from_party_id", "debtor_agent_scheme_name", "debtor_agent_identification", "debtor_account_schemename", "debtor_account_identification", "debtor_account_secondary_identification", "debtor_account_name", "creditor_bank", "to_party_id", "to_bank_id", "creditor_agent_schemename", "creditor_agent_identification", "creditor_account_schemename", "creditor_account_identification", "creditor_account_name", "creditor_secondary_identification", "creditor_address_type", "creditor_department", "creditor_street_name", "creditor_building_number", "creditor_townname", "creditor_addressline1", "creditor_postcode", "creditor_countrysubdivision", "creditor_country", "remittance_reference", "remittance_unstructured_reference", "risk_payment_context_code", "risk_merchant_category_code", "risk_merchant_customer_identification", "risk_delivery_address_line1", "risk_delivery_address_line2", "risk_delivery_address_streetName", "risk_delivery_address_building_number", "risk_delivery_address_postcode", "risk_delivery_address_townname", "risk_delivery_address_county_subdivision", "risk_delivery_address_country", "internal_status", "internal_status_error_code", "payment_status", "payment_setup_status", "payment_submission_status", "gateway_id", "payment_period", "payment_notes", "payment_method", "payment_mode", "payment_type", "payment_method_code", "transfer_type", "transfer_mode", "creation_date_time", "secondary_identification", "authorization_decision", "authorization_number", "authorization_response", "supplymentary_data", "order_number", "order_date_time", "order_description", "order_unit_count", "order_currency", "order_currency_exponent", "order_commission_percentage", "order_discount_percentage", "order_vat_percentage", "order_gross_amount", "order_net_amount", "order_vat_amount", "order_home_currency", "order_home_currency_exponent", "order_home_currency_order_amount", "order_exchange_rate", "order_recurring_payment", "order_recurring_frequency", "order_installments", "order_recurring_expiry", "order_recurring_payment_subscription_name", "order_recurring_payment_subscription_code", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	paymentColumnsWithoutDefault = []string{"value_date", "payment_ref_id", "payment_submission_id", "scheme_payment_id", "instruction_identification", "instruction_amount", "instruction_currency", "end_to_end_identification", "local_instrument", "instruction_priority", "transaction_amount", "transaction_currency", "from_bank_id", "debtor_bank", "from_party_id", "debtor_agent_scheme_name", "debtor_agent_identification", "debtor_account_schemename", "debtor_account_identification", "debtor_account_secondary_identification", "debtor_account_name", "creditor_bank", "to_party_id", "to_bank_id", "creditor_agent_schemename", "creditor_agent_identification", "creditor_account_schemename", "creditor_account_identification", "creditor_account_name", "creditor_secondary_identification", "creditor_address_type", "creditor_department", "creditor_street_name", "creditor_building_number", "creditor_townname", "creditor_addressline1", "creditor_postcode", "creditor_countrysubdivision", "creditor_country", "remittance_reference", "remittance_unstructured_reference", "risk_payment_context_code", "risk_merchant_category_code", "risk_merchant_customer_identification", "risk_delivery_address_line1", "risk_delivery_address_line2", "risk_delivery_address_streetName", "risk_delivery_address_building_number", "risk_delivery_address_postcode", "risk_delivery_address_townname", "risk_delivery_address_county_subdivision", "risk_delivery_address_country", "internal_status", "internal_status_error_code", "payment_status", "payment_setup_status", "payment_submission_status", "gateway_id", "payment_period", "payment_notes", "payment_method", "payment_mode", "payment_type", "payment_method_code", "transfer_type", "transfer_mode", "creation_date_time", "secondary_identification", "authorization_decision", "authorization_number", "authorization_response", "supplymentary_data", "order_number", "order_date_time", "order_description", "order_unit_count", "order_currency", "order_currency_exponent", "order_commission_percentage", "order_discount_percentage", "order_vat_percentage", "order_gross_amount", "order_net_amount", "order_vat_amount", "order_home_currency", "order_home_currency_exponent", "order_home_currency_order_amount", "order_exchange_rate", "order_recurring_payment", "order_recurring_frequency", "order_installments", "order_recurring_expiry", "order_recurring_payment_subscription_name", "order_recurring_payment_subscription_code", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	paymentColumnsWithDefault    = []string{"payment_id"}
 	paymentPrimaryKeyColumns     = []string{"payment_id"}
 )
@@ -810,7 +851,7 @@ func (q paymentQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bo
 }
 
 // PaymentMethodCode pointed to by the foreign key.
-func (o *Payment) PaymentMethodCode1(mods ...qm.QueryMod) paymentMethodQuery {
+func (o *Payment) PaymentMethodCode(mods ...qm.QueryMod) paymentMethodQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("payment_method_code=?", o.PaymentMethodCode),
 	}
@@ -819,90 +860,6 @@ func (o *Payment) PaymentMethodCode1(mods ...qm.QueryMod) paymentMethodQuery {
 
 	query := PaymentMethods(queryMods...)
 	queries.SetFrom(query.Query, "`PaymentMethod`")
-
-	return query
-}
-
-// PaymentPaymentAches retrieves all the PaymentAch's PaymentAches with an executor via payment_id column.
-func (o *Payment) PaymentPaymentAches(mods ...qm.QueryMod) paymentAchQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`PaymentAch`.`payment_id`=?", o.PaymentID),
-	)
-
-	query := PaymentAches(queryMods...)
-	queries.SetFrom(query.Query, "`PaymentAch`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`PaymentAch`.*"})
-	}
-
-	return query
-}
-
-// PaymentPaymentBills retrieves all the PaymentBill's PaymentBills with an executor via payment_id column.
-func (o *Payment) PaymentPaymentBills(mods ...qm.QueryMod) paymentBillQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`PaymentBill`.`payment_id`=?", o.PaymentID),
-	)
-
-	query := PaymentBills(queryMods...)
-	queries.SetFrom(query.Query, "`PaymentBill`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`PaymentBill`.*"})
-	}
-
-	return query
-}
-
-// PaymentPaymentCheques retrieves all the PaymentCheque's PaymentCheques with an executor via payment_id column.
-func (o *Payment) PaymentPaymentCheques(mods ...qm.QueryMod) paymentChequeQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`PaymentCheque`.`payment_id`=?", o.PaymentID),
-	)
-
-	query := PaymentCheques(queryMods...)
-	queries.SetFrom(query.Query, "`PaymentCheque`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`PaymentCheque`.*"})
-	}
-
-	return query
-}
-
-// PaymentPaymentFxTrades retrieves all the PaymentFxTrade's PaymentFxTrades with an executor via payment_id column.
-func (o *Payment) PaymentPaymentFxTrades(mods ...qm.QueryMod) paymentFxTradeQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`PaymentFxTrade`.`payment_id`=?", o.PaymentID),
-	)
-
-	query := PaymentFxTrades(queryMods...)
-	queries.SetFrom(query.Query, "`PaymentFxTrade`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`PaymentFxTrade`.*"})
-	}
 
 	return query
 }
@@ -923,90 +880,6 @@ func (o *Payment) PaymentPaymentGateways(mods ...qm.QueryMod) paymentGatewayQuer
 
 	if len(queries.GetSelect(query.Query)) == 0 {
 		queries.SetSelect(query.Query, []string{"`PaymentGateway`.*"})
-	}
-
-	return query
-}
-
-// PaymentPaymentLoans retrieves all the PaymentLoan's PaymentLoans with an executor via payment_id column.
-func (o *Payment) PaymentPaymentLoans(mods ...qm.QueryMod) paymentLoanQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`PaymentLoan`.`payment_id`=?", o.PaymentID),
-	)
-
-	query := PaymentLoans(queryMods...)
-	queries.SetFrom(query.Query, "`PaymentLoan`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`PaymentLoan`.*"})
-	}
-
-	return query
-}
-
-// PaymentPaymentMessages retrieves all the PaymentMessage's PaymentMessages with an executor via payment_id column.
-func (o *Payment) PaymentPaymentMessages(mods ...qm.QueryMod) paymentMessageQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`PaymentMessage`.`payment_id`=?", o.PaymentID),
-	)
-
-	query := PaymentMessages(queryMods...)
-	queries.SetFrom(query.Query, "`PaymentMessage`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`PaymentMessage`.*"})
-	}
-
-	return query
-}
-
-// PaymentPaymentRtps retrieves all the PaymentRtp's PaymentRtps with an executor via payment_id column.
-func (o *Payment) PaymentPaymentRtps(mods ...qm.QueryMod) paymentRtpQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`PaymentRtp`.`payment_id`=?", o.PaymentID),
-	)
-
-	query := PaymentRtps(queryMods...)
-	queries.SetFrom(query.Query, "`PaymentRtp`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`PaymentRtp`.*"})
-	}
-
-	return query
-}
-
-// PaymentPaymentWires retrieves all the PaymentWire's PaymentWires with an executor via payment_id column.
-func (o *Payment) PaymentPaymentWires(mods ...qm.QueryMod) paymentWireQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`PaymentWire`.`payment_id`=?", o.PaymentID),
-	)
-
-	query := PaymentWires(queryMods...)
-	queries.SetFrom(query.Query, "`PaymentWire`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`PaymentWire`.*"})
 	}
 
 	return query
@@ -1117,386 +990,6 @@ func (paymentL) LoadPaymentMethodCode(ctx context.Context, e boil.ContextExecuto
 	return nil
 }
 
-// LoadPaymentPaymentAches allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (paymentL) LoadPaymentPaymentAches(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
-	var slice []*Payment
-	var object *Payment
-
-	if singular {
-		object = maybePayment.(*Payment)
-	} else {
-		slice = *maybePayment.(*[]*Payment)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentR{}
-		}
-		args = append(args, object.PaymentID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentR{}
-			}
-
-			for _, a := range args {
-				if queries.Equal(a, obj.PaymentID) {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`PaymentAch`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load PaymentAch")
-	}
-
-	var resultSlice []*PaymentAch
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice PaymentAch")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on PaymentAch")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentAch")
-	}
-
-	if len(paymentAchAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PaymentPaymentAches = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &paymentAchR{}
-			}
-			foreign.R.Payment = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if queries.Equal(local.PaymentID, foreign.PaymentID) {
-				local.R.PaymentPaymentAches = append(local.R.PaymentPaymentAches, foreign)
-				if foreign.R == nil {
-					foreign.R = &paymentAchR{}
-				}
-				foreign.R.Payment = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
-// LoadPaymentPaymentBills allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (paymentL) LoadPaymentPaymentBills(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
-	var slice []*Payment
-	var object *Payment
-
-	if singular {
-		object = maybePayment.(*Payment)
-	} else {
-		slice = *maybePayment.(*[]*Payment)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentR{}
-		}
-		args = append(args, object.PaymentID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PaymentID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`PaymentBill`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load PaymentBill")
-	}
-
-	var resultSlice []*PaymentBill
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice PaymentBill")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on PaymentBill")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentBill")
-	}
-
-	if len(paymentBillAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PaymentPaymentBills = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &paymentBillR{}
-			}
-			foreign.R.Payment = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if local.PaymentID == foreign.PaymentID {
-				local.R.PaymentPaymentBills = append(local.R.PaymentPaymentBills, foreign)
-				if foreign.R == nil {
-					foreign.R = &paymentBillR{}
-				}
-				foreign.R.Payment = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
-// LoadPaymentPaymentCheques allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (paymentL) LoadPaymentPaymentCheques(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
-	var slice []*Payment
-	var object *Payment
-
-	if singular {
-		object = maybePayment.(*Payment)
-	} else {
-		slice = *maybePayment.(*[]*Payment)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentR{}
-		}
-		args = append(args, object.PaymentID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PaymentID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`PaymentCheque`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load PaymentCheque")
-	}
-
-	var resultSlice []*PaymentCheque
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice PaymentCheque")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on PaymentCheque")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentCheque")
-	}
-
-	if len(paymentChequeAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PaymentPaymentCheques = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &paymentChequeR{}
-			}
-			foreign.R.Payment = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if local.PaymentID == foreign.PaymentID {
-				local.R.PaymentPaymentCheques = append(local.R.PaymentPaymentCheques, foreign)
-				if foreign.R == nil {
-					foreign.R = &paymentChequeR{}
-				}
-				foreign.R.Payment = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
-// LoadPaymentPaymentFxTrades allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (paymentL) LoadPaymentPaymentFxTrades(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
-	var slice []*Payment
-	var object *Payment
-
-	if singular {
-		object = maybePayment.(*Payment)
-	} else {
-		slice = *maybePayment.(*[]*Payment)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentR{}
-		}
-		args = append(args, object.PaymentID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PaymentID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`PaymentFxTrade`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load PaymentFxTrade")
-	}
-
-	var resultSlice []*PaymentFxTrade
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice PaymentFxTrade")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on PaymentFxTrade")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentFxTrade")
-	}
-
-	if len(paymentFxTradeAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PaymentPaymentFxTrades = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &paymentFxTradeR{}
-			}
-			foreign.R.Payment = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if local.PaymentID == foreign.PaymentID {
-				local.R.PaymentPaymentFxTrades = append(local.R.PaymentPaymentFxTrades, foreign)
-				if foreign.R == nil {
-					foreign.R = &paymentFxTradeR{}
-				}
-				foreign.R.Payment = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
 // LoadPaymentPaymentGateways allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
 func (paymentL) LoadPaymentPaymentGateways(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
@@ -1592,386 +1085,6 @@ func (paymentL) LoadPaymentPaymentGateways(ctx context.Context, e boil.ContextEx
 	return nil
 }
 
-// LoadPaymentPaymentLoans allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (paymentL) LoadPaymentPaymentLoans(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
-	var slice []*Payment
-	var object *Payment
-
-	if singular {
-		object = maybePayment.(*Payment)
-	} else {
-		slice = *maybePayment.(*[]*Payment)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentR{}
-		}
-		args = append(args, object.PaymentID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PaymentID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`PaymentLoan`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load PaymentLoan")
-	}
-
-	var resultSlice []*PaymentLoan
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice PaymentLoan")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on PaymentLoan")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentLoan")
-	}
-
-	if len(paymentLoanAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PaymentPaymentLoans = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &paymentLoanR{}
-			}
-			foreign.R.Payment = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if local.PaymentID == foreign.PaymentID {
-				local.R.PaymentPaymentLoans = append(local.R.PaymentPaymentLoans, foreign)
-				if foreign.R == nil {
-					foreign.R = &paymentLoanR{}
-				}
-				foreign.R.Payment = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
-// LoadPaymentPaymentMessages allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (paymentL) LoadPaymentPaymentMessages(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
-	var slice []*Payment
-	var object *Payment
-
-	if singular {
-		object = maybePayment.(*Payment)
-	} else {
-		slice = *maybePayment.(*[]*Payment)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentR{}
-		}
-		args = append(args, object.PaymentID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentR{}
-			}
-
-			for _, a := range args {
-				if queries.Equal(a, obj.PaymentID) {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`PaymentMessage`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load PaymentMessage")
-	}
-
-	var resultSlice []*PaymentMessage
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice PaymentMessage")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on PaymentMessage")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentMessage")
-	}
-
-	if len(paymentMessageAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PaymentPaymentMessages = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &paymentMessageR{}
-			}
-			foreign.R.Payment = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if queries.Equal(local.PaymentID, foreign.PaymentID) {
-				local.R.PaymentPaymentMessages = append(local.R.PaymentPaymentMessages, foreign)
-				if foreign.R == nil {
-					foreign.R = &paymentMessageR{}
-				}
-				foreign.R.Payment = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
-// LoadPaymentPaymentRtps allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (paymentL) LoadPaymentPaymentRtps(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
-	var slice []*Payment
-	var object *Payment
-
-	if singular {
-		object = maybePayment.(*Payment)
-	} else {
-		slice = *maybePayment.(*[]*Payment)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentR{}
-		}
-		args = append(args, object.PaymentID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PaymentID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`PaymentRtp`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load PaymentRtp")
-	}
-
-	var resultSlice []*PaymentRtp
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice PaymentRtp")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on PaymentRtp")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentRtp")
-	}
-
-	if len(paymentRtpAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PaymentPaymentRtps = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &paymentRtpR{}
-			}
-			foreign.R.Payment = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if local.PaymentID == foreign.PaymentID {
-				local.R.PaymentPaymentRtps = append(local.R.PaymentPaymentRtps, foreign)
-				if foreign.R == nil {
-					foreign.R = &paymentRtpR{}
-				}
-				foreign.R.Payment = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
-// LoadPaymentPaymentWires allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (paymentL) LoadPaymentPaymentWires(ctx context.Context, e boil.ContextExecutor, singular bool, maybePayment interface{}, mods queries.Applicator) error {
-	var slice []*Payment
-	var object *Payment
-
-	if singular {
-		object = maybePayment.(*Payment)
-	} else {
-		slice = *maybePayment.(*[]*Payment)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentR{}
-		}
-		args = append(args, object.PaymentID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentR{}
-			}
-
-			for _, a := range args {
-				if queries.Equal(a, obj.PaymentID) {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`PaymentWire`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load PaymentWire")
-	}
-
-	var resultSlice []*PaymentWire
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice PaymentWire")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on PaymentWire")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentWire")
-	}
-
-	if len(paymentWireAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PaymentPaymentWires = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &paymentWireR{}
-			}
-			foreign.R.Payment = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if queries.Equal(local.PaymentID, foreign.PaymentID) {
-				local.R.PaymentPaymentWires = append(local.R.PaymentPaymentWires, foreign)
-				if foreign.R == nil {
-					foreign.R = &paymentWireR{}
-				}
-				foreign.R.Payment = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
 // SetPaymentMethodCode of the payment to the related item.
 // Sets o.R.PaymentMethodCode to related.
 // Adds o to related.R.PaymentMethodCodePayments.
@@ -2050,288 +1163,6 @@ func (o *Payment) RemovePaymentMethodCode(ctx context.Context, exec boil.Context
 	return nil
 }
 
-// AddPaymentPaymentAches adds the given related objects to the existing relationships
-// of the Payment, optionally inserting them as new records.
-// Appends related to o.R.PaymentPaymentAches.
-// Sets related.R.Payment appropriately.
-func (o *Payment) AddPaymentPaymentAches(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentAch) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			queries.Assign(&rel.PaymentID, o.PaymentID)
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `PaymentAch` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-				strmangle.WhereClause("`", "`", 0, paymentAchPrimaryKeyColumns),
-			)
-			values := []interface{}{o.PaymentID, rel.PaymentAchID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			queries.Assign(&rel.PaymentID, o.PaymentID)
-		}
-	}
-
-	if o.R == nil {
-		o.R = &paymentR{
-			PaymentPaymentAches: related,
-		}
-	} else {
-		o.R.PaymentPaymentAches = append(o.R.PaymentPaymentAches, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &paymentAchR{
-				Payment: o,
-			}
-		} else {
-			rel.R.Payment = o
-		}
-	}
-	return nil
-}
-
-// SetPaymentPaymentAches removes all previously related items of the
-// Payment replacing them completely with the passed
-// in related items, optionally inserting them as new records.
-// Sets o.R.Payment's PaymentPaymentAches accordingly.
-// Replaces o.R.PaymentPaymentAches with related.
-// Sets related.R.Payment's PaymentPaymentAches accordingly.
-func (o *Payment) SetPaymentPaymentAches(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentAch) error {
-	query := "update `PaymentAch` set `payment_id` = null where `payment_id` = ?"
-	values := []interface{}{o.PaymentID}
-	if boil.DebugMode {
-		fmt.Fprintln(boil.DebugWriter, query)
-		fmt.Fprintln(boil.DebugWriter, values)
-	}
-
-	_, err := exec.ExecContext(ctx, query, values...)
-	if err != nil {
-		return errors.Wrap(err, "failed to remove relationships before set")
-	}
-
-	if o.R != nil {
-		for _, rel := range o.R.PaymentPaymentAches {
-			queries.SetScanner(&rel.PaymentID, nil)
-			if rel.R == nil {
-				continue
-			}
-
-			rel.R.Payment = nil
-		}
-
-		o.R.PaymentPaymentAches = nil
-	}
-	return o.AddPaymentPaymentAches(ctx, exec, insert, related...)
-}
-
-// RemovePaymentPaymentAches relationships from objects passed in.
-// Removes related items from R.PaymentPaymentAches (uses pointer comparison, removal does not keep order)
-// Sets related.R.Payment.
-func (o *Payment) RemovePaymentPaymentAches(ctx context.Context, exec boil.ContextExecutor, related ...*PaymentAch) error {
-	var err error
-	for _, rel := range related {
-		queries.SetScanner(&rel.PaymentID, nil)
-		if rel.R != nil {
-			rel.R.Payment = nil
-		}
-		if _, err = rel.Update(ctx, exec, boil.Whitelist("payment_id")); err != nil {
-			return err
-		}
-	}
-	if o.R == nil {
-		return nil
-	}
-
-	for _, rel := range related {
-		for i, ri := range o.R.PaymentPaymentAches {
-			if rel != ri {
-				continue
-			}
-
-			ln := len(o.R.PaymentPaymentAches)
-			if ln > 1 && i < ln-1 {
-				o.R.PaymentPaymentAches[i] = o.R.PaymentPaymentAches[ln-1]
-			}
-			o.R.PaymentPaymentAches = o.R.PaymentPaymentAches[:ln-1]
-			break
-		}
-	}
-
-	return nil
-}
-
-// AddPaymentPaymentBills adds the given related objects to the existing relationships
-// of the Payment, optionally inserting them as new records.
-// Appends related to o.R.PaymentPaymentBills.
-// Sets related.R.Payment appropriately.
-func (o *Payment) AddPaymentPaymentBills(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentBill) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			rel.PaymentID = o.PaymentID
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `PaymentBill` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-				strmangle.WhereClause("`", "`", 0, paymentBillPrimaryKeyColumns),
-			)
-			values := []interface{}{o.PaymentID, rel.PaymentBillID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			rel.PaymentID = o.PaymentID
-		}
-	}
-
-	if o.R == nil {
-		o.R = &paymentR{
-			PaymentPaymentBills: related,
-		}
-	} else {
-		o.R.PaymentPaymentBills = append(o.R.PaymentPaymentBills, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &paymentBillR{
-				Payment: o,
-			}
-		} else {
-			rel.R.Payment = o
-		}
-	}
-	return nil
-}
-
-// AddPaymentPaymentCheques adds the given related objects to the existing relationships
-// of the Payment, optionally inserting them as new records.
-// Appends related to o.R.PaymentPaymentCheques.
-// Sets related.R.Payment appropriately.
-func (o *Payment) AddPaymentPaymentCheques(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentCheque) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			rel.PaymentID = o.PaymentID
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `PaymentCheque` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-				strmangle.WhereClause("`", "`", 0, paymentChequePrimaryKeyColumns),
-			)
-			values := []interface{}{o.PaymentID, rel.PaymentChequeID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			rel.PaymentID = o.PaymentID
-		}
-	}
-
-	if o.R == nil {
-		o.R = &paymentR{
-			PaymentPaymentCheques: related,
-		}
-	} else {
-		o.R.PaymentPaymentCheques = append(o.R.PaymentPaymentCheques, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &paymentChequeR{
-				Payment: o,
-			}
-		} else {
-			rel.R.Payment = o
-		}
-	}
-	return nil
-}
-
-// AddPaymentPaymentFxTrades adds the given related objects to the existing relationships
-// of the Payment, optionally inserting them as new records.
-// Appends related to o.R.PaymentPaymentFxTrades.
-// Sets related.R.Payment appropriately.
-func (o *Payment) AddPaymentPaymentFxTrades(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentFxTrade) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			rel.PaymentID = o.PaymentID
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `PaymentFxTrade` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-				strmangle.WhereClause("`", "`", 0, paymentFxTradePrimaryKeyColumns),
-			)
-			values := []interface{}{o.PaymentID, rel.PaymentFXTradeID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			rel.PaymentID = o.PaymentID
-		}
-	}
-
-	if o.R == nil {
-		o.R = &paymentR{
-			PaymentPaymentFxTrades: related,
-		}
-	} else {
-		o.R.PaymentPaymentFxTrades = append(o.R.PaymentPaymentFxTrades, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &paymentFxTradeR{
-				Payment: o,
-			}
-		} else {
-			rel.R.Payment = o
-		}
-	}
-	return nil
-}
-
 // AddPaymentPaymentGateways adds the given related objects to the existing relationships
 // of the Payment, optionally inserting them as new records.
 // Appends related to o.R.PaymentPaymentGateways.
@@ -2382,358 +1213,6 @@ func (o *Payment) AddPaymentPaymentGateways(ctx context.Context, exec boil.Conte
 			rel.R.Payment = o
 		}
 	}
-	return nil
-}
-
-// AddPaymentPaymentLoans adds the given related objects to the existing relationships
-// of the Payment, optionally inserting them as new records.
-// Appends related to o.R.PaymentPaymentLoans.
-// Sets related.R.Payment appropriately.
-func (o *Payment) AddPaymentPaymentLoans(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentLoan) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			rel.PaymentID = o.PaymentID
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `PaymentLoan` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-				strmangle.WhereClause("`", "`", 0, paymentLoanPrimaryKeyColumns),
-			)
-			values := []interface{}{o.PaymentID, rel.PaymentLoanID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			rel.PaymentID = o.PaymentID
-		}
-	}
-
-	if o.R == nil {
-		o.R = &paymentR{
-			PaymentPaymentLoans: related,
-		}
-	} else {
-		o.R.PaymentPaymentLoans = append(o.R.PaymentPaymentLoans, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &paymentLoanR{
-				Payment: o,
-			}
-		} else {
-			rel.R.Payment = o
-		}
-	}
-	return nil
-}
-
-// AddPaymentPaymentMessages adds the given related objects to the existing relationships
-// of the Payment, optionally inserting them as new records.
-// Appends related to o.R.PaymentPaymentMessages.
-// Sets related.R.Payment appropriately.
-func (o *Payment) AddPaymentPaymentMessages(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentMessage) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			queries.Assign(&rel.PaymentID, o.PaymentID)
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `PaymentMessage` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-				strmangle.WhereClause("`", "`", 0, paymentMessagePrimaryKeyColumns),
-			)
-			values := []interface{}{o.PaymentID, rel.PaymentMessageID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			queries.Assign(&rel.PaymentID, o.PaymentID)
-		}
-	}
-
-	if o.R == nil {
-		o.R = &paymentR{
-			PaymentPaymentMessages: related,
-		}
-	} else {
-		o.R.PaymentPaymentMessages = append(o.R.PaymentPaymentMessages, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &paymentMessageR{
-				Payment: o,
-			}
-		} else {
-			rel.R.Payment = o
-		}
-	}
-	return nil
-}
-
-// SetPaymentPaymentMessages removes all previously related items of the
-// Payment replacing them completely with the passed
-// in related items, optionally inserting them as new records.
-// Sets o.R.Payment's PaymentPaymentMessages accordingly.
-// Replaces o.R.PaymentPaymentMessages with related.
-// Sets related.R.Payment's PaymentPaymentMessages accordingly.
-func (o *Payment) SetPaymentPaymentMessages(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentMessage) error {
-	query := "update `PaymentMessage` set `payment_id` = null where `payment_id` = ?"
-	values := []interface{}{o.PaymentID}
-	if boil.DebugMode {
-		fmt.Fprintln(boil.DebugWriter, query)
-		fmt.Fprintln(boil.DebugWriter, values)
-	}
-
-	_, err := exec.ExecContext(ctx, query, values...)
-	if err != nil {
-		return errors.Wrap(err, "failed to remove relationships before set")
-	}
-
-	if o.R != nil {
-		for _, rel := range o.R.PaymentPaymentMessages {
-			queries.SetScanner(&rel.PaymentID, nil)
-			if rel.R == nil {
-				continue
-			}
-
-			rel.R.Payment = nil
-		}
-
-		o.R.PaymentPaymentMessages = nil
-	}
-	return o.AddPaymentPaymentMessages(ctx, exec, insert, related...)
-}
-
-// RemovePaymentPaymentMessages relationships from objects passed in.
-// Removes related items from R.PaymentPaymentMessages (uses pointer comparison, removal does not keep order)
-// Sets related.R.Payment.
-func (o *Payment) RemovePaymentPaymentMessages(ctx context.Context, exec boil.ContextExecutor, related ...*PaymentMessage) error {
-	var err error
-	for _, rel := range related {
-		queries.SetScanner(&rel.PaymentID, nil)
-		if rel.R != nil {
-			rel.R.Payment = nil
-		}
-		if _, err = rel.Update(ctx, exec, boil.Whitelist("payment_id")); err != nil {
-			return err
-		}
-	}
-	if o.R == nil {
-		return nil
-	}
-
-	for _, rel := range related {
-		for i, ri := range o.R.PaymentPaymentMessages {
-			if rel != ri {
-				continue
-			}
-
-			ln := len(o.R.PaymentPaymentMessages)
-			if ln > 1 && i < ln-1 {
-				o.R.PaymentPaymentMessages[i] = o.R.PaymentPaymentMessages[ln-1]
-			}
-			o.R.PaymentPaymentMessages = o.R.PaymentPaymentMessages[:ln-1]
-			break
-		}
-	}
-
-	return nil
-}
-
-// AddPaymentPaymentRtps adds the given related objects to the existing relationships
-// of the Payment, optionally inserting them as new records.
-// Appends related to o.R.PaymentPaymentRtps.
-// Sets related.R.Payment appropriately.
-func (o *Payment) AddPaymentPaymentRtps(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentRtp) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			rel.PaymentID = o.PaymentID
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `PaymentRtp` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-				strmangle.WhereClause("`", "`", 0, paymentRtpPrimaryKeyColumns),
-			)
-			values := []interface{}{o.PaymentID, rel.PaymentRTPID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			rel.PaymentID = o.PaymentID
-		}
-	}
-
-	if o.R == nil {
-		o.R = &paymentR{
-			PaymentPaymentRtps: related,
-		}
-	} else {
-		o.R.PaymentPaymentRtps = append(o.R.PaymentPaymentRtps, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &paymentRtpR{
-				Payment: o,
-			}
-		} else {
-			rel.R.Payment = o
-		}
-	}
-	return nil
-}
-
-// AddPaymentPaymentWires adds the given related objects to the existing relationships
-// of the Payment, optionally inserting them as new records.
-// Appends related to o.R.PaymentPaymentWires.
-// Sets related.R.Payment appropriately.
-func (o *Payment) AddPaymentPaymentWires(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentWire) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			queries.Assign(&rel.PaymentID, o.PaymentID)
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `PaymentWire` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-				strmangle.WhereClause("`", "`", 0, paymentWirePrimaryKeyColumns),
-			)
-			values := []interface{}{o.PaymentID, rel.PaymentWireID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			queries.Assign(&rel.PaymentID, o.PaymentID)
-		}
-	}
-
-	if o.R == nil {
-		o.R = &paymentR{
-			PaymentPaymentWires: related,
-		}
-	} else {
-		o.R.PaymentPaymentWires = append(o.R.PaymentPaymentWires, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &paymentWireR{
-				Payment: o,
-			}
-		} else {
-			rel.R.Payment = o
-		}
-	}
-	return nil
-}
-
-// SetPaymentPaymentWires removes all previously related items of the
-// Payment replacing them completely with the passed
-// in related items, optionally inserting them as new records.
-// Sets o.R.Payment's PaymentPaymentWires accordingly.
-// Replaces o.R.PaymentPaymentWires with related.
-// Sets related.R.Payment's PaymentPaymentWires accordingly.
-func (o *Payment) SetPaymentPaymentWires(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*PaymentWire) error {
-	query := "update `PaymentWire` set `payment_id` = null where `payment_id` = ?"
-	values := []interface{}{o.PaymentID}
-	if boil.DebugMode {
-		fmt.Fprintln(boil.DebugWriter, query)
-		fmt.Fprintln(boil.DebugWriter, values)
-	}
-
-	_, err := exec.ExecContext(ctx, query, values...)
-	if err != nil {
-		return errors.Wrap(err, "failed to remove relationships before set")
-	}
-
-	if o.R != nil {
-		for _, rel := range o.R.PaymentPaymentWires {
-			queries.SetScanner(&rel.PaymentID, nil)
-			if rel.R == nil {
-				continue
-			}
-
-			rel.R.Payment = nil
-		}
-
-		o.R.PaymentPaymentWires = nil
-	}
-	return o.AddPaymentPaymentWires(ctx, exec, insert, related...)
-}
-
-// RemovePaymentPaymentWires relationships from objects passed in.
-// Removes related items from R.PaymentPaymentWires (uses pointer comparison, removal does not keep order)
-// Sets related.R.Payment.
-func (o *Payment) RemovePaymentPaymentWires(ctx context.Context, exec boil.ContextExecutor, related ...*PaymentWire) error {
-	var err error
-	for _, rel := range related {
-		queries.SetScanner(&rel.PaymentID, nil)
-		if rel.R != nil {
-			rel.R.Payment = nil
-		}
-		if _, err = rel.Update(ctx, exec, boil.Whitelist("payment_id")); err != nil {
-			return err
-		}
-	}
-	if o.R == nil {
-		return nil
-	}
-
-	for _, rel := range related {
-		for i, ri := range o.R.PaymentPaymentWires {
-			if rel != ri {
-				continue
-			}
-
-			ln := len(o.R.PaymentPaymentWires)
-			if ln > 1 && i < ln-1 {
-				o.R.PaymentPaymentWires[i] = o.R.PaymentPaymentWires[ln-1]
-			}
-			o.R.PaymentPaymentWires = o.R.PaymentPaymentWires[:ln-1]
-			break
-		}
-	}
-
 	return nil
 }
 

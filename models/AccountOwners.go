@@ -144,12 +144,10 @@ var AccountOwnerWhere = struct {
 var AccountOwnerRels = struct {
 	Bank                            string
 	Account                         string
-	Party                           string
 	DebtorAccountOwnerBeneficiaries string
 }{
 	Bank:                            "Bank",
 	Account:                         "Account",
-	Party:                           "Party",
 	DebtorAccountOwnerBeneficiaries: "DebtorAccountOwnerBeneficiaries",
 }
 
@@ -157,7 +155,6 @@ var AccountOwnerRels = struct {
 type accountOwnerR struct {
 	Bank                            *Bank
 	Account                         *Account
-	Party                           *Party
 	DebtorAccountOwnerBeneficiaries BeneficiarySlice
 }
 
@@ -479,20 +476,6 @@ func (o *AccountOwner) Account(mods ...qm.QueryMod) accountQuery {
 	return query
 }
 
-// Party pointed to by the foreign key.
-func (o *AccountOwner) Party(mods ...qm.QueryMod) partyQuery {
-	queryMods := []qm.QueryMod{
-		qm.Where("party_id=?", o.PartyID),
-	}
-
-	queryMods = append(queryMods, mods...)
-
-	query := Parties(queryMods...)
-	queries.SetFrom(query.Query, "`Parties`")
-
-	return query
-}
-
 // DebtorAccountOwnerBeneficiaries retrieves all the Beneficiary's Beneficiaries with an executor via debtor_account_owner_id column.
 func (o *AccountOwner) DebtorAccountOwnerBeneficiaries(mods ...qm.QueryMod) beneficiaryQuery {
 	var queryMods []qm.QueryMod
@@ -716,107 +699,6 @@ func (accountOwnerL) LoadAccount(ctx context.Context, e boil.ContextExecutor, si
 	return nil
 }
 
-// LoadParty allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for an N-1 relationship.
-func (accountOwnerL) LoadParty(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccountOwner interface{}, mods queries.Applicator) error {
-	var slice []*AccountOwner
-	var object *AccountOwner
-
-	if singular {
-		object = maybeAccountOwner.(*AccountOwner)
-	} else {
-		slice = *maybeAccountOwner.(*[]*AccountOwner)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &accountOwnerR{}
-		}
-		args = append(args, object.PartyID)
-
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &accountOwnerR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PartyID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PartyID)
-
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`Parties`), qm.WhereIn(`party_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load Party")
-	}
-
-	var resultSlice []*Party
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice Party")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for Parties")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Parties")
-	}
-
-	if len(accountOwnerAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(resultSlice) == 0 {
-		return nil
-	}
-
-	if singular {
-		foreign := resultSlice[0]
-		object.R.Party = foreign
-		if foreign.R == nil {
-			foreign.R = &partyR{}
-		}
-		foreign.R.PartyAccountOwners = append(foreign.R.PartyAccountOwners, object)
-		return nil
-	}
-
-	for _, local := range slice {
-		for _, foreign := range resultSlice {
-			if local.PartyID == foreign.PartyID {
-				local.R.Party = foreign
-				if foreign.R == nil {
-					foreign.R = &partyR{}
-				}
-				foreign.R.PartyAccountOwners = append(foreign.R.PartyAccountOwners, local)
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
 // LoadDebtorAccountOwnerBeneficiaries allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
 func (accountOwnerL) LoadDebtorAccountOwnerBeneficiaries(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccountOwner interface{}, mods queries.Applicator) error {
@@ -1001,53 +883,6 @@ func (o *AccountOwner) SetAccount(ctx context.Context, exec boil.ContextExecutor
 		}
 	} else {
 		related.R.AccountAccountOwners = append(related.R.AccountAccountOwners, o)
-	}
-
-	return nil
-}
-
-// SetParty of the accountOwner to the related item.
-// Sets o.R.Party to related.
-// Adds o to related.R.PartyAccountOwners.
-func (o *AccountOwner) SetParty(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Party) error {
-	var err error
-	if insert {
-		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
-			return errors.Wrap(err, "failed to insert into foreign table")
-		}
-	}
-
-	updateQuery := fmt.Sprintf(
-		"UPDATE `AccountOwners` SET %s WHERE %s",
-		strmangle.SetParamNames("`", "`", 0, []string{"party_id"}),
-		strmangle.WhereClause("`", "`", 0, accountOwnerPrimaryKeyColumns),
-	)
-	values := []interface{}{related.PartyID, o.AccountOwnerID}
-
-	if boil.DebugMode {
-		fmt.Fprintln(boil.DebugWriter, updateQuery)
-		fmt.Fprintln(boil.DebugWriter, values)
-	}
-
-	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-		return errors.Wrap(err, "failed to update local table")
-	}
-
-	o.PartyID = related.PartyID
-	if o.R == nil {
-		o.R = &accountOwnerR{
-			Party: related,
-		}
-	} else {
-		o.R.Party = related
-	}
-
-	if related.R == nil {
-		related.R = &partyR{
-			PartyAccountOwners: AccountOwnerSlice{o},
-		}
-	} else {
-		related.R.PartyAccountOwners = append(related.R.PartyAccountOwners, o)
 	}
 
 	return nil

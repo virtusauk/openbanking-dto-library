@@ -31,7 +31,7 @@ type Product struct {
 	BankID                             int               `boil:"bank_id" json:"bank_id" toml:"bank_id" yaml:"bank_id"`
 	Description                        null.String       `boil:"description" json:"description,omitempty" toml:"description" yaml:"description,omitempty"`
 	LastModifiedDate                   null.Time         `boil:"last_modified_date" json:"last_modified_date,omitempty" toml:"last_modified_date" yaml:"last_modified_date,omitempty"`
-	SecondaryProductID                 null.String       `boil:"secondary_product_id" json:"secondary_product_id,omitempty" toml:"secondary_product_id" yaml:"secondary_product_id,omitempty"`
+	SecondaryProductID                 string            `boil:"secondary_product_id" json:"secondary_product_id" toml:"secondary_product_id" yaml:"secondary_product_id"`
 	MarketingStateId                   null.String       `boil:"marketingStateId" json:"marketingStateId,omitempty" toml:"marketingStateId" yaml:"marketingStateId,omitempty"`
 	ProductType                        string            `boil:"product_type" json:"product_type" toml:"product_type" yaml:"product_type"`
 	ProductSubType                     string            `boil:"product_sub_type" json:"product_sub_type" toml:"product_sub_type" yaml:"product_sub_type"`
@@ -70,13 +70,16 @@ type Product struct {
 	ProductIdentifier                  null.String       `boil:"product_identifier" json:"product_identifier,omitempty" toml:"product_identifier" yaml:"product_identifier,omitempty"`
 	Segment                            null.String       `boil:"segment" json:"segment,omitempty" toml:"segment" yaml:"segment,omitempty"`
 	FeeFreeLengthPeriod                null.Int          `boil:"fee_free_length_period" json:"fee_free_length_period,omitempty" toml:"fee_free_length_period" yaml:"fee_free_length_period,omitempty"`
-	Note                               null.String       `boil:"note" json:"note,omitempty" toml:"note" yaml:"note,omitempty"`
+	Notes                              null.String       `boil:"notes" json:"notes,omitempty" toml:"notes" yaml:"notes,omitempty"`
 	MakerDate                          time.Time         `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
 	CheckerDate                        null.Time         `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
 	MakerID                            string            `boil:"maker_id" json:"maker_id" toml:"maker_id" yaml:"maker_id"`
 	CheckerID                          null.String       `boil:"checker_id" json:"checker_id,omitempty" toml:"checker_id" yaml:"checker_id,omitempty"`
 	ModifiedBy                         null.String       `boil:"modified_by" json:"modified_by,omitempty" toml:"modified_by" yaml:"modified_by,omitempty"`
 	ModifiedDate                       null.Time         `boil:"modified_date" json:"modified_date,omitempty" toml:"modified_date" yaml:"modified_date,omitempty"`
+	OtherProductTypeName               null.String       `boil:"other_product_type_name" json:"other_product_type_name,omitempty" toml:"other_product_type_name" yaml:"other_product_type_name,omitempty"`
+	OtherProductTypeDescription        null.String       `boil:"other_product_type_description" json:"other_product_type_description,omitempty" toml:"other_product_type_description" yaml:"other_product_type_description,omitempty"`
+	AccountID                          null.Int          `boil:"account_id" json:"account_id,omitempty" toml:"account_id" yaml:"account_id,omitempty"`
 
 	R *productR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L productL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -128,13 +131,16 @@ var ProductColumns = struct {
 	ProductIdentifier                  string
 	Segment                            string
 	FeeFreeLengthPeriod                string
-	Note                               string
+	Notes                              string
 	MakerDate                          string
 	CheckerDate                        string
 	MakerID                            string
 	CheckerID                          string
 	ModifiedBy                         string
 	ModifiedDate                       string
+	OtherProductTypeName               string
+	OtherProductTypeDescription        string
+	AccountID                          string
 }{
 	ProductID:                          "product_id",
 	ProductName:                        "product_name",
@@ -181,13 +187,16 @@ var ProductColumns = struct {
 	ProductIdentifier:                  "product_identifier",
 	Segment:                            "segment",
 	FeeFreeLengthPeriod:                "fee_free_length_period",
-	Note:                               "note",
+	Notes:                              "notes",
 	MakerDate:                          "maker_date",
 	CheckerDate:                        "checker_date",
 	MakerID:                            "maker_id",
 	CheckerID:                          "checker_id",
 	ModifiedBy:                         "modified_by",
 	ModifiedDate:                       "modified_date",
+	OtherProductTypeName:               "other_product_type_name",
+	OtherProductTypeDescription:        "other_product_type_description",
+	AccountID:                          "account_id",
 }
 
 // Generated where
@@ -199,7 +208,7 @@ var ProductWhere = struct {
 	BankID                             whereHelperint
 	Description                        whereHelpernull_String
 	LastModifiedDate                   whereHelpernull_Time
-	SecondaryProductID                 whereHelpernull_String
+	SecondaryProductID                 whereHelperstring
 	MarketingStateId                   whereHelpernull_String
 	ProductType                        whereHelperstring
 	ProductSubType                     whereHelperstring
@@ -238,13 +247,16 @@ var ProductWhere = struct {
 	ProductIdentifier                  whereHelpernull_String
 	Segment                            whereHelpernull_String
 	FeeFreeLengthPeriod                whereHelpernull_Int
-	Note                               whereHelpernull_String
+	Notes                              whereHelpernull_String
 	MakerDate                          whereHelpertime_Time
 	CheckerDate                        whereHelpernull_Time
 	MakerID                            whereHelperstring
 	CheckerID                          whereHelpernull_String
 	ModifiedBy                         whereHelpernull_String
 	ModifiedDate                       whereHelpernull_Time
+	OtherProductTypeName               whereHelpernull_String
+	OtherProductTypeDescription        whereHelpernull_String
+	AccountID                          whereHelpernull_Int
 }{
 	ProductID:                          whereHelperint{field: `product_id`},
 	ProductName:                        whereHelperstring{field: `product_name`},
@@ -252,7 +264,7 @@ var ProductWhere = struct {
 	BankID:                             whereHelperint{field: `bank_id`},
 	Description:                        whereHelpernull_String{field: `description`},
 	LastModifiedDate:                   whereHelpernull_Time{field: `last_modified_date`},
-	SecondaryProductID:                 whereHelpernull_String{field: `secondary_product_id`},
+	SecondaryProductID:                 whereHelperstring{field: `secondary_product_id`},
 	MarketingStateId:                   whereHelpernull_String{field: `marketingStateId`},
 	ProductType:                        whereHelperstring{field: `product_type`},
 	ProductSubType:                     whereHelperstring{field: `product_sub_type`},
@@ -291,13 +303,16 @@ var ProductWhere = struct {
 	ProductIdentifier:                  whereHelpernull_String{field: `product_identifier`},
 	Segment:                            whereHelpernull_String{field: `segment`},
 	FeeFreeLengthPeriod:                whereHelpernull_Int{field: `fee_free_length_period`},
-	Note:                               whereHelpernull_String{field: `note`},
+	Notes:                              whereHelpernull_String{field: `notes`},
 	MakerDate:                          whereHelpertime_Time{field: `maker_date`},
 	CheckerDate:                        whereHelpernull_Time{field: `checker_date`},
 	MakerID:                            whereHelperstring{field: `maker_id`},
 	CheckerID:                          whereHelpernull_String{field: `checker_id`},
 	ModifiedBy:                         whereHelpernull_String{field: `modified_by`},
 	ModifiedDate:                       whereHelpernull_Time{field: `modified_date`},
+	OtherProductTypeName:               whereHelpernull_String{field: `other_product_type_name`},
+	OtherProductTypeDescription:        whereHelpernull_String{field: `other_product_type_description`},
+	AccountID:                          whereHelpernull_Int{field: `account_id`},
 }
 
 // ProductRels is where relationship names are stored.
@@ -327,8 +342,8 @@ func (*productR) NewStruct() *productR {
 type productL struct{}
 
 var (
-	productColumns               = []string{"product_id", "product_name", "creation_date", "bank_id", "description", "last_modified_date", "secondary_product_id", "marketingStateId", "product_type", "product_sub_type", "product_group", "interest_calculation_balance", "activated", "interest_payment_point", "collect_interest_when_locked", "recommended_deposit_amount", "max_widthdrawl_amount", "min_opening_balance", "max_opening_balance", "default_opening_balance", "min_maturity_period", "max_maturity_period", "default_maturity_period", "max_overdraft_limit", "allow_overdraft", "maturity_period_unit", "savings_fees", "allow_arbitrary_fees", "id_generator_type", "id_pattern", "accounting_method", "savings_product_rules", "dormancy_period_days", "overdraft_days_inyear", "withholding_taxenabled", "line_of_credit_requirement", "for_groups", "ref_templates", "for_individuals", "interest_paid_into_account", "ref_interest_accrued_accounting_method", "interest_days_inyear", "product_identifier", "segment", "fee_free_length_period", "note", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	productColumnsWithoutDefault = []string{"product_name", "creation_date", "bank_id", "description", "last_modified_date", "secondary_product_id", "marketingStateId", "product_type", "product_sub_type", "product_group", "interest_calculation_balance", "activated", "interest_payment_point", "collect_interest_when_locked", "recommended_deposit_amount", "max_widthdrawl_amount", "min_opening_balance", "max_opening_balance", "default_opening_balance", "min_maturity_period", "max_maturity_period", "default_maturity_period", "max_overdraft_limit", "allow_overdraft", "maturity_period_unit", "savings_fees", "allow_arbitrary_fees", "id_generator_type", "id_pattern", "accounting_method", "savings_product_rules", "dormancy_period_days", "overdraft_days_inyear", "withholding_taxenabled", "line_of_credit_requirement", "for_groups", "ref_templates", "for_individuals", "interest_paid_into_account", "ref_interest_accrued_accounting_method", "interest_days_inyear", "product_identifier", "segment", "fee_free_length_period", "note", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	productColumns               = []string{"product_id", "product_name", "creation_date", "bank_id", "description", "last_modified_date", "secondary_product_id", "marketingStateId", "product_type", "product_sub_type", "product_group", "interest_calculation_balance", "activated", "interest_payment_point", "collect_interest_when_locked", "recommended_deposit_amount", "max_widthdrawl_amount", "min_opening_balance", "max_opening_balance", "default_opening_balance", "min_maturity_period", "max_maturity_period", "default_maturity_period", "max_overdraft_limit", "allow_overdraft", "maturity_period_unit", "savings_fees", "allow_arbitrary_fees", "id_generator_type", "id_pattern", "accounting_method", "savings_product_rules", "dormancy_period_days", "overdraft_days_inyear", "withholding_taxenabled", "line_of_credit_requirement", "for_groups", "ref_templates", "for_individuals", "interest_paid_into_account", "ref_interest_accrued_accounting_method", "interest_days_inyear", "product_identifier", "segment", "fee_free_length_period", "notes", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date", "other_product_type_name", "other_product_type_description", "account_id"}
+	productColumnsWithoutDefault = []string{"product_name", "creation_date", "bank_id", "description", "last_modified_date", "secondary_product_id", "marketingStateId", "product_type", "product_sub_type", "product_group", "interest_calculation_balance", "activated", "interest_payment_point", "collect_interest_when_locked", "recommended_deposit_amount", "max_widthdrawl_amount", "min_opening_balance", "max_opening_balance", "default_opening_balance", "min_maturity_period", "max_maturity_period", "default_maturity_period", "max_overdraft_limit", "allow_overdraft", "maturity_period_unit", "savings_fees", "allow_arbitrary_fees", "id_generator_type", "id_pattern", "accounting_method", "savings_product_rules", "dormancy_period_days", "overdraft_days_inyear", "withholding_taxenabled", "line_of_credit_requirement", "for_groups", "ref_templates", "for_individuals", "interest_paid_into_account", "ref_interest_accrued_accounting_method", "interest_days_inyear", "product_identifier", "segment", "fee_free_length_period", "notes", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date", "other_product_type_name", "other_product_type_description", "account_id"}
 	productColumnsWithDefault    = []string{"product_id"}
 	productPrimaryKeyColumns     = []string{"product_id"}
 )
@@ -1446,6 +1461,7 @@ func (o ProductSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, 
 
 var mySQLProductUniqueColumns = []string{
 	"product_id",
+	"marketingStateId",
 }
 
 // Upsert attempts an insert using an executor, and does an update or ignore on conflict.

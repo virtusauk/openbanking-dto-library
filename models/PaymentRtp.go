@@ -128,7 +128,7 @@ var PaymentRtpRels = struct {
 
 // paymentRtpR is where relationships are stored.
 type paymentRtpR struct {
-	Payment       *Payment
+	Payment       *PaymentInitiation
 	RTPRequest    *RtpRequest
 	ReceiverToken *RtpToken
 }
@@ -424,15 +424,15 @@ func (q paymentRtpQuery) Exists(ctx context.Context, exec boil.ContextExecutor) 
 }
 
 // Payment pointed to by the foreign key.
-func (o *PaymentRtp) Payment(mods ...qm.QueryMod) paymentQuery {
+func (o *PaymentRtp) Payment(mods ...qm.QueryMod) paymentInitiationQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("payment_id=?", o.PaymentID),
 	}
 
 	queryMods = append(queryMods, mods...)
 
-	query := Payments(queryMods...)
-	queries.SetFrom(query.Query, "`Payment`")
+	query := PaymentInitiations(queryMods...)
+	queries.SetFrom(query.Query, "`PaymentInitiation`")
 
 	return query
 }
@@ -506,26 +506,26 @@ func (paymentRtpL) LoadPayment(ctx context.Context, e boil.ContextExecutor, sing
 		return nil
 	}
 
-	query := NewQuery(qm.From(`Payment`), qm.WhereIn(`payment_id in ?`, args...))
+	query := NewQuery(qm.From(`PaymentInitiation`), qm.WhereIn(`payment_id in ?`, args...))
 	if mods != nil {
 		mods.Apply(query)
 	}
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load Payment")
+		return errors.Wrap(err, "failed to eager load PaymentInitiation")
 	}
 
-	var resultSlice []*Payment
+	var resultSlice []*PaymentInitiation
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice Payment")
+		return errors.Wrap(err, "failed to bind eager loaded slice PaymentInitiation")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for Payment")
+		return errors.Wrap(err, "failed to close results of eager load for PaymentInitiation")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Payment")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentInitiation")
 	}
 
 	if len(paymentRtpAfterSelectHooks) != 0 {
@@ -544,7 +544,7 @@ func (paymentRtpL) LoadPayment(ctx context.Context, e boil.ContextExecutor, sing
 		foreign := resultSlice[0]
 		object.R.Payment = foreign
 		if foreign.R == nil {
-			foreign.R = &paymentR{}
+			foreign.R = &paymentInitiationR{}
 		}
 		foreign.R.PaymentPaymentRtps = append(foreign.R.PaymentPaymentRtps, object)
 		return nil
@@ -555,7 +555,7 @@ func (paymentRtpL) LoadPayment(ctx context.Context, e boil.ContextExecutor, sing
 			if local.PaymentID == foreign.PaymentID {
 				local.R.Payment = foreign
 				if foreign.R == nil {
-					foreign.R = &paymentR{}
+					foreign.R = &paymentInitiationR{}
 				}
 				foreign.R.PaymentPaymentRtps = append(foreign.R.PaymentPaymentRtps, local)
 				break
@@ -775,7 +775,7 @@ func (paymentRtpL) LoadReceiverToken(ctx context.Context, e boil.ContextExecutor
 // SetPayment of the paymentRtp to the related item.
 // Sets o.R.Payment to related.
 // Adds o to related.R.PaymentPaymentRtps.
-func (o *PaymentRtp) SetPayment(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Payment) error {
+func (o *PaymentRtp) SetPayment(ctx context.Context, exec boil.ContextExecutor, insert bool, related *PaymentInitiation) error {
 	var err error
 	if insert {
 		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
@@ -809,7 +809,7 @@ func (o *PaymentRtp) SetPayment(ctx context.Context, exec boil.ContextExecutor, 
 	}
 
 	if related.R == nil {
-		related.R = &paymentR{
+		related.R = &paymentInitiationR{
 			PaymentPaymentRtps: PaymentRtpSlice{o},
 		}
 	} else {

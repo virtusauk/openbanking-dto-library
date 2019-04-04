@@ -28,7 +28,7 @@ type DirectDebit struct {
 	DirectDebitID                          int               `boil:"direct_debit_id" json:"direct_debit_id" toml:"direct_debit_id" yaml:"direct_debit_id"`
 	BankID                                 int               `boil:"bank_id" json:"bank_id" toml:"bank_id" yaml:"bank_id"`
 	DebtorAccountID                        int               `boil:"debtor_account_id" json:"debtor_account_id" toml:"debtor_account_id" yaml:"debtor_account_id"`
-	ServicerSchemeName                     string            `boil:"servicer_scheme_name" json:"servicer_scheme_name" toml:"servicer_scheme_name" yaml:"servicer_scheme_name"`
+	ServicerSchemeName                     null.String       `boil:"servicer_scheme_name" json:"servicer_scheme_name,omitempty" toml:"servicer_scheme_name" yaml:"servicer_scheme_name,omitempty"`
 	ServicerIdentification                 null.String       `boil:"servicer_identification" json:"servicer_identification,omitempty" toml:"servicer_identification" yaml:"servicer_identification,omitempty"`
 	CreditorAccountSchemeName              string            `boil:"creditor_account_scheme_name" json:"creditor_account_scheme_name" toml:"creditor_account_scheme_name" yaml:"creditor_account_scheme_name"`
 	CreditorAccountIdentification          string            `boil:"creditor_account_identification" json:"creditor_account_identification" toml:"creditor_account_identification" yaml:"creditor_account_identification"`
@@ -106,7 +106,7 @@ var DirectDebitWhere = struct {
 	DirectDebitID                          whereHelperint
 	BankID                                 whereHelperint
 	DebtorAccountID                        whereHelperint
-	ServicerSchemeName                     whereHelperstring
+	ServicerSchemeName                     whereHelpernull_String
 	ServicerIdentification                 whereHelpernull_String
 	CreditorAccountSchemeName              whereHelperstring
 	CreditorAccountIdentification          whereHelperstring
@@ -129,7 +129,7 @@ var DirectDebitWhere = struct {
 	DirectDebitID:                          whereHelperint{field: `direct_debit_id`},
 	BankID:                                 whereHelperint{field: `bank_id`},
 	DebtorAccountID:                        whereHelperint{field: `debtor_account_id`},
-	ServicerSchemeName:                     whereHelperstring{field: `servicer_scheme_name`},
+	ServicerSchemeName:                     whereHelpernull_String{field: `servicer_scheme_name`},
 	ServicerIdentification:                 whereHelpernull_String{field: `servicer_identification`},
 	CreditorAccountSchemeName:              whereHelperstring{field: `creditor_account_scheme_name`},
 	CreditorAccountIdentification:          whereHelperstring{field: `creditor_account_identification`},

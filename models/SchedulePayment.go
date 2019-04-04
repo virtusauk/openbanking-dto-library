@@ -26,8 +26,13 @@ import (
 // SchedulePayment is an object representing the database table.
 type SchedulePayment struct {
 	SchedulePaymentID                      int               `boil:"schedule_payment_id" json:"schedule_payment_id" toml:"schedule_payment_id" yaml:"schedule_payment_id"`
+	SchedulePaymentRefID                   null.String       `boil:"Schedule_payment_ref_id" json:"Schedule_payment_ref_id,omitempty" toml:"Schedule_payment_ref_id" yaml:"Schedule_payment_ref_id,omitempty"`
 	AccountID                              null.Int          `boil:"account_id" json:"account_id,omitempty" toml:"account_id" yaml:"account_id,omitempty"`
+	InstructionIdentification              null.String       `boil:"instruction_identification" json:"instruction_identification,omitempty" toml:"instruction_identification" yaml:"instruction_identification,omitempty"`
+	EndtoendIdentification                 null.String       `boil:"endtoend_identification" json:"endtoend_identification,omitempty" toml:"endtoend_identification" yaml:"endtoend_identification,omitempty"`
+	LocalInstrument                        null.String       `boil:"local_instrument" json:"local_instrument,omitempty" toml:"local_instrument" yaml:"local_instrument,omitempty"`
 	SchedulePaymentDateandtime             null.Time         `boil:"schedule_payment_dateandtime" json:"schedule_payment_dateandtime,omitempty" toml:"schedule_payment_dateandtime" yaml:"schedule_payment_dateandtime,omitempty"`
+	RequestedExecutionDateTime             null.Time         `boil:"requested_execution_date_time" json:"requested_execution_date_time,omitempty" toml:"requested_execution_date_time" yaml:"requested_execution_date_time,omitempty"`
 	ScheduleType                           null.String       `boil:"schedule_type" json:"schedule_type,omitempty" toml:"schedule_type" yaml:"schedule_type,omitempty"`
 	Reference                              null.String       `boil:"reference" json:"reference,omitempty" toml:"reference" yaml:"reference,omitempty"`
 	InstructedAmount                       types.NullDecimal `boil:"instructed_amount" json:"instructed_amount,omitempty" toml:"instructed_amount" yaml:"instructed_amount,omitempty"`
@@ -38,6 +43,17 @@ type SchedulePayment struct {
 	CreditoraccountIdentification          null.String       `boil:"creditoraccount_identification" json:"creditoraccount_identification,omitempty" toml:"creditoraccount_identification" yaml:"creditoraccount_identification,omitempty"`
 	CreditoraccountName                    null.String       `boil:"creditoraccount_name" json:"creditoraccount_name,omitempty" toml:"creditoraccount_name" yaml:"creditoraccount_name,omitempty"`
 	CreditoraccountSecondaryIdentification null.String       `boil:"creditoraccount_secondary_identification" json:"creditoraccount_secondary_identification,omitempty" toml:"creditoraccount_secondary_identification" yaml:"creditoraccount_secondary_identification,omitempty"`
+	CreditorAddressType                    null.String       `boil:"creditor_address_type" json:"creditor_address_type,omitempty" toml:"creditor_address_type" yaml:"creditor_address_type,omitempty"`
+	CreditorDepartment                     null.String       `boil:"creditor_department" json:"creditor_department,omitempty" toml:"creditor_department" yaml:"creditor_department,omitempty"`
+	CreditorSubdepartment                  null.String       `boil:"creditor_subdepartment" json:"creditor_subdepartment,omitempty" toml:"creditor_subdepartment" yaml:"creditor_subdepartment,omitempty"`
+	CreditorStreetName                     null.String       `boil:"creditor_street_name" json:"creditor_street_name,omitempty" toml:"creditor_street_name" yaml:"creditor_street_name,omitempty"`
+	CreditorBuildingNumber                 null.String       `boil:"creditor_building_number" json:"creditor_building_number,omitempty" toml:"creditor_building_number" yaml:"creditor_building_number,omitempty"`
+	CreditorTownname                       null.String       `boil:"creditor_townname" json:"creditor_townname,omitempty" toml:"creditor_townname" yaml:"creditor_townname,omitempty"`
+	CreditorAddressline1                   null.String       `boil:"creditor_addressline1" json:"creditor_addressline1,omitempty" toml:"creditor_addressline1" yaml:"creditor_addressline1,omitempty"`
+	CreditorPostcode                       null.String       `boil:"creditor_postcode" json:"creditor_postcode,omitempty" toml:"creditor_postcode" yaml:"creditor_postcode,omitempty"`
+	CreditorCountrysubdivision             null.String       `boil:"creditor_countrysubdivision" json:"creditor_countrysubdivision,omitempty" toml:"creditor_countrysubdivision" yaml:"creditor_countrysubdivision,omitempty"`
+	CreditorCountry                        null.String       `boil:"creditor_country" json:"creditor_country,omitempty" toml:"creditor_country" yaml:"creditor_country,omitempty"`
+	SupplementaryData                      null.String       `boil:"supplementary_data" json:"supplementary_data,omitempty" toml:"supplementary_data" yaml:"supplementary_data,omitempty"`
 	MakerDate                              null.Time         `boil:"maker_date" json:"maker_date,omitempty" toml:"maker_date" yaml:"maker_date,omitempty"`
 	CheckerDate                            null.Time         `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
 	MakerID                                null.String       `boil:"maker_id" json:"maker_id,omitempty" toml:"maker_id" yaml:"maker_id,omitempty"`
@@ -51,8 +67,13 @@ type SchedulePayment struct {
 
 var SchedulePaymentColumns = struct {
 	SchedulePaymentID                      string
+	SchedulePaymentRefID                   string
 	AccountID                              string
+	InstructionIdentification              string
+	EndtoendIdentification                 string
+	LocalInstrument                        string
 	SchedulePaymentDateandtime             string
+	RequestedExecutionDateTime             string
 	ScheduleType                           string
 	Reference                              string
 	InstructedAmount                       string
@@ -63,6 +84,17 @@ var SchedulePaymentColumns = struct {
 	CreditoraccountIdentification          string
 	CreditoraccountName                    string
 	CreditoraccountSecondaryIdentification string
+	CreditorAddressType                    string
+	CreditorDepartment                     string
+	CreditorSubdepartment                  string
+	CreditorStreetName                     string
+	CreditorBuildingNumber                 string
+	CreditorTownname                       string
+	CreditorAddressline1                   string
+	CreditorPostcode                       string
+	CreditorCountrysubdivision             string
+	CreditorCountry                        string
+	SupplementaryData                      string
 	MakerDate                              string
 	CheckerDate                            string
 	MakerID                                string
@@ -71,8 +103,13 @@ var SchedulePaymentColumns = struct {
 	ModifiedDate                           string
 }{
 	SchedulePaymentID:                      "schedule_payment_id",
+	SchedulePaymentRefID:                   "Schedule_payment_ref_id",
 	AccountID:                              "account_id",
+	InstructionIdentification:              "instruction_identification",
+	EndtoendIdentification:                 "endtoend_identification",
+	LocalInstrument:                        "local_instrument",
 	SchedulePaymentDateandtime:             "schedule_payment_dateandtime",
+	RequestedExecutionDateTime:             "requested_execution_date_time",
 	ScheduleType:                           "schedule_type",
 	Reference:                              "reference",
 	InstructedAmount:                       "instructed_amount",
@@ -83,6 +120,17 @@ var SchedulePaymentColumns = struct {
 	CreditoraccountIdentification:          "creditoraccount_identification",
 	CreditoraccountName:                    "creditoraccount_name",
 	CreditoraccountSecondaryIdentification: "creditoraccount_secondary_identification",
+	CreditorAddressType:                    "creditor_address_type",
+	CreditorDepartment:                     "creditor_department",
+	CreditorSubdepartment:                  "creditor_subdepartment",
+	CreditorStreetName:                     "creditor_street_name",
+	CreditorBuildingNumber:                 "creditor_building_number",
+	CreditorTownname:                       "creditor_townname",
+	CreditorAddressline1:                   "creditor_addressline1",
+	CreditorPostcode:                       "creditor_postcode",
+	CreditorCountrysubdivision:             "creditor_countrysubdivision",
+	CreditorCountry:                        "creditor_country",
+	SupplementaryData:                      "supplementary_data",
 	MakerDate:                              "maker_date",
 	CheckerDate:                            "checker_date",
 	MakerID:                                "maker_id",
@@ -95,8 +143,13 @@ var SchedulePaymentColumns = struct {
 
 var SchedulePaymentWhere = struct {
 	SchedulePaymentID                      whereHelperint
+	SchedulePaymentRefID                   whereHelpernull_String
 	AccountID                              whereHelpernull_Int
+	InstructionIdentification              whereHelpernull_String
+	EndtoendIdentification                 whereHelpernull_String
+	LocalInstrument                        whereHelpernull_String
 	SchedulePaymentDateandtime             whereHelpernull_Time
+	RequestedExecutionDateTime             whereHelpernull_Time
 	ScheduleType                           whereHelpernull_String
 	Reference                              whereHelpernull_String
 	InstructedAmount                       whereHelpertypes_NullDecimal
@@ -107,6 +160,17 @@ var SchedulePaymentWhere = struct {
 	CreditoraccountIdentification          whereHelpernull_String
 	CreditoraccountName                    whereHelpernull_String
 	CreditoraccountSecondaryIdentification whereHelpernull_String
+	CreditorAddressType                    whereHelpernull_String
+	CreditorDepartment                     whereHelpernull_String
+	CreditorSubdepartment                  whereHelpernull_String
+	CreditorStreetName                     whereHelpernull_String
+	CreditorBuildingNumber                 whereHelpernull_String
+	CreditorTownname                       whereHelpernull_String
+	CreditorAddressline1                   whereHelpernull_String
+	CreditorPostcode                       whereHelpernull_String
+	CreditorCountrysubdivision             whereHelpernull_String
+	CreditorCountry                        whereHelpernull_String
+	SupplementaryData                      whereHelpernull_String
 	MakerDate                              whereHelpernull_Time
 	CheckerDate                            whereHelpernull_Time
 	MakerID                                whereHelpernull_String
@@ -115,8 +179,13 @@ var SchedulePaymentWhere = struct {
 	ModifiedDate                           whereHelpernull_Time
 }{
 	SchedulePaymentID:                      whereHelperint{field: `schedule_payment_id`},
+	SchedulePaymentRefID:                   whereHelpernull_String{field: `Schedule_payment_ref_id`},
 	AccountID:                              whereHelpernull_Int{field: `account_id`},
+	InstructionIdentification:              whereHelpernull_String{field: `instruction_identification`},
+	EndtoendIdentification:                 whereHelpernull_String{field: `endtoend_identification`},
+	LocalInstrument:                        whereHelpernull_String{field: `local_instrument`},
 	SchedulePaymentDateandtime:             whereHelpernull_Time{field: `schedule_payment_dateandtime`},
+	RequestedExecutionDateTime:             whereHelpernull_Time{field: `requested_execution_date_time`},
 	ScheduleType:                           whereHelpernull_String{field: `schedule_type`},
 	Reference:                              whereHelpernull_String{field: `reference`},
 	InstructedAmount:                       whereHelpertypes_NullDecimal{field: `instructed_amount`},
@@ -127,6 +196,17 @@ var SchedulePaymentWhere = struct {
 	CreditoraccountIdentification:          whereHelpernull_String{field: `creditoraccount_identification`},
 	CreditoraccountName:                    whereHelpernull_String{field: `creditoraccount_name`},
 	CreditoraccountSecondaryIdentification: whereHelpernull_String{field: `creditoraccount_secondary_identification`},
+	CreditorAddressType:                    whereHelpernull_String{field: `creditor_address_type`},
+	CreditorDepartment:                     whereHelpernull_String{field: `creditor_department`},
+	CreditorSubdepartment:                  whereHelpernull_String{field: `creditor_subdepartment`},
+	CreditorStreetName:                     whereHelpernull_String{field: `creditor_street_name`},
+	CreditorBuildingNumber:                 whereHelpernull_String{field: `creditor_building_number`},
+	CreditorTownname:                       whereHelpernull_String{field: `creditor_townname`},
+	CreditorAddressline1:                   whereHelpernull_String{field: `creditor_addressline1`},
+	CreditorPostcode:                       whereHelpernull_String{field: `creditor_postcode`},
+	CreditorCountrysubdivision:             whereHelpernull_String{field: `creditor_countrysubdivision`},
+	CreditorCountry:                        whereHelpernull_String{field: `creditor_country`},
+	SupplementaryData:                      whereHelpernull_String{field: `supplementary_data`},
 	MakerDate:                              whereHelpernull_Time{field: `maker_date`},
 	CheckerDate:                            whereHelpernull_Time{field: `checker_date`},
 	MakerID:                                whereHelpernull_String{field: `maker_id`},
@@ -137,10 +217,14 @@ var SchedulePaymentWhere = struct {
 
 // SchedulePaymentRels is where relationship names are stored.
 var SchedulePaymentRels = struct {
-}{}
+	Account string
+}{
+	Account: "Account",
+}
 
 // schedulePaymentR is where relationships are stored.
 type schedulePaymentR struct {
+	Account *Account
 }
 
 // NewStruct creates a new relationship struct
@@ -152,8 +236,8 @@ func (*schedulePaymentR) NewStruct() *schedulePaymentR {
 type schedulePaymentL struct{}
 
 var (
-	schedulePaymentColumns               = []string{"schedule_payment_id", "account_id", "schedule_payment_dateandtime", "schedule_type", "reference", "instructed_amount", "instructed_amount_currency", "creditoragent_scheme_name", "creditoragent_identification", "creditoraccount_schemename", "creditoraccount_identification", "creditoraccount_name", "creditoraccount_secondary_identification", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	schedulePaymentColumnsWithoutDefault = []string{"schedule_payment_id", "account_id", "schedule_payment_dateandtime", "schedule_type", "reference", "instructed_amount", "instructed_amount_currency", "creditoragent_scheme_name", "creditoragent_identification", "creditoraccount_schemename", "creditoraccount_identification", "creditoraccount_name", "creditoraccount_secondary_identification", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	schedulePaymentColumns               = []string{"schedule_payment_id", "Schedule_payment_ref_id", "account_id", "instruction_identification", "endtoend_identification", "local_instrument", "schedule_payment_dateandtime", "requested_execution_date_time", "schedule_type", "reference", "instructed_amount", "instructed_amount_currency", "creditoragent_scheme_name", "creditoragent_identification", "creditoraccount_schemename", "creditoraccount_identification", "creditoraccount_name", "creditoraccount_secondary_identification", "creditor_address_type", "creditor_department", "creditor_subdepartment", "creditor_street_name", "creditor_building_number", "creditor_townname", "creditor_addressline1", "creditor_postcode", "creditor_countrysubdivision", "creditor_country", "supplementary_data", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	schedulePaymentColumnsWithoutDefault = []string{"schedule_payment_id", "Schedule_payment_ref_id", "account_id", "instruction_identification", "endtoend_identification", "local_instrument", "schedule_payment_dateandtime", "requested_execution_date_time", "schedule_type", "reference", "instructed_amount", "instructed_amount_currency", "creditoragent_scheme_name", "creditoragent_identification", "creditoraccount_schemename", "creditoraccount_identification", "creditoraccount_name", "creditoraccount_secondary_identification", "creditor_address_type", "creditor_department", "creditor_subdepartment", "creditor_street_name", "creditor_building_number", "creditor_townname", "creditor_addressline1", "creditor_postcode", "creditor_countrysubdivision", "creditor_country", "supplementary_data", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	schedulePaymentColumnsWithDefault    = []string{}
 	schedulePaymentPrimaryKeyColumns     = []string{"schedule_payment_id"}
 )
@@ -431,6 +515,203 @@ func (q schedulePaymentQuery) Exists(ctx context.Context, exec boil.ContextExecu
 	}
 
 	return count > 0, nil
+}
+
+// Account pointed to by the foreign key.
+func (o *SchedulePayment) Account(mods ...qm.QueryMod) accountQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("account_id=?", o.AccountID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := Accounts(queryMods...)
+	queries.SetFrom(query.Query, "`Account`")
+
+	return query
+}
+
+// LoadAccount allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (schedulePaymentL) LoadAccount(ctx context.Context, e boil.ContextExecutor, singular bool, maybeSchedulePayment interface{}, mods queries.Applicator) error {
+	var slice []*SchedulePayment
+	var object *SchedulePayment
+
+	if singular {
+		object = maybeSchedulePayment.(*SchedulePayment)
+	} else {
+		slice = *maybeSchedulePayment.(*[]*SchedulePayment)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &schedulePaymentR{}
+		}
+		if !queries.IsNil(object.AccountID) {
+			args = append(args, object.AccountID)
+		}
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &schedulePaymentR{}
+			}
+
+			for _, a := range args {
+				if queries.Equal(a, obj.AccountID) {
+					continue Outer
+				}
+			}
+
+			if !queries.IsNil(obj.AccountID) {
+				args = append(args, obj.AccountID)
+			}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`Account`), qm.WhereIn(`account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Account")
+	}
+
+	var resultSlice []*Account
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Account")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for Account")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Account")
+	}
+
+	if len(schedulePaymentAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Account = foreign
+		if foreign.R == nil {
+			foreign.R = &accountR{}
+		}
+		foreign.R.AccountSchedulePayments = append(foreign.R.AccountSchedulePayments, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if queries.Equal(local.AccountID, foreign.AccountID) {
+				local.R.Account = foreign
+				if foreign.R == nil {
+					foreign.R = &accountR{}
+				}
+				foreign.R.AccountSchedulePayments = append(foreign.R.AccountSchedulePayments, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// SetAccount of the schedulePayment to the related item.
+// Sets o.R.Account to related.
+// Adds o to related.R.AccountSchedulePayments.
+func (o *SchedulePayment) SetAccount(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Account) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE `SchedulePayment` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"account_id"}),
+		strmangle.WhereClause("`", "`", 0, schedulePaymentPrimaryKeyColumns),
+	)
+	values := []interface{}{related.AccountID, o.SchedulePaymentID}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	queries.Assign(&o.AccountID, related.AccountID)
+	if o.R == nil {
+		o.R = &schedulePaymentR{
+			Account: related,
+		}
+	} else {
+		o.R.Account = related
+	}
+
+	if related.R == nil {
+		related.R = &accountR{
+			AccountSchedulePayments: SchedulePaymentSlice{o},
+		}
+	} else {
+		related.R.AccountSchedulePayments = append(related.R.AccountSchedulePayments, o)
+	}
+
+	return nil
+}
+
+// RemoveAccount relationship.
+// Sets o.R.Account to nil.
+// Removes o from all passed in related items' relationships struct (Optional).
+func (o *SchedulePayment) RemoveAccount(ctx context.Context, exec boil.ContextExecutor, related *Account) error {
+	var err error
+
+	queries.SetScanner(&o.AccountID, nil)
+	if _, err = o.Update(ctx, exec, boil.Whitelist("account_id")); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.R.Account = nil
+	if related == nil || related.R == nil {
+		return nil
+	}
+
+	for i, ri := range related.R.AccountSchedulePayments {
+		if queries.Equal(o.AccountID, ri.AccountID) {
+			continue
+		}
+
+		ln := len(related.R.AccountSchedulePayments)
+		if ln > 1 && i < ln-1 {
+			related.R.AccountSchedulePayments[i] = related.R.AccountSchedulePayments[ln-1]
+		}
+		related.R.AccountSchedulePayments = related.R.AccountSchedulePayments[:ln-1]
+		break
+	}
+	return nil
 }
 
 // SchedulePayments retrieves all the records using an executor.

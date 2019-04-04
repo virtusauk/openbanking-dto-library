@@ -177,20 +177,20 @@ var PaymentFxTradeWhere = struct {
 
 // PaymentFxTradeRels is where relationship names are stored.
 var PaymentFxTradeRels = struct {
+	Payment     string
 	TraderParty string
 	Bank        string
-	Payment     string
 }{
+	Payment:     "Payment",
 	TraderParty: "TraderParty",
 	Bank:        "Bank",
-	Payment:     "Payment",
 }
 
 // paymentFxTradeR is where relationships are stored.
 type paymentFxTradeR struct {
+	Payment     *PaymentInitiation
 	TraderParty *Party
 	Bank        *Bank
-	Payment     *Payment
 }
 
 // NewStruct creates a new relationship struct
@@ -483,6 +483,20 @@ func (q paymentFxTradeQuery) Exists(ctx context.Context, exec boil.ContextExecut
 	return count > 0, nil
 }
 
+// Payment pointed to by the foreign key.
+func (o *PaymentFxTrade) Payment(mods ...qm.QueryMod) paymentInitiationQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("payment_id=?", o.PaymentID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := PaymentInitiations(queryMods...)
+	queries.SetFrom(query.Query, "`PaymentInitiation`")
+
+	return query
+}
+
 // TraderParty pointed to by the foreign key.
 func (o *PaymentFxTrade) TraderParty(mods ...qm.QueryMod) partyQuery {
 	queryMods := []qm.QueryMod{
@@ -511,18 +525,105 @@ func (o *PaymentFxTrade) Bank(mods ...qm.QueryMod) bankQuery {
 	return query
 }
 
-// Payment pointed to by the foreign key.
-func (o *PaymentFxTrade) Payment(mods ...qm.QueryMod) paymentQuery {
-	queryMods := []qm.QueryMod{
-		qm.Where("payment_id=?", o.PaymentID),
+// LoadPayment allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (paymentFxTradeL) LoadPayment(ctx context.Context, e boil.ContextExecutor, singular bool, maybePaymentFxTrade interface{}, mods queries.Applicator) error {
+	var slice []*PaymentFxTrade
+	var object *PaymentFxTrade
+
+	if singular {
+		object = maybePaymentFxTrade.(*PaymentFxTrade)
+	} else {
+		slice = *maybePaymentFxTrade.(*[]*PaymentFxTrade)
 	}
 
-	queryMods = append(queryMods, mods...)
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &paymentFxTradeR{}
+		}
+		args = append(args, object.PaymentID)
 
-	query := Payments(queryMods...)
-	queries.SetFrom(query.Query, "`Payment`")
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &paymentFxTradeR{}
+			}
 
-	return query
+			for _, a := range args {
+				if a == obj.PaymentID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.PaymentID)
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`PaymentInitiation`), qm.WhereIn(`payment_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load PaymentInitiation")
+	}
+
+	var resultSlice []*PaymentInitiation
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice PaymentInitiation")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for PaymentInitiation")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentInitiation")
+	}
+
+	if len(paymentFxTradeAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Payment = foreign
+		if foreign.R == nil {
+			foreign.R = &paymentInitiationR{}
+		}
+		foreign.R.PaymentPaymentFxTrades = append(foreign.R.PaymentPaymentFxTrades, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.PaymentID == foreign.PaymentID {
+				local.R.Payment = foreign
+				if foreign.R == nil {
+					foreign.R = &paymentInitiationR{}
+				}
+				foreign.R.PaymentPaymentFxTrades = append(foreign.R.PaymentPaymentFxTrades, local)
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadTraderParty allows an eager lookup of values, cached into the
@@ -727,102 +828,48 @@ func (paymentFxTradeL) LoadBank(ctx context.Context, e boil.ContextExecutor, sin
 	return nil
 }
 
-// LoadPayment allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for an N-1 relationship.
-func (paymentFxTradeL) LoadPayment(ctx context.Context, e boil.ContextExecutor, singular bool, maybePaymentFxTrade interface{}, mods queries.Applicator) error {
-	var slice []*PaymentFxTrade
-	var object *PaymentFxTrade
+// SetPayment of the paymentFxTrade to the related item.
+// Sets o.R.Payment to related.
+// Adds o to related.R.PaymentPaymentFxTrades.
+func (o *PaymentFxTrade) SetPayment(ctx context.Context, exec boil.ContextExecutor, insert bool, related *PaymentInitiation) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
 
-	if singular {
-		object = maybePaymentFxTrade.(*PaymentFxTrade)
+	updateQuery := fmt.Sprintf(
+		"UPDATE `PaymentFxTrade` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
+		strmangle.WhereClause("`", "`", 0, paymentFxTradePrimaryKeyColumns),
+	)
+	values := []interface{}{related.PaymentID, o.PaymentFXTradeID}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.PaymentID = related.PaymentID
+	if o.R == nil {
+		o.R = &paymentFxTradeR{
+			Payment: related,
+		}
 	} else {
-		slice = *maybePaymentFxTrade.(*[]*PaymentFxTrade)
+		o.R.Payment = related
 	}
 
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentFxTradeR{}
+	if related.R == nil {
+		related.R = &paymentInitiationR{
+			PaymentPaymentFxTrades: PaymentFxTradeSlice{o},
 		}
-		args = append(args, object.PaymentID)
-
 	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentFxTradeR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PaymentID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`Payment`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load Payment")
-	}
-
-	var resultSlice []*Payment
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice Payment")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for Payment")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Payment")
-	}
-
-	if len(paymentFxTradeAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(resultSlice) == 0 {
-		return nil
-	}
-
-	if singular {
-		foreign := resultSlice[0]
-		object.R.Payment = foreign
-		if foreign.R == nil {
-			foreign.R = &paymentR{}
-		}
-		foreign.R.PaymentPaymentFxTrades = append(foreign.R.PaymentPaymentFxTrades, object)
-		return nil
-	}
-
-	for _, local := range slice {
-		for _, foreign := range resultSlice {
-			if local.PaymentID == foreign.PaymentID {
-				local.R.Payment = foreign
-				if foreign.R == nil {
-					foreign.R = &paymentR{}
-				}
-				foreign.R.PaymentPaymentFxTrades = append(foreign.R.PaymentPaymentFxTrades, local)
-				break
-			}
-		}
+		related.R.PaymentPaymentFxTrades = append(related.R.PaymentPaymentFxTrades, o)
 	}
 
 	return nil
@@ -917,53 +964,6 @@ func (o *PaymentFxTrade) SetBank(ctx context.Context, exec boil.ContextExecutor,
 		}
 	} else {
 		related.R.BankPaymentFxTrades = append(related.R.BankPaymentFxTrades, o)
-	}
-
-	return nil
-}
-
-// SetPayment of the paymentFxTrade to the related item.
-// Sets o.R.Payment to related.
-// Adds o to related.R.PaymentPaymentFxTrades.
-func (o *PaymentFxTrade) SetPayment(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Payment) error {
-	var err error
-	if insert {
-		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
-			return errors.Wrap(err, "failed to insert into foreign table")
-		}
-	}
-
-	updateQuery := fmt.Sprintf(
-		"UPDATE `PaymentFxTrade` SET %s WHERE %s",
-		strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-		strmangle.WhereClause("`", "`", 0, paymentFxTradePrimaryKeyColumns),
-	)
-	values := []interface{}{related.PaymentID, o.PaymentFXTradeID}
-
-	if boil.DebugMode {
-		fmt.Fprintln(boil.DebugWriter, updateQuery)
-		fmt.Fprintln(boil.DebugWriter, values)
-	}
-
-	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-		return errors.Wrap(err, "failed to update local table")
-	}
-
-	o.PaymentID = related.PaymentID
-	if o.R == nil {
-		o.R = &paymentFxTradeR{
-			Payment: related,
-		}
-	} else {
-		o.R.Payment = related
-	}
-
-	if related.R == nil {
-		related.R = &paymentR{
-			PaymentPaymentFxTrades: PaymentFxTradeSlice{o},
-		}
-	} else {
-		related.R.PaymentPaymentFxTrades = append(related.R.PaymentPaymentFxTrades, o)
 	}
 
 	return nil

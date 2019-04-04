@@ -29,13 +29,14 @@ type PhoneNumber struct {
 	BankID        int         `boil:"bank_id" json:"bank_id" toml:"bank_id" yaml:"bank_id"`
 	Type          string      `boil:"type" json:"type" toml:"type" yaml:"type"`
 	PhoneNumber   string      `boil:"phone_number" json:"phone_number" toml:"phone_number" yaml:"phone_number"`
+	ModifiedDate  null.Time   `boil:"modified_date" json:"modified_date,omitempty" toml:"modified_date" yaml:"modified_date,omitempty"`
+	Mobile        string      `boil:"mobile" json:"mobile" toml:"mobile" yaml:"mobile"`
 	Active        null.String `boil:"active" json:"active,omitempty" toml:"active" yaml:"active,omitempty"`
 	MakerDate     time.Time   `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
 	CheckerDate   null.Time   `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
 	MakerID       string      `boil:"maker_id" json:"maker_id" toml:"maker_id" yaml:"maker_id"`
 	CheckerID     null.String `boil:"checker_id" json:"checker_id,omitempty" toml:"checker_id" yaml:"checker_id,omitempty"`
 	ModifiedBy    null.String `boil:"modified_by" json:"modified_by,omitempty" toml:"modified_by" yaml:"modified_by,omitempty"`
-	ModifiedDate  null.Time   `boil:"modified_date" json:"modified_date,omitempty" toml:"modified_date" yaml:"modified_date,omitempty"`
 
 	R *phoneNumberR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L phoneNumberL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -47,26 +48,28 @@ var PhoneNumberColumns = struct {
 	BankID        string
 	Type          string
 	PhoneNumber   string
+	ModifiedDate  string
+	Mobile        string
 	Active        string
 	MakerDate     string
 	CheckerDate   string
 	MakerID       string
 	CheckerID     string
 	ModifiedBy    string
-	ModifiedDate  string
 }{
 	PhoneNumberID: "phone_number_id",
 	PartyID:       "party_id",
 	BankID:        "bank_id",
 	Type:          "type",
 	PhoneNumber:   "phone_number",
+	ModifiedDate:  "modified_date",
+	Mobile:        "mobile",
 	Active:        "active",
 	MakerDate:     "maker_date",
 	CheckerDate:   "checker_date",
 	MakerID:       "maker_id",
 	CheckerID:     "checker_id",
 	ModifiedBy:    "modified_by",
-	ModifiedDate:  "modified_date",
 }
 
 // Generated where
@@ -77,26 +80,28 @@ var PhoneNumberWhere = struct {
 	BankID        whereHelperint
 	Type          whereHelperstring
 	PhoneNumber   whereHelperstring
+	ModifiedDate  whereHelpernull_Time
+	Mobile        whereHelperstring
 	Active        whereHelpernull_String
 	MakerDate     whereHelpertime_Time
 	CheckerDate   whereHelpernull_Time
 	MakerID       whereHelperstring
 	CheckerID     whereHelpernull_String
 	ModifiedBy    whereHelpernull_String
-	ModifiedDate  whereHelpernull_Time
 }{
 	PhoneNumberID: whereHelperint{field: `phone_number_id`},
 	PartyID:       whereHelperint{field: `party_id`},
 	BankID:        whereHelperint{field: `bank_id`},
 	Type:          whereHelperstring{field: `type`},
 	PhoneNumber:   whereHelperstring{field: `phone_number`},
+	ModifiedDate:  whereHelpernull_Time{field: `modified_date`},
+	Mobile:        whereHelperstring{field: `mobile`},
 	Active:        whereHelpernull_String{field: `active`},
 	MakerDate:     whereHelpertime_Time{field: `maker_date`},
 	CheckerDate:   whereHelpernull_Time{field: `checker_date`},
 	MakerID:       whereHelperstring{field: `maker_id`},
 	CheckerID:     whereHelpernull_String{field: `checker_id`},
 	ModifiedBy:    whereHelpernull_String{field: `modified_by`},
-	ModifiedDate:  whereHelpernull_Time{field: `modified_date`},
 }
 
 // PhoneNumberRels is where relationship names are stored.
@@ -123,8 +128,8 @@ func (*phoneNumberR) NewStruct() *phoneNumberR {
 type phoneNumberL struct{}
 
 var (
-	phoneNumberColumns               = []string{"phone_number_id", "party_id", "bank_id", "type", "phone_number", "active", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	phoneNumberColumnsWithoutDefault = []string{"bank_id", "type", "phone_number", "active", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	phoneNumberColumns               = []string{"phone_number_id", "party_id", "bank_id", "type", "phone_number", "modified_date", "mobile", "active", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by"}
+	phoneNumberColumnsWithoutDefault = []string{"bank_id", "type", "phone_number", "modified_date", "mobile", "active", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by"}
 	phoneNumberColumnsWithDefault    = []string{"phone_number_id", "party_id"}
 	phoneNumberPrimaryKeyColumns     = []string{"phone_number_id"}
 )

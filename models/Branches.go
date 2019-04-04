@@ -47,7 +47,6 @@ type Branch struct {
 	Addressline7           null.String `boil:"addressline7" json:"addressline7,omitempty" toml:"addressline7" yaml:"addressline7,omitempty"`
 	Countrysubdivision     null.String `boil:"countrysubdivision" json:"countrysubdivision,omitempty" toml:"countrysubdivision" yaml:"countrysubdivision,omitempty"`
 	Country                null.String `boil:"country" json:"country,omitempty" toml:"country" yaml:"country,omitempty"`
-	Address                null.String `boil:"address" json:"address,omitempty" toml:"address" yaml:"address,omitempty"`
 	Postcode               string      `boil:"postcode" json:"postcode" toml:"postcode" yaml:"postcode"`
 	EmailAddress           null.String `boil:"email_address" json:"email_address,omitempty" toml:"email_address" yaml:"email_address,omitempty"`
 	PhoneNumber            null.String `boil:"phone_number" json:"phone_number,omitempty" toml:"phone_number" yaml:"phone_number,omitempty"`
@@ -89,7 +88,6 @@ var BranchColumns = struct {
 	Addressline7           string
 	Countrysubdivision     string
 	Country                string
-	Address                string
 	Postcode               string
 	EmailAddress           string
 	PhoneNumber            string
@@ -126,7 +124,6 @@ var BranchColumns = struct {
 	Addressline7:           "addressline7",
 	Countrysubdivision:     "countrysubdivision",
 	Country:                "country",
-	Address:                "address",
 	Postcode:               "postcode",
 	EmailAddress:           "email_address",
 	PhoneNumber:            "phone_number",
@@ -167,7 +164,6 @@ var BranchWhere = struct {
 	Addressline7           whereHelpernull_String
 	Countrysubdivision     whereHelpernull_String
 	Country                whereHelpernull_String
-	Address                whereHelpernull_String
 	Postcode               whereHelperstring
 	EmailAddress           whereHelpernull_String
 	PhoneNumber            whereHelpernull_String
@@ -204,7 +200,6 @@ var BranchWhere = struct {
 	Addressline7:           whereHelpernull_String{field: `addressline7`},
 	Countrysubdivision:     whereHelpernull_String{field: `countrysubdivision`},
 	Country:                whereHelpernull_String{field: `country`},
-	Address:                whereHelpernull_String{field: `address`},
 	Postcode:               whereHelperstring{field: `postcode`},
 	EmailAddress:           whereHelpernull_String{field: `email_address`},
 	PhoneNumber:            whereHelpernull_String{field: `phone_number`},
@@ -258,8 +253,8 @@ func (*branchR) NewStruct() *branchR {
 type branchL struct{}
 
 var (
-	branchColumns               = []string{"branch_id", "bank_id", "servicer_schemename", "servicer_identification", "unit_name", "unit_type", "unit_location", "parent_unit", "address_type", "department", "subdepartment", "street_name", "building_number", "townname", "addressline1", "addressline2", "addressline3", "addressline4", "addressline5", "addressline6", "addressline7", "countrysubdivision", "country", "address", "postcode", "email_address", "phone_number", "lang_code", "iso_code", "app_link", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	branchColumnsWithoutDefault = []string{"bank_id", "servicer_schemename", "servicer_identification", "unit_name", "unit_type", "unit_location", "parent_unit", "address_type", "department", "subdepartment", "street_name", "building_number", "townname", "addressline1", "addressline2", "addressline3", "addressline4", "addressline5", "addressline6", "addressline7", "countrysubdivision", "country", "address", "postcode", "email_address", "phone_number", "lang_code", "iso_code", "app_link", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	branchColumns               = []string{"branch_id", "bank_id", "servicer_schemename", "servicer_identification", "unit_name", "unit_type", "unit_location", "parent_unit", "address_type", "department", "subdepartment", "street_name", "building_number", "townname", "addressline1", "addressline2", "addressline3", "addressline4", "addressline5", "addressline6", "addressline7", "countrysubdivision", "country", "postcode", "email_address", "phone_number", "lang_code", "iso_code", "app_link", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	branchColumnsWithoutDefault = []string{"bank_id", "servicer_schemename", "servicer_identification", "unit_name", "unit_type", "unit_location", "parent_unit", "address_type", "department", "subdepartment", "street_name", "building_number", "townname", "addressline1", "addressline2", "addressline3", "addressline4", "addressline5", "addressline6", "addressline7", "countrysubdivision", "country", "postcode", "email_address", "phone_number", "lang_code", "iso_code", "app_link", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	branchColumnsWithDefault    = []string{"branch_id"}
 	branchPrimaryKeyColumns     = []string{"branch_id"}
 )

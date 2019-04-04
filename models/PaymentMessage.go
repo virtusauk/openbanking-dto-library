@@ -459,7 +459,7 @@ var PaymentMessageRels = struct {
 
 // paymentMessageR is where relationships are stored.
 type paymentMessageR struct {
-	Payment *Payment
+	Payment *PaymentInitiation
 }
 
 // NewStruct creates a new relationship struct
@@ -753,15 +753,15 @@ func (q paymentMessageQuery) Exists(ctx context.Context, exec boil.ContextExecut
 }
 
 // Payment pointed to by the foreign key.
-func (o *PaymentMessage) Payment(mods ...qm.QueryMod) paymentQuery {
+func (o *PaymentMessage) Payment(mods ...qm.QueryMod) paymentInitiationQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("payment_id=?", o.PaymentID),
 	}
 
 	queryMods = append(queryMods, mods...)
 
-	query := Payments(queryMods...)
-	queries.SetFrom(query.Query, "`Payment`")
+	query := PaymentInitiations(queryMods...)
+	queries.SetFrom(query.Query, "`PaymentInitiation`")
 
 	return query
 }
@@ -811,26 +811,26 @@ func (paymentMessageL) LoadPayment(ctx context.Context, e boil.ContextExecutor, 
 		return nil
 	}
 
-	query := NewQuery(qm.From(`Payment`), qm.WhereIn(`payment_id in ?`, args...))
+	query := NewQuery(qm.From(`PaymentInitiation`), qm.WhereIn(`payment_id in ?`, args...))
 	if mods != nil {
 		mods.Apply(query)
 	}
 
 	results, err := query.QueryContext(ctx, e)
 	if err != nil {
-		return errors.Wrap(err, "failed to eager load Payment")
+		return errors.Wrap(err, "failed to eager load PaymentInitiation")
 	}
 
-	var resultSlice []*Payment
+	var resultSlice []*PaymentInitiation
 	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice Payment")
+		return errors.Wrap(err, "failed to bind eager loaded slice PaymentInitiation")
 	}
 
 	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for Payment")
+		return errors.Wrap(err, "failed to close results of eager load for PaymentInitiation")
 	}
 	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Payment")
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentInitiation")
 	}
 
 	if len(paymentMessageAfterSelectHooks) != 0 {
@@ -849,7 +849,7 @@ func (paymentMessageL) LoadPayment(ctx context.Context, e boil.ContextExecutor, 
 		foreign := resultSlice[0]
 		object.R.Payment = foreign
 		if foreign.R == nil {
-			foreign.R = &paymentR{}
+			foreign.R = &paymentInitiationR{}
 		}
 		foreign.R.PaymentPaymentMessages = append(foreign.R.PaymentPaymentMessages, object)
 		return nil
@@ -860,7 +860,7 @@ func (paymentMessageL) LoadPayment(ctx context.Context, e boil.ContextExecutor, 
 			if queries.Equal(local.PaymentID, foreign.PaymentID) {
 				local.R.Payment = foreign
 				if foreign.R == nil {
-					foreign.R = &paymentR{}
+					foreign.R = &paymentInitiationR{}
 				}
 				foreign.R.PaymentPaymentMessages = append(foreign.R.PaymentPaymentMessages, local)
 				break
@@ -874,7 +874,7 @@ func (paymentMessageL) LoadPayment(ctx context.Context, e boil.ContextExecutor, 
 // SetPayment of the paymentMessage to the related item.
 // Sets o.R.Payment to related.
 // Adds o to related.R.PaymentPaymentMessages.
-func (o *PaymentMessage) SetPayment(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Payment) error {
+func (o *PaymentMessage) SetPayment(ctx context.Context, exec boil.ContextExecutor, insert bool, related *PaymentInitiation) error {
 	var err error
 	if insert {
 		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
@@ -908,7 +908,7 @@ func (o *PaymentMessage) SetPayment(ctx context.Context, exec boil.ContextExecut
 	}
 
 	if related.R == nil {
-		related.R = &paymentR{
+		related.R = &paymentInitiationR{
 			PaymentPaymentMessages: PaymentMessageSlice{o},
 		}
 	} else {
@@ -921,7 +921,7 @@ func (o *PaymentMessage) SetPayment(ctx context.Context, exec boil.ContextExecut
 // RemovePayment relationship.
 // Sets o.R.Payment to nil.
 // Removes o from all passed in related items' relationships struct (Optional).
-func (o *PaymentMessage) RemovePayment(ctx context.Context, exec boil.ContextExecutor, related *Payment) error {
+func (o *PaymentMessage) RemovePayment(ctx context.Context, exec boil.ContextExecutor, related *PaymentInitiation) error {
 	var err error
 
 	queries.SetScanner(&o.PaymentID, nil)

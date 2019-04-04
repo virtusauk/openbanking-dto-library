@@ -157,23 +157,23 @@ var PaymentBillWhere = struct {
 
 // PaymentBillRels is where relationship names are stored.
 var PaymentBillRels = struct {
+	Payment     string
 	Biller      string
 	FromAccount string
 	FromParty   string
-	Payment     string
 }{
+	Payment:     "Payment",
 	Biller:      "Biller",
 	FromAccount: "FromAccount",
 	FromParty:   "FromParty",
-	Payment:     "Payment",
 }
 
 // paymentBillR is where relationships are stored.
 type paymentBillR struct {
+	Payment     *PaymentInitiation
 	Biller      *Biller
 	FromAccount *Account
 	FromParty   *Party
-	Payment     *Payment
 }
 
 // NewStruct creates a new relationship struct
@@ -466,6 +466,20 @@ func (q paymentBillQuery) Exists(ctx context.Context, exec boil.ContextExecutor)
 	return count > 0, nil
 }
 
+// Payment pointed to by the foreign key.
+func (o *PaymentBill) Payment(mods ...qm.QueryMod) paymentInitiationQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("payment_id=?", o.PaymentID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := PaymentInitiations(queryMods...)
+	queries.SetFrom(query.Query, "`PaymentInitiation`")
+
+	return query
+}
+
 // Biller pointed to by the foreign key.
 func (o *PaymentBill) Biller(mods ...qm.QueryMod) billerQuery {
 	queryMods := []qm.QueryMod{
@@ -508,18 +522,105 @@ func (o *PaymentBill) FromParty(mods ...qm.QueryMod) partyQuery {
 	return query
 }
 
-// Payment pointed to by the foreign key.
-func (o *PaymentBill) Payment(mods ...qm.QueryMod) paymentQuery {
-	queryMods := []qm.QueryMod{
-		qm.Where("payment_id=?", o.PaymentID),
+// LoadPayment allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (paymentBillL) LoadPayment(ctx context.Context, e boil.ContextExecutor, singular bool, maybePaymentBill interface{}, mods queries.Applicator) error {
+	var slice []*PaymentBill
+	var object *PaymentBill
+
+	if singular {
+		object = maybePaymentBill.(*PaymentBill)
+	} else {
+		slice = *maybePaymentBill.(*[]*PaymentBill)
 	}
 
-	queryMods = append(queryMods, mods...)
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &paymentBillR{}
+		}
+		args = append(args, object.PaymentID)
 
-	query := Payments(queryMods...)
-	queries.SetFrom(query.Query, "`Payment`")
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &paymentBillR{}
+			}
 
-	return query
+			for _, a := range args {
+				if a == obj.PaymentID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.PaymentID)
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`PaymentInitiation`), qm.WhereIn(`payment_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load PaymentInitiation")
+	}
+
+	var resultSlice []*PaymentInitiation
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice PaymentInitiation")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for PaymentInitiation")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for PaymentInitiation")
+	}
+
+	if len(paymentBillAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Payment = foreign
+		if foreign.R == nil {
+			foreign.R = &paymentInitiationR{}
+		}
+		foreign.R.PaymentPaymentBills = append(foreign.R.PaymentPaymentBills, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.PaymentID == foreign.PaymentID {
+				local.R.Payment = foreign
+				if foreign.R == nil {
+					foreign.R = &paymentInitiationR{}
+				}
+				foreign.R.PaymentPaymentBills = append(foreign.R.PaymentPaymentBills, local)
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 // LoadBiller allows an eager lookup of values, cached into the
@@ -825,102 +926,48 @@ func (paymentBillL) LoadFromParty(ctx context.Context, e boil.ContextExecutor, s
 	return nil
 }
 
-// LoadPayment allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for an N-1 relationship.
-func (paymentBillL) LoadPayment(ctx context.Context, e boil.ContextExecutor, singular bool, maybePaymentBill interface{}, mods queries.Applicator) error {
-	var slice []*PaymentBill
-	var object *PaymentBill
+// SetPayment of the paymentBill to the related item.
+// Sets o.R.Payment to related.
+// Adds o to related.R.PaymentPaymentBills.
+func (o *PaymentBill) SetPayment(ctx context.Context, exec boil.ContextExecutor, insert bool, related *PaymentInitiation) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
 
-	if singular {
-		object = maybePaymentBill.(*PaymentBill)
+	updateQuery := fmt.Sprintf(
+		"UPDATE `PaymentBill` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
+		strmangle.WhereClause("`", "`", 0, paymentBillPrimaryKeyColumns),
+	)
+	values := []interface{}{related.PaymentID, o.PaymentBillID}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.PaymentID = related.PaymentID
+	if o.R == nil {
+		o.R = &paymentBillR{
+			Payment: related,
+		}
 	} else {
-		slice = *maybePaymentBill.(*[]*PaymentBill)
+		o.R.Payment = related
 	}
 
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &paymentBillR{}
+	if related.R == nil {
+		related.R = &paymentInitiationR{
+			PaymentPaymentBills: PaymentBillSlice{o},
 		}
-		args = append(args, object.PaymentID)
-
 	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &paymentBillR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PaymentID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PaymentID)
-
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`Payment`), qm.WhereIn(`payment_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load Payment")
-	}
-
-	var resultSlice []*Payment
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice Payment")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for Payment")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Payment")
-	}
-
-	if len(paymentBillAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(resultSlice) == 0 {
-		return nil
-	}
-
-	if singular {
-		foreign := resultSlice[0]
-		object.R.Payment = foreign
-		if foreign.R == nil {
-			foreign.R = &paymentR{}
-		}
-		foreign.R.PaymentPaymentBills = append(foreign.R.PaymentPaymentBills, object)
-		return nil
-	}
-
-	for _, local := range slice {
-		for _, foreign := range resultSlice {
-			if local.PaymentID == foreign.PaymentID {
-				local.R.Payment = foreign
-				if foreign.R == nil {
-					foreign.R = &paymentR{}
-				}
-				foreign.R.PaymentPaymentBills = append(foreign.R.PaymentPaymentBills, local)
-				break
-			}
-		}
+		related.R.PaymentPaymentBills = append(related.R.PaymentPaymentBills, o)
 	}
 
 	return nil
@@ -1062,53 +1109,6 @@ func (o *PaymentBill) SetFromParty(ctx context.Context, exec boil.ContextExecuto
 		}
 	} else {
 		related.R.FromPartyPaymentBills = append(related.R.FromPartyPaymentBills, o)
-	}
-
-	return nil
-}
-
-// SetPayment of the paymentBill to the related item.
-// Sets o.R.Payment to related.
-// Adds o to related.R.PaymentPaymentBills.
-func (o *PaymentBill) SetPayment(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Payment) error {
-	var err error
-	if insert {
-		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
-			return errors.Wrap(err, "failed to insert into foreign table")
-		}
-	}
-
-	updateQuery := fmt.Sprintf(
-		"UPDATE `PaymentBill` SET %s WHERE %s",
-		strmangle.SetParamNames("`", "`", 0, []string{"payment_id"}),
-		strmangle.WhereClause("`", "`", 0, paymentBillPrimaryKeyColumns),
-	)
-	values := []interface{}{related.PaymentID, o.PaymentBillID}
-
-	if boil.DebugMode {
-		fmt.Fprintln(boil.DebugWriter, updateQuery)
-		fmt.Fprintln(boil.DebugWriter, values)
-	}
-
-	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-		return errors.Wrap(err, "failed to update local table")
-	}
-
-	o.PaymentID = related.PaymentID
-	if o.R == nil {
-		o.R = &paymentBillR{
-			Payment: related,
-		}
-	} else {
-		o.R.Payment = related
-	}
-
-	if related.R == nil {
-		related.R = &paymentR{
-			PaymentPaymentBills: PaymentBillSlice{o},
-		}
-	} else {
-		related.R.PaymentPaymentBills = append(related.R.PaymentPaymentBills, o)
 	}
 
 	return nil

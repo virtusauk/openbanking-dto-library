@@ -25,122 +25,170 @@ import (
 
 // Transaction is an object representing the database table.
 type Transaction struct {
-	TransactionID                     int               `boil:"transaction_id" json:"transaction_id" toml:"transaction_id" yaml:"transaction_id"`
-	TransactionReference              string            `boil:"transaction_reference" json:"transaction_reference" toml:"transaction_reference" yaml:"transaction_reference"`
-	BankID                            int               `boil:"bank_id" json:"bank_id" toml:"bank_id" yaml:"bank_id"`
-	AccountID                         int               `boil:"account_id" json:"account_id" toml:"account_id" yaml:"account_id"`
-	CreditDebitIndicator              string            `boil:"credit_debit_indicator" json:"credit_debit_indicator" toml:"credit_debit_indicator" yaml:"credit_debit_indicator"`
-	PaymentID                         null.Int          `boil:"payment_id" json:"payment_id,omitempty" toml:"payment_id" yaml:"payment_id,omitempty"`
-	TransferID                        null.String       `boil:"transfer_id" json:"transfer_id,omitempty" toml:"transfer_id" yaml:"transfer_id,omitempty"`
-	PaymentRefID                      null.String       `boil:"payment_ref_id" json:"payment_ref_id,omitempty" toml:"payment_ref_id" yaml:"payment_ref_id,omitempty"`
-	CounterpartyAccountID             null.Int          `boil:"counterparty_account_id" json:"counterparty_account_id,omitempty" toml:"counterparty_account_id" yaml:"counterparty_account_id,omitempty"`
-	TransactionAmount                 types.Decimal     `boil:"transaction_amount" json:"transaction_amount" toml:"transaction_amount" yaml:"transaction_amount"`
-	CurrencyCode                      null.String       `boil:"currency_code" json:"currency_code,omitempty" toml:"currency_code" yaml:"currency_code,omitempty"`
-	ChargeAmount                      types.NullDecimal `boil:"charge_amount" json:"charge_amount,omitempty" toml:"charge_amount" yaml:"charge_amount,omitempty"`
-	ChargeCurrency                    null.String       `boil:"charge_currency" json:"charge_currency,omitempty" toml:"charge_currency" yaml:"charge_currency,omitempty"`
-	TransactionType                   string            `boil:"transaction_type" json:"transaction_type" toml:"transaction_type" yaml:"transaction_type"`
-	CounterpartyBankID                null.Int          `boil:"counterparty_bank_id" json:"counterparty_bank_id,omitempty" toml:"counterparty_bank_id" yaml:"counterparty_bank_id,omitempty"`
-	BankLocation                      null.String       `boil:"bank_location" json:"bank_location,omitempty" toml:"bank_location" yaml:"bank_location,omitempty"`
-	CounterpartyBankLocation          null.String       `boil:"counterparty_bank_location" json:"counterparty_bank_location,omitempty" toml:"counterparty_bank_location" yaml:"counterparty_bank_location,omitempty"`
-	SwiftCode                         null.String       `boil:"swift_code" json:"swift_code,omitempty" toml:"swift_code" yaml:"swift_code,omitempty"`
-	SwiftCodeTrace                    null.String       `boil:"swift_code_trace" json:"swift_code_trace,omitempty" toml:"swift_code_trace" yaml:"swift_code_trace,omitempty"`
-	Purpose                           null.String       `boil:"purpose" json:"purpose,omitempty" toml:"purpose" yaml:"purpose,omitempty"`
-	Status                            null.String       `boil:"status" json:"status,omitempty" toml:"status" yaml:"status,omitempty"`
-	Balance                           types.NullDecimal `boil:"balance" json:"balance,omitempty" toml:"balance" yaml:"balance,omitempty"`
-	BalanceType                       string            `boil:"balance_type" json:"balance_type" toml:"balance_type" yaml:"balance_type"`
-	BalanceCreditDebitIndicator       string            `boil:"balance_credit_debit_indicator" json:"balance_credit_debit_indicator" toml:"balance_credit_debit_indicator" yaml:"balance_credit_debit_indicator"`
-	ObTransactionType                 null.String       `boil:"ob_transaction_type" json:"ob_transaction_type,omitempty" toml:"ob_transaction_type" yaml:"ob_transaction_type,omitempty"`
-	OverdraftFeesAmount               types.NullDecimal `boil:"overdraft_fees_amount" json:"overdraft_fees_amount,omitempty" toml:"overdraft_fees_amount" yaml:"overdraft_fees_amount,omitempty"`
-	InterestAmount                    types.NullDecimal `boil:"interest_amount" json:"interest_amount,omitempty" toml:"interest_amount" yaml:"interest_amount,omitempty"`
-	FeesAmount                        types.NullDecimal `boil:"fees_amount" json:"fees_amount,omitempty" toml:"fees_amount" yaml:"fees_amount,omitempty"`
-	OverdraftAmount                   types.NullDecimal `boil:"overdraft_amount" json:"overdraft_amount,omitempty" toml:"overdraft_amount" yaml:"overdraft_amount,omitempty"`
-	FundsAmount                       types.NullDecimal `boil:"funds_amount" json:"funds_amount,omitempty" toml:"funds_amount" yaml:"funds_amount,omitempty"`
-	OverdraftInterestAmount           types.NullDecimal `boil:"overdraft_interest_amount" json:"overdraft_interest_amount,omitempty" toml:"overdraft_interest_amount" yaml:"overdraft_interest_amount,omitempty"`
-	InterestRate                      types.NullDecimal `boil:"interest_rate" json:"interest_rate,omitempty" toml:"interest_rate" yaml:"interest_rate,omitempty"`
-	OverdraftInterestRate             types.NullDecimal `boil:"overdraft_interest_rate" json:"overdraft_interest_rate,omitempty" toml:"overdraft_interest_rate" yaml:"overdraft_interest_rate,omitempty"`
-	Comment                           null.String       `boil:"comment" json:"comment,omitempty" toml:"comment" yaml:"comment,omitempty"`
-	AddressLine                       null.String       `boil:"address_line" json:"address_line,omitempty" toml:"address_line" yaml:"address_line,omitempty"`
-	TransactionName                   string            `boil:"transaction_name" json:"transaction_name" toml:"transaction_name" yaml:"transaction_name"`
-	ExpectedDisbursementDate          null.Time         `boil:"expected_disbursement_date" json:"expected_disbursement_date,omitempty" toml:"expected_disbursement_date" yaml:"expected_disbursement_date,omitempty"`
-	ExpectedDisbursementTime          null.String       `boil:"expected_disbursement_time" json:"expected_disbursement_time,omitempty" toml:"expected_disbursement_time" yaml:"expected_disbursement_time,omitempty"`
-	BookingDateTime                   null.Time         `boil:"booking_date_time" json:"booking_date_time,omitempty" toml:"booking_date_time" yaml:"booking_date_time,omitempty"`
-	ValueDateTime                     null.Time         `boil:"value_date_time" json:"value_date_time,omitempty" toml:"value_date_time" yaml:"value_date_time,omitempty"`
-	CounterpartyBankCode              null.String       `boil:"counterparty_bank_code" json:"counterparty_bank_code,omitempty" toml:"counterparty_bank_code" yaml:"counterparty_bank_code,omitempty"`
-	CounterpartyBankName              null.String       `boil:"counterparty_bank_name" json:"counterparty_bank_name,omitempty" toml:"counterparty_bank_name" yaml:"counterparty_bank_name,omitempty"`
-	BankTransactionCode               null.String       `boil:"bank_transaction_code" json:"bank_transaction_code,omitempty" toml:"bank_transaction_code" yaml:"bank_transaction_code,omitempty"`
-	BankTransactionSubcode            null.String       `boil:"bank_transaction_subcode" json:"bank_transaction_subcode,omitempty" toml:"bank_transaction_subcode" yaml:"bank_transaction_subcode,omitempty"`
-	ProprietaryBankTransactionCode    null.String       `boil:"proprietary_bank_transaction_code" json:"proprietary_bank_transaction_code,omitempty" toml:"proprietary_bank_transaction_code" yaml:"proprietary_bank_transaction_code,omitempty"`
-	ProprietaryBankTransactionSubcode null.String       `boil:"proprietary_bank_transaction_subcode" json:"proprietary_bank_transaction_subcode,omitempty" toml:"proprietary_bank_transaction_subcode" yaml:"proprietary_bank_transaction_subcode,omitempty"`
-	IssuerBank                        null.String       `boil:"issuer_bank" json:"issuer_bank,omitempty" toml:"issuer_bank" yaml:"issuer_bank,omitempty"`
-	MerchantName                      null.String       `boil:"merchant_name" json:"merchant_name,omitempty" toml:"merchant_name" yaml:"merchant_name,omitempty"`
-	MerchantCategoryCode              null.String       `boil:"merchant_category_code" json:"merchant_category_code,omitempty" toml:"merchant_category_code" yaml:"merchant_category_code,omitempty"`
-	MakerDate                         time.Time         `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
-	CheckerDate                       null.Time         `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
-	MakerID                           string            `boil:"maker_id" json:"maker_id" toml:"maker_id" yaml:"maker_id"`
-	CheckerID                         null.String       `boil:"checker_id" json:"checker_id,omitempty" toml:"checker_id" yaml:"checker_id,omitempty"`
-	ModifiedBy                        null.String       `boil:"modified_by" json:"modified_by,omitempty" toml:"modified_by" yaml:"modified_by,omitempty"`
-	ModifiedDate                      null.Time         `boil:"modified_date" json:"modified_date,omitempty" toml:"modified_date" yaml:"modified_date,omitempty"`
+	TransactionID                              int               `boil:"transaction_id" json:"transaction_id" toml:"transaction_id" yaml:"transaction_id"`
+	TransactionReference                       string            `boil:"transaction_reference" json:"transaction_reference" toml:"transaction_reference" yaml:"transaction_reference"`
+	BankID                                     int               `boil:"bank_id" json:"bank_id" toml:"bank_id" yaml:"bank_id"`
+	AccountID                                  int               `boil:"account_id" json:"account_id" toml:"account_id" yaml:"account_id"`
+	CreditDebitIndicator                       string            `boil:"credit_debit_indicator" json:"credit_debit_indicator" toml:"credit_debit_indicator" yaml:"credit_debit_indicator"`
+	PaymentID                                  null.Int          `boil:"payment_id" json:"payment_id,omitempty" toml:"payment_id" yaml:"payment_id,omitempty"`
+	TransferID                                 null.Int          `boil:"transfer_id" json:"transfer_id,omitempty" toml:"transfer_id" yaml:"transfer_id,omitempty"`
+	PaymentRefID                               null.String       `boil:"payment_ref_id" json:"payment_ref_id,omitempty" toml:"payment_ref_id" yaml:"payment_ref_id,omitempty"`
+	CounterpartyAccountID                      null.Int          `boil:"counterparty_account_id" json:"counterparty_account_id,omitempty" toml:"counterparty_account_id" yaml:"counterparty_account_id,omitempty"`
+	TransactionAmount                          types.Decimal     `boil:"transaction_amount" json:"transaction_amount" toml:"transaction_amount" yaml:"transaction_amount"`
+	CurrencyCode                               null.String       `boil:"currency_code" json:"currency_code,omitempty" toml:"currency_code" yaml:"currency_code,omitempty"`
+	ChargeAmount                               types.NullDecimal `boil:"charge_amount" json:"charge_amount,omitempty" toml:"charge_amount" yaml:"charge_amount,omitempty"`
+	ChargeCurrency                             null.String       `boil:"charge_currency" json:"charge_currency,omitempty" toml:"charge_currency" yaml:"charge_currency,omitempty"`
+	CounterpartyBankID                         null.Int          `boil:"counterparty_bank_id" json:"counterparty_bank_id,omitempty" toml:"counterparty_bank_id" yaml:"counterparty_bank_id,omitempty"`
+	BankLocation                               null.String       `boil:"bank_location" json:"bank_location,omitempty" toml:"bank_location" yaml:"bank_location,omitempty"`
+	CounterpartyBankLocation                   null.String       `boil:"counterparty_bank_location" json:"counterparty_bank_location,omitempty" toml:"counterparty_bank_location" yaml:"counterparty_bank_location,omitempty"`
+	SwiftCode                                  null.String       `boil:"swift_code" json:"swift_code,omitempty" toml:"swift_code" yaml:"swift_code,omitempty"`
+	SwiftCodeTrace                             null.String       `boil:"swift_code_trace" json:"swift_code_trace,omitempty" toml:"swift_code_trace" yaml:"swift_code_trace,omitempty"`
+	Purpose                                    null.String       `boil:"purpose" json:"purpose,omitempty" toml:"purpose" yaml:"purpose,omitempty"`
+	Status                                     null.String       `boil:"status" json:"status,omitempty" toml:"status" yaml:"status,omitempty"`
+	Balance                                    types.NullDecimal `boil:"balance" json:"balance,omitempty" toml:"balance" yaml:"balance,omitempty"`
+	BalanceType                                string            `boil:"balance_type" json:"balance_type" toml:"balance_type" yaml:"balance_type"`
+	BalanceCreditDebitIndicator                string            `boil:"balance_credit_debit_indicator" json:"balance_credit_debit_indicator" toml:"balance_credit_debit_indicator" yaml:"balance_credit_debit_indicator"`
+	ObTransactionType                          null.String       `boil:"ob_transaction_type" json:"ob_transaction_type,omitempty" toml:"ob_transaction_type" yaml:"ob_transaction_type,omitempty"`
+	OverdraftFeesAmount                        types.NullDecimal `boil:"overdraft_fees_amount" json:"overdraft_fees_amount,omitempty" toml:"overdraft_fees_amount" yaml:"overdraft_fees_amount,omitempty"`
+	InterestAmount                             types.NullDecimal `boil:"interest_amount" json:"interest_amount,omitempty" toml:"interest_amount" yaml:"interest_amount,omitempty"`
+	FeesAmount                                 types.NullDecimal `boil:"fees_amount" json:"fees_amount,omitempty" toml:"fees_amount" yaml:"fees_amount,omitempty"`
+	OverdraftAmount                            types.NullDecimal `boil:"overdraft_amount" json:"overdraft_amount,omitempty" toml:"overdraft_amount" yaml:"overdraft_amount,omitempty"`
+	FundsAmount                                types.NullDecimal `boil:"funds_amount" json:"funds_amount,omitempty" toml:"funds_amount" yaml:"funds_amount,omitempty"`
+	OverdraftInterestAmount                    types.NullDecimal `boil:"overdraft_interest_amount" json:"overdraft_interest_amount,omitempty" toml:"overdraft_interest_amount" yaml:"overdraft_interest_amount,omitempty"`
+	InterestRate                               types.NullDecimal `boil:"interest_rate" json:"interest_rate,omitempty" toml:"interest_rate" yaml:"interest_rate,omitempty"`
+	OverdraftInterestRate                      types.NullDecimal `boil:"overdraft_interest_rate" json:"overdraft_interest_rate,omitempty" toml:"overdraft_interest_rate" yaml:"overdraft_interest_rate,omitempty"`
+	Comment                                    null.String       `boil:"comment" json:"comment,omitempty" toml:"comment" yaml:"comment,omitempty"`
+	AddressLine                                null.String       `boil:"address_line" json:"address_line,omitempty" toml:"address_line" yaml:"address_line,omitempty"`
+	TransactionName                            string            `boil:"transaction_name" json:"transaction_name" toml:"transaction_name" yaml:"transaction_name"`
+	ExpectedDisbursementDate                   null.Time         `boil:"expected_disbursement_date" json:"expected_disbursement_date,omitempty" toml:"expected_disbursement_date" yaml:"expected_disbursement_date,omitempty"`
+	ExpectedDisbursementTime                   null.String       `boil:"expected_disbursement_time" json:"expected_disbursement_time,omitempty" toml:"expected_disbursement_time" yaml:"expected_disbursement_time,omitempty"`
+	BookingDateTime                            null.Time         `boil:"booking_date_time" json:"booking_date_time,omitempty" toml:"booking_date_time" yaml:"booking_date_time,omitempty"`
+	ValueDateTime                              null.Time         `boil:"value_date_time" json:"value_date_time,omitempty" toml:"value_date_time" yaml:"value_date_time,omitempty"`
+	CounterpartyBankCode                       null.String       `boil:"counterparty_bank_code" json:"counterparty_bank_code,omitempty" toml:"counterparty_bank_code" yaml:"counterparty_bank_code,omitempty"`
+	CounterpartyBankName                       null.String       `boil:"counterparty_bank_name" json:"counterparty_bank_name,omitempty" toml:"counterparty_bank_name" yaml:"counterparty_bank_name,omitempty"`
+	BankTransactionCode                        null.String       `boil:"bank_transaction_code" json:"bank_transaction_code,omitempty" toml:"bank_transaction_code" yaml:"bank_transaction_code,omitempty"`
+	BankTransactionSubcode                     null.String       `boil:"bank_transaction_subcode" json:"bank_transaction_subcode,omitempty" toml:"bank_transaction_subcode" yaml:"bank_transaction_subcode,omitempty"`
+	ProprietaryBankTransactionCode             null.String       `boil:"proprietary_bank_transaction_code" json:"proprietary_bank_transaction_code,omitempty" toml:"proprietary_bank_transaction_code" yaml:"proprietary_bank_transaction_code,omitempty"`
+	ProprietaryBankTransactionIssuer           null.String       `boil:"proprietary_bank_transaction_issuer" json:"proprietary_bank_transaction_issuer,omitempty" toml:"proprietary_bank_transaction_issuer" yaml:"proprietary_bank_transaction_issuer,omitempty"`
+	IssuerBank                                 null.String       `boil:"issuer_bank" json:"issuer_bank,omitempty" toml:"issuer_bank" yaml:"issuer_bank,omitempty"`
+	MerchantName                               null.String       `boil:"merchant_name" json:"merchant_name,omitempty" toml:"merchant_name" yaml:"merchant_name,omitempty"`
+	MerchantCategoryCode                       null.String       `boil:"merchant_category_code" json:"merchant_category_code,omitempty" toml:"merchant_category_code" yaml:"merchant_category_code,omitempty"`
+	MakerDate                                  time.Time         `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
+	CheckerDate                                null.Time         `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
+	MakerID                                    string            `boil:"maker_id" json:"maker_id" toml:"maker_id" yaml:"maker_id"`
+	CheckerID                                  null.String       `boil:"checker_id" json:"checker_id,omitempty" toml:"checker_id" yaml:"checker_id,omitempty"`
+	ModifiedBy                                 null.String       `boil:"modified_by" json:"modified_by,omitempty" toml:"modified_by" yaml:"modified_by,omitempty"`
+	ModifiedDate                               null.Time         `boil:"modified_date" json:"modified_date,omitempty" toml:"modified_date" yaml:"modified_date,omitempty"`
+	TransactionTypeID                          int               `boil:"transaction_type_id" json:"transaction_type_id" toml:"transaction_type_id" yaml:"transaction_type_id"`
+	CounterpartyAgentSchemename                null.String       `boil:"counterparty_agent_schemename" json:"counterparty_agent_schemename,omitempty" toml:"counterparty_agent_schemename" yaml:"counterparty_agent_schemename,omitempty"`
+	CounterpartyAgentIdentification            null.String       `boil:"counterparty_agent_identification" json:"counterparty_agent_identification,omitempty" toml:"counterparty_agent_identification" yaml:"counterparty_agent_identification,omitempty"`
+	CounterpartyAccountSchemename              null.String       `boil:"counterparty_account_schemename" json:"counterparty_account_schemename,omitempty" toml:"counterparty_account_schemename" yaml:"counterparty_account_schemename,omitempty"`
+	CounterpartyAccountIdentification          null.String       `boil:"counterparty_account_identification" json:"counterparty_account_identification,omitempty" toml:"counterparty_account_identification" yaml:"counterparty_account_identification,omitempty"`
+	CounterpartyAccountName                    null.String       `boil:"counterparty_account_name" json:"counterparty_account_name,omitempty" toml:"counterparty_account_name" yaml:"counterparty_account_name,omitempty"`
+	CounterpartyAccountSecondaryIdentification null.String       `boil:"counterparty_account_secondary_identification" json:"counterparty_account_secondary_identification,omitempty" toml:"counterparty_account_secondary_identification" yaml:"counterparty_account_secondary_identification,omitempty"`
+	CounterpartyReference                      null.String       `boil:"counterparty_reference" json:"counterparty_reference,omitempty" toml:"counterparty_reference" yaml:"counterparty_reference,omitempty"`
+	CounterpartyAgentName                      null.String       `boil:"counterparty_agent_name" json:"counterparty_agent_name,omitempty" toml:"counterparty_agent_name" yaml:"counterparty_agent_name,omitempty"`
+	CounterpartyAgentAddressType               null.String       `boil:"counterparty_agent_address_type" json:"counterparty_agent_address_type,omitempty" toml:"counterparty_agent_address_type" yaml:"counterparty_agent_address_type,omitempty"`
+	CounterpartyAgentDepartment                null.String       `boil:"counterparty_agent_department" json:"counterparty_agent_department,omitempty" toml:"counterparty_agent_department" yaml:"counterparty_agent_department,omitempty"`
+	CounterpartyAgentSubdepartment             null.String       `boil:"counterparty_agent_subdepartment" json:"counterparty_agent_subdepartment,omitempty" toml:"counterparty_agent_subdepartment" yaml:"counterparty_agent_subdepartment,omitempty"`
+	CounterpartyAgentStreetName                null.String       `boil:"counterparty_agent_street_name" json:"counterparty_agent_street_name,omitempty" toml:"counterparty_agent_street_name" yaml:"counterparty_agent_street_name,omitempty"`
+	CounterpartyAgentBuildingNumber            null.String       `boil:"counterparty_agent_building_number" json:"counterparty_agent_building_number,omitempty" toml:"counterparty_agent_building_number" yaml:"counterparty_agent_building_number,omitempty"`
+	CounterpartyAgentTownName                  null.String       `boil:"counterparty_agent_town_name" json:"counterparty_agent_town_name,omitempty" toml:"counterparty_agent_town_name" yaml:"counterparty_agent_town_name,omitempty"`
+	CounterpartyAgentAddressline1              null.String       `boil:"counterparty_agent_addressline1" json:"counterparty_agent_addressline1,omitempty" toml:"counterparty_agent_addressline1" yaml:"counterparty_agent_addressline1,omitempty"`
+	CounterpartyAgentPostalcode                null.String       `boil:"counterparty_agent_postalcode" json:"counterparty_agent_postalcode,omitempty" toml:"counterparty_agent_postalcode" yaml:"counterparty_agent_postalcode,omitempty"`
+	CounterpartyAgentCountrysubdivision        null.String       `boil:"counterparty_agent_countrysubdivision" json:"counterparty_agent_countrysubdivision,omitempty" toml:"counterparty_agent_countrysubdivision" yaml:"counterparty_agent_countrysubdivision,omitempty"`
+	CounterpartyAgnetCountry                   null.String       `boil:"counterparty_agnet_country" json:"counterparty_agnet_country,omitempty" toml:"counterparty_agnet_country" yaml:"counterparty_agnet_country,omitempty"`
+	TransactionInformation                     null.String       `boil:"transaction_information" json:"transaction_information,omitempty" toml:"transaction_information" yaml:"transaction_information,omitempty"`
+	CardSchemename                             null.String       `boil:"card_schemename" json:"card_schemename,omitempty" toml:"card_schemename" yaml:"card_schemename,omitempty"`
+	CardAuthorizationType                      null.String       `boil:"card_authorization_type" json:"card_authorization_type,omitempty" toml:"card_authorization_type" yaml:"card_authorization_type,omitempty"`
+	CardName                                   null.String       `boil:"card_name" json:"card_name,omitempty" toml:"card_name" yaml:"card_name,omitempty"`
+	CardIdentification                         null.String       `boil:"card_identification" json:"card_identification,omitempty" toml:"card_identification" yaml:"card_identification,omitempty"`
+	SupplementaryData                          null.String       `boil:"supplementary_data" json:"supplementary_data,omitempty" toml:"supplementary_data" yaml:"supplementary_data,omitempty"`
 
 	R *transactionR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L transactionL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var TransactionColumns = struct {
-	TransactionID                     string
-	TransactionReference              string
-	BankID                            string
-	AccountID                         string
-	CreditDebitIndicator              string
-	PaymentID                         string
-	TransferID                        string
-	PaymentRefID                      string
-	CounterpartyAccountID             string
-	TransactionAmount                 string
-	CurrencyCode                      string
-	ChargeAmount                      string
-	ChargeCurrency                    string
-	TransactionType                   string
-	CounterpartyBankID                string
-	BankLocation                      string
-	CounterpartyBankLocation          string
-	SwiftCode                         string
-	SwiftCodeTrace                    string
-	Purpose                           string
-	Status                            string
-	Balance                           string
-	BalanceType                       string
-	BalanceCreditDebitIndicator       string
-	ObTransactionType                 string
-	OverdraftFeesAmount               string
-	InterestAmount                    string
-	FeesAmount                        string
-	OverdraftAmount                   string
-	FundsAmount                       string
-	OverdraftInterestAmount           string
-	InterestRate                      string
-	OverdraftInterestRate             string
-	Comment                           string
-	AddressLine                       string
-	TransactionName                   string
-	ExpectedDisbursementDate          string
-	ExpectedDisbursementTime          string
-	BookingDateTime                   string
-	ValueDateTime                     string
-	CounterpartyBankCode              string
-	CounterpartyBankName              string
-	BankTransactionCode               string
-	BankTransactionSubcode            string
-	ProprietaryBankTransactionCode    string
-	ProprietaryBankTransactionSubcode string
-	IssuerBank                        string
-	MerchantName                      string
-	MerchantCategoryCode              string
-	MakerDate                         string
-	CheckerDate                       string
-	MakerID                           string
-	CheckerID                         string
-	ModifiedBy                        string
-	ModifiedDate                      string
+	TransactionID                              string
+	TransactionReference                       string
+	BankID                                     string
+	AccountID                                  string
+	CreditDebitIndicator                       string
+	PaymentID                                  string
+	TransferID                                 string
+	PaymentRefID                               string
+	CounterpartyAccountID                      string
+	TransactionAmount                          string
+	CurrencyCode                               string
+	ChargeAmount                               string
+	ChargeCurrency                             string
+	CounterpartyBankID                         string
+	BankLocation                               string
+	CounterpartyBankLocation                   string
+	SwiftCode                                  string
+	SwiftCodeTrace                             string
+	Purpose                                    string
+	Status                                     string
+	Balance                                    string
+	BalanceType                                string
+	BalanceCreditDebitIndicator                string
+	ObTransactionType                          string
+	OverdraftFeesAmount                        string
+	InterestAmount                             string
+	FeesAmount                                 string
+	OverdraftAmount                            string
+	FundsAmount                                string
+	OverdraftInterestAmount                    string
+	InterestRate                               string
+	OverdraftInterestRate                      string
+	Comment                                    string
+	AddressLine                                string
+	TransactionName                            string
+	ExpectedDisbursementDate                   string
+	ExpectedDisbursementTime                   string
+	BookingDateTime                            string
+	ValueDateTime                              string
+	CounterpartyBankCode                       string
+	CounterpartyBankName                       string
+	BankTransactionCode                        string
+	BankTransactionSubcode                     string
+	ProprietaryBankTransactionCode             string
+	ProprietaryBankTransactionIssuer           string
+	IssuerBank                                 string
+	MerchantName                               string
+	MerchantCategoryCode                       string
+	MakerDate                                  string
+	CheckerDate                                string
+	MakerID                                    string
+	CheckerID                                  string
+	ModifiedBy                                 string
+	ModifiedDate                               string
+	TransactionTypeID                          string
+	CounterpartyAgentSchemename                string
+	CounterpartyAgentIdentification            string
+	CounterpartyAccountSchemename              string
+	CounterpartyAccountIdentification          string
+	CounterpartyAccountName                    string
+	CounterpartyAccountSecondaryIdentification string
+	CounterpartyReference                      string
+	CounterpartyAgentName                      string
+	CounterpartyAgentAddressType               string
+	CounterpartyAgentDepartment                string
+	CounterpartyAgentSubdepartment             string
+	CounterpartyAgentStreetName                string
+	CounterpartyAgentBuildingNumber            string
+	CounterpartyAgentTownName                  string
+	CounterpartyAgentAddressline1              string
+	CounterpartyAgentPostalcode                string
+	CounterpartyAgentCountrysubdivision        string
+	CounterpartyAgnetCountry                   string
+	TransactionInformation                     string
+	CardSchemename                             string
+	CardAuthorizationType                      string
+	CardName                                   string
+	CardIdentification                         string
+	SupplementaryData                          string
 }{
 	TransactionID:                     "transaction_id",
 	TransactionReference:              "transaction_reference",
@@ -155,7 +203,6 @@ var TransactionColumns = struct {
 	CurrencyCode:                      "currency_code",
 	ChargeAmount:                      "charge_amount",
 	ChargeCurrency:                    "charge_currency",
-	TransactionType:                   "transaction_type",
 	CounterpartyBankID:                "counterparty_bank_id",
 	BankLocation:                      "bank_location",
 	CounterpartyBankLocation:          "counterparty_bank_location",
@@ -187,7 +234,7 @@ var TransactionColumns = struct {
 	BankTransactionCode:               "bank_transaction_code",
 	BankTransactionSubcode:            "bank_transaction_subcode",
 	ProprietaryBankTransactionCode:    "proprietary_bank_transaction_code",
-	ProprietaryBankTransactionSubcode: "proprietary_bank_transaction_subcode",
+	ProprietaryBankTransactionIssuer:  "proprietary_bank_transaction_issuer",
 	IssuerBank:                        "issuer_bank",
 	MerchantName:                      "merchant_name",
 	MerchantCategoryCode:              "merchant_category_code",
@@ -197,66 +244,115 @@ var TransactionColumns = struct {
 	CheckerID:                         "checker_id",
 	ModifiedBy:                        "modified_by",
 	ModifiedDate:                      "modified_date",
+	TransactionTypeID:                 "transaction_type_id",
+	CounterpartyAgentSchemename:       "counterparty_agent_schemename",
+	CounterpartyAgentIdentification:   "counterparty_agent_identification",
+	CounterpartyAccountSchemename:     "counterparty_account_schemename",
+	CounterpartyAccountIdentification: "counterparty_account_identification",
+	CounterpartyAccountName:           "counterparty_account_name",
+	CounterpartyAccountSecondaryIdentification: "counterparty_account_secondary_identification",
+	CounterpartyReference:                      "counterparty_reference",
+	CounterpartyAgentName:                      "counterparty_agent_name",
+	CounterpartyAgentAddressType:               "counterparty_agent_address_type",
+	CounterpartyAgentDepartment:                "counterparty_agent_department",
+	CounterpartyAgentSubdepartment:             "counterparty_agent_subdepartment",
+	CounterpartyAgentStreetName:                "counterparty_agent_street_name",
+	CounterpartyAgentBuildingNumber:            "counterparty_agent_building_number",
+	CounterpartyAgentTownName:                  "counterparty_agent_town_name",
+	CounterpartyAgentAddressline1:              "counterparty_agent_addressline1",
+	CounterpartyAgentPostalcode:                "counterparty_agent_postalcode",
+	CounterpartyAgentCountrysubdivision:        "counterparty_agent_countrysubdivision",
+	CounterpartyAgnetCountry:                   "counterparty_agnet_country",
+	TransactionInformation:                     "transaction_information",
+	CardSchemename:                             "card_schemename",
+	CardAuthorizationType:                      "card_authorization_type",
+	CardName:                                   "card_name",
+	CardIdentification:                         "card_identification",
+	SupplementaryData:                          "supplementary_data",
 }
 
 // Generated where
 
 var TransactionWhere = struct {
-	TransactionID                     whereHelperint
-	TransactionReference              whereHelperstring
-	BankID                            whereHelperint
-	AccountID                         whereHelperint
-	CreditDebitIndicator              whereHelperstring
-	PaymentID                         whereHelpernull_Int
-	TransferID                        whereHelpernull_String
-	PaymentRefID                      whereHelpernull_String
-	CounterpartyAccountID             whereHelpernull_Int
-	TransactionAmount                 whereHelpertypes_Decimal
-	CurrencyCode                      whereHelpernull_String
-	ChargeAmount                      whereHelpertypes_NullDecimal
-	ChargeCurrency                    whereHelpernull_String
-	TransactionType                   whereHelperstring
-	CounterpartyBankID                whereHelpernull_Int
-	BankLocation                      whereHelpernull_String
-	CounterpartyBankLocation          whereHelpernull_String
-	SwiftCode                         whereHelpernull_String
-	SwiftCodeTrace                    whereHelpernull_String
-	Purpose                           whereHelpernull_String
-	Status                            whereHelpernull_String
-	Balance                           whereHelpertypes_NullDecimal
-	BalanceType                       whereHelperstring
-	BalanceCreditDebitIndicator       whereHelperstring
-	ObTransactionType                 whereHelpernull_String
-	OverdraftFeesAmount               whereHelpertypes_NullDecimal
-	InterestAmount                    whereHelpertypes_NullDecimal
-	FeesAmount                        whereHelpertypes_NullDecimal
-	OverdraftAmount                   whereHelpertypes_NullDecimal
-	FundsAmount                       whereHelpertypes_NullDecimal
-	OverdraftInterestAmount           whereHelpertypes_NullDecimal
-	InterestRate                      whereHelpertypes_NullDecimal
-	OverdraftInterestRate             whereHelpertypes_NullDecimal
-	Comment                           whereHelpernull_String
-	AddressLine                       whereHelpernull_String
-	TransactionName                   whereHelperstring
-	ExpectedDisbursementDate          whereHelpernull_Time
-	ExpectedDisbursementTime          whereHelpernull_String
-	BookingDateTime                   whereHelpernull_Time
-	ValueDateTime                     whereHelpernull_Time
-	CounterpartyBankCode              whereHelpernull_String
-	CounterpartyBankName              whereHelpernull_String
-	BankTransactionCode               whereHelpernull_String
-	BankTransactionSubcode            whereHelpernull_String
-	ProprietaryBankTransactionCode    whereHelpernull_String
-	ProprietaryBankTransactionSubcode whereHelpernull_String
-	IssuerBank                        whereHelpernull_String
-	MerchantName                      whereHelpernull_String
-	MerchantCategoryCode              whereHelpernull_String
-	MakerDate                         whereHelpertime_Time
-	CheckerDate                       whereHelpernull_Time
-	MakerID                           whereHelperstring
-	CheckerID                         whereHelpernull_String
-	ModifiedBy                        whereHelpernull_String
-	ModifiedDate                      whereHelpernull_Time
+	TransactionID                              whereHelperint
+	TransactionReference                       whereHelperstring
+	BankID                                     whereHelperint
+	AccountID                                  whereHelperint
+	CreditDebitIndicator                       whereHelperstring
+	PaymentID                                  whereHelpernull_Int
+	TransferID                                 whereHelpernull_Int
+	PaymentRefID                               whereHelpernull_String
+	CounterpartyAccountID                      whereHelpernull_Int
+	TransactionAmount                          whereHelpertypes_Decimal
+	CurrencyCode                               whereHelpernull_String
+	ChargeAmount                               whereHelpertypes_NullDecimal
+	ChargeCurrency                             whereHelpernull_String
+	CounterpartyBankID                         whereHelpernull_Int
+	BankLocation                               whereHelpernull_String
+	CounterpartyBankLocation                   whereHelpernull_String
+	SwiftCode                                  whereHelpernull_String
+	SwiftCodeTrace                             whereHelpernull_String
+	Purpose                                    whereHelpernull_String
+	Status                                     whereHelpernull_String
+	Balance                                    whereHelpertypes_NullDecimal
+	BalanceType                                whereHelperstring
+	BalanceCreditDebitIndicator                whereHelperstring
+	ObTransactionType                          whereHelpernull_String
+	OverdraftFeesAmount                        whereHelpertypes_NullDecimal
+	InterestAmount                             whereHelpertypes_NullDecimal
+	FeesAmount                                 whereHelpertypes_NullDecimal
+	OverdraftAmount                            whereHelpertypes_NullDecimal
+	FundsAmount                                whereHelpertypes_NullDecimal
+	OverdraftInterestAmount                    whereHelpertypes_NullDecimal
+	InterestRate                               whereHelpertypes_NullDecimal
+	OverdraftInterestRate                      whereHelpertypes_NullDecimal
+	Comment                                    whereHelpernull_String
+	AddressLine                                whereHelpernull_String
+	TransactionName                            whereHelperstring
+	ExpectedDisbursementDate                   whereHelpernull_Time
+	ExpectedDisbursementTime                   whereHelpernull_String
+	BookingDateTime                            whereHelpernull_Time
+	ValueDateTime                              whereHelpernull_Time
+	CounterpartyBankCode                       whereHelpernull_String
+	CounterpartyBankName                       whereHelpernull_String
+	BankTransactionCode                        whereHelpernull_String
+	BankTransactionSubcode                     whereHelpernull_String
+	ProprietaryBankTransactionCode             whereHelpernull_String
+	ProprietaryBankTransactionIssuer           whereHelpernull_String
+	IssuerBank                                 whereHelpernull_String
+	MerchantName                               whereHelpernull_String
+	MerchantCategoryCode                       whereHelpernull_String
+	MakerDate                                  whereHelpertime_Time
+	CheckerDate                                whereHelpernull_Time
+	MakerID                                    whereHelperstring
+	CheckerID                                  whereHelpernull_String
+	ModifiedBy                                 whereHelpernull_String
+	ModifiedDate                               whereHelpernull_Time
+	TransactionTypeID                          whereHelperint
+	CounterpartyAgentSchemename                whereHelpernull_String
+	CounterpartyAgentIdentification            whereHelpernull_String
+	CounterpartyAccountSchemename              whereHelpernull_String
+	CounterpartyAccountIdentification          whereHelpernull_String
+	CounterpartyAccountName                    whereHelpernull_String
+	CounterpartyAccountSecondaryIdentification whereHelpernull_String
+	CounterpartyReference                      whereHelpernull_String
+	CounterpartyAgentName                      whereHelpernull_String
+	CounterpartyAgentAddressType               whereHelpernull_String
+	CounterpartyAgentDepartment                whereHelpernull_String
+	CounterpartyAgentSubdepartment             whereHelpernull_String
+	CounterpartyAgentStreetName                whereHelpernull_String
+	CounterpartyAgentBuildingNumber            whereHelpernull_String
+	CounterpartyAgentTownName                  whereHelpernull_String
+	CounterpartyAgentAddressline1              whereHelpernull_String
+	CounterpartyAgentPostalcode                whereHelpernull_String
+	CounterpartyAgentCountrysubdivision        whereHelpernull_String
+	CounterpartyAgnetCountry                   whereHelpernull_String
+	TransactionInformation                     whereHelpernull_String
+	CardSchemename                             whereHelpernull_String
+	CardAuthorizationType                      whereHelpernull_String
+	CardName                                   whereHelpernull_String
+	CardIdentification                         whereHelpernull_String
+	SupplementaryData                          whereHelpernull_String
 }{
 	TransactionID:                     whereHelperint{field: `transaction_id`},
 	TransactionReference:              whereHelperstring{field: `transaction_reference`},
@@ -264,14 +360,13 @@ var TransactionWhere = struct {
 	AccountID:                         whereHelperint{field: `account_id`},
 	CreditDebitIndicator:              whereHelperstring{field: `credit_debit_indicator`},
 	PaymentID:                         whereHelpernull_Int{field: `payment_id`},
-	TransferID:                        whereHelpernull_String{field: `transfer_id`},
+	TransferID:                        whereHelpernull_Int{field: `transfer_id`},
 	PaymentRefID:                      whereHelpernull_String{field: `payment_ref_id`},
 	CounterpartyAccountID:             whereHelpernull_Int{field: `counterparty_account_id`},
 	TransactionAmount:                 whereHelpertypes_Decimal{field: `transaction_amount`},
 	CurrencyCode:                      whereHelpernull_String{field: `currency_code`},
 	ChargeAmount:                      whereHelpertypes_NullDecimal{field: `charge_amount`},
 	ChargeCurrency:                    whereHelpernull_String{field: `charge_currency`},
-	TransactionType:                   whereHelperstring{field: `transaction_type`},
 	CounterpartyBankID:                whereHelpernull_Int{field: `counterparty_bank_id`},
 	BankLocation:                      whereHelpernull_String{field: `bank_location`},
 	CounterpartyBankLocation:          whereHelpernull_String{field: `counterparty_bank_location`},
@@ -303,7 +398,7 @@ var TransactionWhere = struct {
 	BankTransactionCode:               whereHelpernull_String{field: `bank_transaction_code`},
 	BankTransactionSubcode:            whereHelpernull_String{field: `bank_transaction_subcode`},
 	ProprietaryBankTransactionCode:    whereHelpernull_String{field: `proprietary_bank_transaction_code`},
-	ProprietaryBankTransactionSubcode: whereHelpernull_String{field: `proprietary_bank_transaction_subcode`},
+	ProprietaryBankTransactionIssuer:  whereHelpernull_String{field: `proprietary_bank_transaction_issuer`},
 	IssuerBank:                        whereHelpernull_String{field: `issuer_bank`},
 	MerchantName:                      whereHelpernull_String{field: `merchant_name`},
 	MerchantCategoryCode:              whereHelpernull_String{field: `merchant_category_code`},
@@ -313,6 +408,31 @@ var TransactionWhere = struct {
 	CheckerID:                         whereHelpernull_String{field: `checker_id`},
 	ModifiedBy:                        whereHelpernull_String{field: `modified_by`},
 	ModifiedDate:                      whereHelpernull_Time{field: `modified_date`},
+	TransactionTypeID:                 whereHelperint{field: `transaction_type_id`},
+	CounterpartyAgentSchemename:       whereHelpernull_String{field: `counterparty_agent_schemename`},
+	CounterpartyAgentIdentification:   whereHelpernull_String{field: `counterparty_agent_identification`},
+	CounterpartyAccountSchemename:     whereHelpernull_String{field: `counterparty_account_schemename`},
+	CounterpartyAccountIdentification: whereHelpernull_String{field: `counterparty_account_identification`},
+	CounterpartyAccountName:           whereHelpernull_String{field: `counterparty_account_name`},
+	CounterpartyAccountSecondaryIdentification: whereHelpernull_String{field: `counterparty_account_secondary_identification`},
+	CounterpartyReference:                      whereHelpernull_String{field: `counterparty_reference`},
+	CounterpartyAgentName:                      whereHelpernull_String{field: `counterparty_agent_name`},
+	CounterpartyAgentAddressType:               whereHelpernull_String{field: `counterparty_agent_address_type`},
+	CounterpartyAgentDepartment:                whereHelpernull_String{field: `counterparty_agent_department`},
+	CounterpartyAgentSubdepartment:             whereHelpernull_String{field: `counterparty_agent_subdepartment`},
+	CounterpartyAgentStreetName:                whereHelpernull_String{field: `counterparty_agent_street_name`},
+	CounterpartyAgentBuildingNumber:            whereHelpernull_String{field: `counterparty_agent_building_number`},
+	CounterpartyAgentTownName:                  whereHelpernull_String{field: `counterparty_agent_town_name`},
+	CounterpartyAgentAddressline1:              whereHelpernull_String{field: `counterparty_agent_addressline1`},
+	CounterpartyAgentPostalcode:                whereHelpernull_String{field: `counterparty_agent_postalcode`},
+	CounterpartyAgentCountrysubdivision:        whereHelpernull_String{field: `counterparty_agent_countrysubdivision`},
+	CounterpartyAgnetCountry:                   whereHelpernull_String{field: `counterparty_agnet_country`},
+	TransactionInformation:                     whereHelpernull_String{field: `transaction_information`},
+	CardSchemename:                             whereHelpernull_String{field: `card_schemename`},
+	CardAuthorizationType:                      whereHelpernull_String{field: `card_authorization_type`},
+	CardName:                                   whereHelpernull_String{field: `card_name`},
+	CardIdentification:                         whereHelpernull_String{field: `card_identification`},
+	SupplementaryData:                          whereHelpernull_String{field: `supplementary_data`},
 }
 
 // TransactionRels is where relationship names are stored.
@@ -345,8 +465,8 @@ func (*transactionR) NewStruct() *transactionR {
 type transactionL struct{}
 
 var (
-	transactionColumns               = []string{"transaction_id", "transaction_reference", "bank_id", "account_id", "credit_debit_indicator", "payment_id", "transfer_id", "payment_ref_id", "counterparty_account_id", "transaction_amount", "currency_code", "charge_amount", "charge_currency", "transaction_type", "counterparty_bank_id", "bank_location", "counterparty_bank_location", "swift_code", "swift_code_trace", "purpose", "status", "balance", "balance_type", "balance_credit_debit_indicator", "ob_transaction_type", "overdraft_fees_amount", "interest_amount", "fees_amount", "overdraft_amount", "funds_amount", "overdraft_interest_amount", "interest_rate", "overdraft_interest_rate", "comment", "address_line", "transaction_name", "expected_disbursement_date", "expected_disbursement_time", "booking_date_time", "value_date_time", "counterparty_bank_code", "counterparty_bank_name", "bank_transaction_code", "bank_transaction_subcode", "proprietary_bank_transaction_code", "proprietary_bank_transaction_subcode", "issuer_bank", "merchant_name", "merchant_category_code", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	transactionColumnsWithoutDefault = []string{"transaction_reference", "bank_id", "account_id", "credit_debit_indicator", "payment_id", "transfer_id", "payment_ref_id", "counterparty_account_id", "transaction_amount", "currency_code", "charge_amount", "charge_currency", "transaction_type", "counterparty_bank_id", "bank_location", "counterparty_bank_location", "swift_code", "swift_code_trace", "purpose", "status", "balance", "balance_type", "balance_credit_debit_indicator", "ob_transaction_type", "overdraft_fees_amount", "interest_amount", "fees_amount", "overdraft_amount", "funds_amount", "overdraft_interest_amount", "interest_rate", "overdraft_interest_rate", "comment", "address_line", "transaction_name", "expected_disbursement_date", "expected_disbursement_time", "booking_date_time", "value_date_time", "counterparty_bank_code", "counterparty_bank_name", "bank_transaction_code", "bank_transaction_subcode", "proprietary_bank_transaction_code", "proprietary_bank_transaction_subcode", "issuer_bank", "merchant_name", "merchant_category_code", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	transactionColumns               = []string{"transaction_id", "transaction_reference", "bank_id", "account_id", "credit_debit_indicator", "payment_id", "transfer_id", "payment_ref_id", "counterparty_account_id", "transaction_amount", "currency_code", "charge_amount", "charge_currency", "counterparty_bank_id", "bank_location", "counterparty_bank_location", "swift_code", "swift_code_trace", "purpose", "status", "balance", "balance_type", "balance_credit_debit_indicator", "ob_transaction_type", "overdraft_fees_amount", "interest_amount", "fees_amount", "overdraft_amount", "funds_amount", "overdraft_interest_amount", "interest_rate", "overdraft_interest_rate", "comment", "address_line", "transaction_name", "expected_disbursement_date", "expected_disbursement_time", "booking_date_time", "value_date_time", "counterparty_bank_code", "counterparty_bank_name", "bank_transaction_code", "bank_transaction_subcode", "proprietary_bank_transaction_code", "proprietary_bank_transaction_issuer", "issuer_bank", "merchant_name", "merchant_category_code", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date", "transaction_type_id", "counterparty_agent_schemename", "counterparty_agent_identification", "counterparty_account_schemename", "counterparty_account_identification", "counterparty_account_name", "counterparty_account_secondary_identification", "counterparty_reference", "counterparty_agent_name", "counterparty_agent_address_type", "counterparty_agent_department", "counterparty_agent_subdepartment", "counterparty_agent_street_name", "counterparty_agent_building_number", "counterparty_agent_town_name", "counterparty_agent_addressline1", "counterparty_agent_postalcode", "counterparty_agent_countrysubdivision", "counterparty_agnet_country", "transaction_information", "card_schemename", "card_authorization_type", "card_name", "card_identification", "supplementary_data"}
+	transactionColumnsWithoutDefault = []string{"transaction_reference", "bank_id", "account_id", "credit_debit_indicator", "payment_id", "transfer_id", "payment_ref_id", "counterparty_account_id", "transaction_amount", "currency_code", "charge_amount", "charge_currency", "counterparty_bank_id", "bank_location", "counterparty_bank_location", "swift_code", "swift_code_trace", "purpose", "status", "balance", "balance_type", "balance_credit_debit_indicator", "ob_transaction_type", "overdraft_fees_amount", "interest_amount", "fees_amount", "overdraft_amount", "funds_amount", "overdraft_interest_amount", "interest_rate", "overdraft_interest_rate", "comment", "address_line", "transaction_name", "expected_disbursement_date", "expected_disbursement_time", "booking_date_time", "value_date_time", "counterparty_bank_code", "counterparty_bank_name", "bank_transaction_code", "bank_transaction_subcode", "proprietary_bank_transaction_code", "proprietary_bank_transaction_issuer", "issuer_bank", "merchant_name", "merchant_category_code", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date", "transaction_type_id", "counterparty_agent_schemename", "counterparty_agent_identification", "counterparty_account_schemename", "counterparty_account_identification", "counterparty_account_name", "counterparty_account_secondary_identification", "counterparty_reference", "counterparty_agent_name", "counterparty_agent_address_type", "counterparty_agent_department", "counterparty_agent_subdepartment", "counterparty_agent_street_name", "counterparty_agent_building_number", "counterparty_agent_town_name", "counterparty_agent_addressline1", "counterparty_agent_postalcode", "counterparty_agent_countrysubdivision", "counterparty_agnet_country", "transaction_information", "card_schemename", "card_authorization_type", "card_name", "card_identification", "supplementary_data"}
 	transactionColumnsWithDefault    = []string{"transaction_id"}
 	transactionPrimaryKeyColumns     = []string{"transaction_id"}
 )
@@ -655,7 +775,7 @@ func (o *Transaction) Bank(mods ...qm.QueryMod) bankQuery {
 }
 
 // CurrencyCode pointed to by the foreign key.
-func (o *Transaction) CurrencyCode1(mods ...qm.QueryMod) currencyMasterQuery {
+func (o *Transaction) CurrencyCode(mods ...qm.QueryMod) currencyMasterQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("currency_id=?", o.CurrencyCode),
 	}

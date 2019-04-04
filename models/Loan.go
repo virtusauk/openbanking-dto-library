@@ -738,7 +738,7 @@ func (o *Loan) Account(mods ...qm.QueryMod) accountQuery {
 }
 
 // AssetIDRef pointed to by the foreign key.
-func (o *Loan) AssetIDRef1(mods ...qm.QueryMod) assetQuery {
+func (o *Loan) AssetIDRef(mods ...qm.QueryMod) assetQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("asset_id=?", o.AssetIDRef),
 	}
@@ -752,7 +752,7 @@ func (o *Loan) AssetIDRef1(mods ...qm.QueryMod) assetQuery {
 }
 
 // CreditOriginRef pointed to by the foreign key.
-func (o *Loan) CreditOriginRef1(mods ...qm.QueryMod) creditOriginationQuery {
+func (o *Loan) CreditOriginRef(mods ...qm.QueryMod) creditOriginationQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("credit_origination_id=?", o.CreditOriginRef),
 	}

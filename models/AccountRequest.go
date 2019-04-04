@@ -58,7 +58,10 @@ type AccountRequest struct {
 	ExpirationDateTime           time.Time   `boil:"expiration_date_time" json:"expiration_date_time" toml:"expiration_date_time" yaml:"expiration_date_time"`
 	TransactionFromDateTime      time.Time   `boil:"transaction_from_date_time" json:"transaction_from_date_time" toml:"transaction_from_date_time" yaml:"transaction_from_date_time"`
 	TransactionToDateTime        time.Time   `boil:"transaction_to_date_time" json:"transaction_to_date_time" toml:"transaction_to_date_time" yaml:"transaction_to_date_time"`
-	RISK                         null.String `boil:"RISK" json:"RISK,omitempty" toml:"RISK" yaml:"RISK,omitempty"`
+	ConsentID                    null.String `boil:"consent_id" json:"consent_id,omitempty" toml:"consent_id" yaml:"consent_id,omitempty"`
+	CreationDateTime             null.Time   `boil:"creation_date_time" json:"creation_date_time,omitempty" toml:"creation_date_time" yaml:"creation_date_time,omitempty"`
+	StatusUpdateDateTime         null.Time   `boil:"status_update_date_time" json:"status_update_date_time,omitempty" toml:"status_update_date_time" yaml:"status_update_date_time,omitempty"`
+	ConsentRisk                  null.String `boil:"consent_risk" json:"consent_risk,omitempty" toml:"consent_risk" yaml:"consent_risk,omitempty"`
 	MakerDate                    time.Time   `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
 	CheckerDate                  null.Time   `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
 	MakerID                      string      `boil:"maker_id" json:"maker_id" toml:"maker_id" yaml:"maker_id"`
@@ -105,7 +108,10 @@ var AccountRequestColumns = struct {
 	ExpirationDateTime           string
 	TransactionFromDateTime      string
 	TransactionToDateTime        string
-	RISK                         string
+	ConsentID                    string
+	CreationDateTime             string
+	StatusUpdateDateTime         string
+	ConsentRisk                  string
 	MakerDate                    string
 	CheckerDate                  string
 	MakerID                      string
@@ -147,7 +153,10 @@ var AccountRequestColumns = struct {
 	ExpirationDateTime:           "expiration_date_time",
 	TransactionFromDateTime:      "transaction_from_date_time",
 	TransactionToDateTime:        "transaction_to_date_time",
-	RISK:                         "RISK",
+	ConsentID:                    "consent_id",
+	CreationDateTime:             "creation_date_time",
+	StatusUpdateDateTime:         "status_update_date_time",
+	ConsentRisk:                  "consent_risk",
 	MakerDate:                    "maker_date",
 	CheckerDate:                  "checker_date",
 	MakerID:                      "maker_id",
@@ -216,7 +225,10 @@ var AccountRequestWhere = struct {
 	ExpirationDateTime           whereHelpertime_Time
 	TransactionFromDateTime      whereHelpertime_Time
 	TransactionToDateTime        whereHelpertime_Time
-	RISK                         whereHelpernull_String
+	ConsentID                    whereHelpernull_String
+	CreationDateTime             whereHelpernull_Time
+	StatusUpdateDateTime         whereHelpernull_Time
+	ConsentRisk                  whereHelpernull_String
 	MakerDate                    whereHelpertime_Time
 	CheckerDate                  whereHelpernull_Time
 	MakerID                      whereHelperstring
@@ -258,7 +270,10 @@ var AccountRequestWhere = struct {
 	ExpirationDateTime:           whereHelpertime_Time{field: `expiration_date_time`},
 	TransactionFromDateTime:      whereHelpertime_Time{field: `transaction_from_date_time`},
 	TransactionToDateTime:        whereHelpertime_Time{field: `transaction_to_date_time`},
-	RISK:                         whereHelpernull_String{field: `RISK`},
+	ConsentID:                    whereHelpernull_String{field: `consent_id`},
+	CreationDateTime:             whereHelpernull_Time{field: `creation_date_time`},
+	StatusUpdateDateTime:         whereHelpernull_Time{field: `status_update_date_time`},
+	ConsentRisk:                  whereHelpernull_String{field: `consent_risk`},
 	MakerDate:                    whereHelpertime_Time{field: `maker_date`},
 	CheckerDate:                  whereHelpernull_Time{field: `checker_date`},
 	MakerID:                      whereHelperstring{field: `maker_id`},
@@ -288,8 +303,8 @@ func (*accountRequestR) NewStruct() *accountRequestR {
 type accountRequestL struct{}
 
 var (
-	accountRequestColumns               = []string{"account_request_id", "account_id_ref", "account_request_reference", "account_id", "scheme_name", "account_identification", "party_id", "bank_id", "name", "status", "read_accounts_basic", "read_accounts_detail", "read_balances", "read_beneficiaries_basic", "read_beneficiaries_detail", "read_direct_debits", "read_offers", "read_pan", "read_party", "read_party_psu", "read_products", "read_scheduled_payments_basic", "read_scheduled_payments_dfetail", "read_standing_orders_basic", "read_standing_orders_detail", "read_statements_basic", "read_statements_detail", "read_transactions_basic", "read_transactions_credits", "read_transactions_debits", "read_transactions_detail", "expiration_date_time", "transaction_from_date_time", "transaction_to_date_time", "RISK", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	accountRequestColumnsWithoutDefault = []string{"account_id_ref", "account_request_reference", "account_id", "scheme_name", "account_identification", "party_id", "bank_id", "name", "status", "read_accounts_basic", "read_accounts_detail", "read_balances", "read_beneficiaries_basic", "read_beneficiaries_detail", "read_direct_debits", "read_offers", "read_pan", "read_party", "read_party_psu", "read_products", "read_scheduled_payments_basic", "read_scheduled_payments_dfetail", "read_standing_orders_basic", "read_standing_orders_detail", "read_statements_basic", "read_statements_detail", "read_transactions_basic", "read_transactions_credits", "read_transactions_debits", "read_transactions_detail", "expiration_date_time", "transaction_from_date_time", "transaction_to_date_time", "RISK", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	accountRequestColumns               = []string{"account_request_id", "account_id_ref", "account_request_reference", "account_id", "scheme_name", "account_identification", "party_id", "bank_id", "name", "status", "read_accounts_basic", "read_accounts_detail", "read_balances", "read_beneficiaries_basic", "read_beneficiaries_detail", "read_direct_debits", "read_offers", "read_pan", "read_party", "read_party_psu", "read_products", "read_scheduled_payments_basic", "read_scheduled_payments_dfetail", "read_standing_orders_basic", "read_standing_orders_detail", "read_statements_basic", "read_statements_detail", "read_transactions_basic", "read_transactions_credits", "read_transactions_debits", "read_transactions_detail", "expiration_date_time", "transaction_from_date_time", "transaction_to_date_time", "consent_id", "creation_date_time", "status_update_date_time", "consent_risk", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	accountRequestColumnsWithoutDefault = []string{"account_id_ref", "account_request_reference", "account_id", "scheme_name", "account_identification", "party_id", "bank_id", "name", "status", "read_accounts_basic", "read_accounts_detail", "read_balances", "read_beneficiaries_basic", "read_beneficiaries_detail", "read_direct_debits", "read_offers", "read_pan", "read_party", "read_party_psu", "read_products", "read_scheduled_payments_basic", "read_scheduled_payments_dfetail", "read_standing_orders_basic", "read_standing_orders_detail", "read_statements_basic", "read_statements_detail", "read_transactions_basic", "read_transactions_credits", "read_transactions_debits", "read_transactions_detail", "expiration_date_time", "transaction_from_date_time", "transaction_to_date_time", "consent_id", "creation_date_time", "status_update_date_time", "consent_risk", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	accountRequestColumnsWithDefault    = []string{"account_request_id"}
 	accountRequestPrimaryKeyColumns     = []string{"account_request_id"}
 )

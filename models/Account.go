@@ -57,8 +57,6 @@ type Account struct {
 	NoDebit                 null.String       `boil:"no_debit" json:"no_debit,omitempty" toml:"no_debit" yaml:"no_debit,omitempty"`
 	NoCredit                null.String       `boil:"no_credit" json:"no_credit,omitempty" toml:"no_credit" yaml:"no_credit,omitempty"`
 	CreditDebitIndicator    null.String       `boil:"credit_debit_indicator" json:"credit_debit_indicator,omitempty" toml:"credit_debit_indicator" yaml:"credit_debit_indicator,omitempty"`
-	CreditLineIncluded      null.String       `boil:"credit_line_included" json:"credit_line_included,omitempty" toml:"credit_line_included" yaml:"credit_line_included,omitempty"`
-	CreditLineAmount        types.NullDecimal `boil:"credit_line_amount" json:"credit_line_amount,omitempty" toml:"credit_line_amount" yaml:"credit_line_amount,omitempty"`
 	CreditLineType          null.String       `boil:"credit_line_type" json:"credit_line_type,omitempty" toml:"credit_line_type" yaml:"credit_line_type,omitempty"`
 	MakerDate               time.Time         `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
 	CheckerDate             null.Time         `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
@@ -66,6 +64,7 @@ type Account struct {
 	CheckerID               null.String       `boil:"checker_id" json:"checker_id,omitempty" toml:"checker_id" yaml:"checker_id,omitempty"`
 	ModifiedBy              null.String       `boil:"modified_by" json:"modified_by,omitempty" toml:"modified_by" yaml:"modified_by,omitempty"`
 	ModifiedDate            null.Time         `boil:"modified_date" json:"modified_date,omitempty" toml:"modified_date" yaml:"modified_date,omitempty"`
+	AccountRiskScore        types.NullDecimal `boil:"account_risk_score" json:"account_risk_score,omitempty" toml:"account_risk_score" yaml:"account_risk_score,omitempty"`
 
 	R *accountR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L accountL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -104,8 +103,6 @@ var AccountColumns = struct {
 	NoDebit                 string
 	NoCredit                string
 	CreditDebitIndicator    string
-	CreditLineIncluded      string
-	CreditLineAmount        string
 	CreditLineType          string
 	MakerDate               string
 	CheckerDate             string
@@ -113,6 +110,7 @@ var AccountColumns = struct {
 	CheckerID               string
 	ModifiedBy              string
 	ModifiedDate            string
+	AccountRiskScore        string
 }{
 	AccountID:               "account_id",
 	SchemeName:              "scheme_name",
@@ -146,8 +144,6 @@ var AccountColumns = struct {
 	NoDebit:                 "no_debit",
 	NoCredit:                "no_credit",
 	CreditDebitIndicator:    "credit_debit_indicator",
-	CreditLineIncluded:      "credit_line_included",
-	CreditLineAmount:        "credit_line_amount",
 	CreditLineType:          "credit_line_type",
 	MakerDate:               "maker_date",
 	CheckerDate:             "checker_date",
@@ -155,6 +151,7 @@ var AccountColumns = struct {
 	CheckerID:               "checker_id",
 	ModifiedBy:              "modified_by",
 	ModifiedDate:            "modified_date",
+	AccountRiskScore:        "account_risk_score",
 }
 
 // Generated where
@@ -321,8 +318,6 @@ var AccountWhere = struct {
 	NoDebit                 whereHelpernull_String
 	NoCredit                whereHelpernull_String
 	CreditDebitIndicator    whereHelpernull_String
-	CreditLineIncluded      whereHelpernull_String
-	CreditLineAmount        whereHelpertypes_NullDecimal
 	CreditLineType          whereHelpernull_String
 	MakerDate               whereHelpertime_Time
 	CheckerDate             whereHelpernull_Time
@@ -330,6 +325,7 @@ var AccountWhere = struct {
 	CheckerID               whereHelpernull_String
 	ModifiedBy              whereHelpernull_String
 	ModifiedDate            whereHelpernull_Time
+	AccountRiskScore        whereHelpertypes_NullDecimal
 }{
 	AccountID:               whereHelperint{field: `account_id`},
 	SchemeName:              whereHelperstring{field: `scheme_name`},
@@ -363,8 +359,6 @@ var AccountWhere = struct {
 	NoDebit:                 whereHelpernull_String{field: `no_debit`},
 	NoCredit:                whereHelpernull_String{field: `no_credit`},
 	CreditDebitIndicator:    whereHelpernull_String{field: `credit_debit_indicator`},
-	CreditLineIncluded:      whereHelpernull_String{field: `credit_line_included`},
-	CreditLineAmount:        whereHelpertypes_NullDecimal{field: `credit_line_amount`},
 	CreditLineType:          whereHelpernull_String{field: `credit_line_type`},
 	MakerDate:               whereHelpertime_Time{field: `maker_date`},
 	CheckerDate:             whereHelpernull_Time{field: `checker_date`},
@@ -372,108 +366,124 @@ var AccountWhere = struct {
 	CheckerID:               whereHelpernull_String{field: `checker_id`},
 	ModifiedBy:              whereHelpernull_String{field: `modified_by`},
 	ModifiedDate:            whereHelpernull_Time{field: `modified_date`},
+	AccountRiskScore:        whereHelpertypes_NullDecimal{field: `account_risk_score`},
 }
 
 // AccountRels is where relationship names are stored.
 var AccountRels = struct {
-	Bank                           string
-	Product                        string
-	AccountType                    string
-	Branch                         string
-	FromAccountAccountLinks        string
-	ToAccountAccountLinks          string
-	AccountAccountOwners           string
-	AccountAccountRequestHistories string
-	DebtorAccountBeneficiaries     string
-	PayeeAccountBillers            string
-	AccountCustomerOffers          string
-	DebtorAccountDirectDebits      string
-	AccountFxDeals                 string
-	AccountJournalEntryLines       string
-	AccountLoans                   string
-	FromAccountPaymentAches        string
-	ToAccountPaymentAches          string
-	FromAccountPaymentBills        string
-	AcountPaymentLimits            string
-	FromAccountPaymentWires        string
-	ToAccountPaymentWires          string
-	AccountPortfolios              string
-	PayeeAccountRegisteredBillers  string
-	AccountRTPS                    string
-	AccountTFParties               string
-	AccountTFPartyTxns             string
-	AccountTransactions            string
-	FromAccountTransferAches       string
-	ToAccountTransferAches         string
-	FromAccountTransferWires       string
-	ToAccountTransferWires         string
+	Bank                               string
+	Product                            string
+	AccountType                        string
+	Branch                             string
+	FromAccountAccountLinks            string
+	ToAccountAccountLinks              string
+	AccountAccountOwners               string
+	AccountAccountRequestHistories     string
+	DebtorAccountBeneficiaries         string
+	PayeeAccountBillers                string
+	AccountCustomerOffers              string
+	DebtorAccountDirectDebits          string
+	AccountFundConfirmations           string
+	AccountFxDeals                     string
+	AccountJournalEntryLines           string
+	AccountLoans                       string
+	AccountOBPFundConfirmationConsents string
+	FromAccountPaymentAches            string
+	ToAccountPaymentAches              string
+	FromAccountPaymentBills            string
+	AcountPaymentLimits                string
+	FromAccountPaymentWires            string
+	ToAccountPaymentWires              string
+	AccountPortfolios                  string
+	PayeeAccountRegisteredBillers      string
+	AccountRTPS                        string
+	AccountSchedulePayments            string
+	DebtorAccountStandingOrders        string
+	AccountStatements                  string
+	AccountTFParties                   string
+	AccountTFPartyTxns                 string
+	AccountTransactions                string
+	FromAccountTransferAches           string
+	ToAccountTransferAches             string
+	FromAccountTransferWires           string
+	ToAccountTransferWires             string
 }{
-	Bank:                           "Bank",
-	Product:                        "Product",
-	AccountType:                    "AccountType",
-	Branch:                         "Branch",
-	FromAccountAccountLinks:        "FromAccountAccountLinks",
-	ToAccountAccountLinks:          "ToAccountAccountLinks",
-	AccountAccountOwners:           "AccountAccountOwners",
-	AccountAccountRequestHistories: "AccountAccountRequestHistories",
-	DebtorAccountBeneficiaries:     "DebtorAccountBeneficiaries",
-	PayeeAccountBillers:            "PayeeAccountBillers",
-	AccountCustomerOffers:          "AccountCustomerOffers",
-	DebtorAccountDirectDebits:      "DebtorAccountDirectDebits",
-	AccountFxDeals:                 "AccountFxDeals",
-	AccountJournalEntryLines:       "AccountJournalEntryLines",
-	AccountLoans:                   "AccountLoans",
-	FromAccountPaymentAches:        "FromAccountPaymentAches",
-	ToAccountPaymentAches:          "ToAccountPaymentAches",
-	FromAccountPaymentBills:        "FromAccountPaymentBills",
-	AcountPaymentLimits:            "AcountPaymentLimits",
-	FromAccountPaymentWires:        "FromAccountPaymentWires",
-	ToAccountPaymentWires:          "ToAccountPaymentWires",
-	AccountPortfolios:              "AccountPortfolios",
-	PayeeAccountRegisteredBillers:  "PayeeAccountRegisteredBillers",
-	AccountRTPS:                    "AccountRTPS",
-	AccountTFParties:               "AccountTFParties",
-	AccountTFPartyTxns:             "AccountTFPartyTxns",
-	AccountTransactions:            "AccountTransactions",
-	FromAccountTransferAches:       "FromAccountTransferAches",
-	ToAccountTransferAches:         "ToAccountTransferAches",
-	FromAccountTransferWires:       "FromAccountTransferWires",
-	ToAccountTransferWires:         "ToAccountTransferWires",
+	Bank:                               "Bank",
+	Product:                            "Product",
+	AccountType:                        "AccountType",
+	Branch:                             "Branch",
+	FromAccountAccountLinks:            "FromAccountAccountLinks",
+	ToAccountAccountLinks:              "ToAccountAccountLinks",
+	AccountAccountOwners:               "AccountAccountOwners",
+	AccountAccountRequestHistories:     "AccountAccountRequestHistories",
+	DebtorAccountBeneficiaries:         "DebtorAccountBeneficiaries",
+	PayeeAccountBillers:                "PayeeAccountBillers",
+	AccountCustomerOffers:              "AccountCustomerOffers",
+	DebtorAccountDirectDebits:          "DebtorAccountDirectDebits",
+	AccountFundConfirmations:           "AccountFundConfirmations",
+	AccountFxDeals:                     "AccountFxDeals",
+	AccountJournalEntryLines:           "AccountJournalEntryLines",
+	AccountLoans:                       "AccountLoans",
+	AccountOBPFundConfirmationConsents: "AccountOBPFundConfirmationConsents",
+	FromAccountPaymentAches:            "FromAccountPaymentAches",
+	ToAccountPaymentAches:              "ToAccountPaymentAches",
+	FromAccountPaymentBills:            "FromAccountPaymentBills",
+	AcountPaymentLimits:                "AcountPaymentLimits",
+	FromAccountPaymentWires:            "FromAccountPaymentWires",
+	ToAccountPaymentWires:              "ToAccountPaymentWires",
+	AccountPortfolios:                  "AccountPortfolios",
+	PayeeAccountRegisteredBillers:      "PayeeAccountRegisteredBillers",
+	AccountRTPS:                        "AccountRTPS",
+	AccountSchedulePayments:            "AccountSchedulePayments",
+	DebtorAccountStandingOrders:        "DebtorAccountStandingOrders",
+	AccountStatements:                  "AccountStatements",
+	AccountTFParties:                   "AccountTFParties",
+	AccountTFPartyTxns:                 "AccountTFPartyTxns",
+	AccountTransactions:                "AccountTransactions",
+	FromAccountTransferAches:           "FromAccountTransferAches",
+	ToAccountTransferAches:             "ToAccountTransferAches",
+	FromAccountTransferWires:           "FromAccountTransferWires",
+	ToAccountTransferWires:             "ToAccountTransferWires",
 }
 
 // accountR is where relationships are stored.
 type accountR struct {
-	Bank                           *Bank
-	Product                        *Product
-	AccountType                    *AccountType
-	Branch                         *Branch
-	FromAccountAccountLinks        AccountLinkSlice
-	ToAccountAccountLinks          AccountLinkSlice
-	AccountAccountOwners           AccountOwnerSlice
-	AccountAccountRequestHistories AccountRequestHistorySlice
-	DebtorAccountBeneficiaries     BeneficiarySlice
-	PayeeAccountBillers            BillerSlice
-	AccountCustomerOffers          CustomerOfferSlice
-	DebtorAccountDirectDebits      DirectDebitSlice
-	AccountFxDeals                 FxDealSlice
-	AccountJournalEntryLines       JournalEntryLineSlice
-	AccountLoans                   LoanSlice
-	FromAccountPaymentAches        PaymentAchSlice
-	ToAccountPaymentAches          PaymentAchSlice
-	FromAccountPaymentBills        PaymentBillSlice
-	AcountPaymentLimits            PaymentLimitSlice
-	FromAccountPaymentWires        PaymentWireSlice
-	ToAccountPaymentWires          PaymentWireSlice
-	AccountPortfolios              PortfolioSlice
-	PayeeAccountRegisteredBillers  RegisteredBillerSlice
-	AccountRTPS                    RTPSlice
-	AccountTFParties               TFPartySlice
-	AccountTFPartyTxns             TFPartyTxnSlice
-	AccountTransactions            TransactionSlice
-	FromAccountTransferAches       TransferAchSlice
-	ToAccountTransferAches         TransferAchSlice
-	FromAccountTransferWires       TransferWireSlice
-	ToAccountTransferWires         TransferWireSlice
+	Bank                               *Bank
+	Product                            *Product
+	AccountType                        *AccountType
+	Branch                             *Branch
+	FromAccountAccountLinks            AccountLinkSlice
+	ToAccountAccountLinks              AccountLinkSlice
+	AccountAccountOwners               AccountOwnerSlice
+	AccountAccountRequestHistories     AccountRequestHistorySlice
+	DebtorAccountBeneficiaries         BeneficiarySlice
+	PayeeAccountBillers                BillerSlice
+	AccountCustomerOffers              CustomerOfferSlice
+	DebtorAccountDirectDebits          DirectDebitSlice
+	AccountFundConfirmations           FundConfirmationSlice
+	AccountFxDeals                     FxDealSlice
+	AccountJournalEntryLines           JournalEntryLineSlice
+	AccountLoans                       LoanSlice
+	AccountOBPFundConfirmationConsents OBPFundConfirmationConsentSlice
+	FromAccountPaymentAches            PaymentAchSlice
+	ToAccountPaymentAches              PaymentAchSlice
+	FromAccountPaymentBills            PaymentBillSlice
+	AcountPaymentLimits                PaymentLimitSlice
+	FromAccountPaymentWires            PaymentWireSlice
+	ToAccountPaymentWires              PaymentWireSlice
+	AccountPortfolios                  PortfolioSlice
+	PayeeAccountRegisteredBillers      RegisteredBillerSlice
+	AccountRTPS                        RTPSlice
+	AccountSchedulePayments            SchedulePaymentSlice
+	DebtorAccountStandingOrders        StandingOrderSlice
+	AccountStatements                  StatementSlice
+	AccountTFParties                   TFPartySlice
+	AccountTFPartyTxns                 TFPartyTxnSlice
+	AccountTransactions                TransactionSlice
+	FromAccountTransferAches           TransferAchSlice
+	ToAccountTransferAches             TransferAchSlice
+	FromAccountTransferWires           TransferWireSlice
+	ToAccountTransferWires             TransferWireSlice
 }
 
 // NewStruct creates a new relationship struct
@@ -485,8 +495,8 @@ func (*accountR) NewStruct() *accountR {
 type accountL struct{}
 
 var (
-	accountColumns               = []string{"account_id", "scheme_name", "account_identification", "secondary_identification", "bank_id", "branch_id", "account_name", "nickname", "product_id", "account_currency", "balance", "status", "type_of_balance", "account_opening_date", "account_closing_date", "account_type_id", "accountrefnumber", "isjointaccount", "isonlineaccessenabled", "usage", "nominee_name", "nominee_address", "nominee_phone_no", "nominee_dob", "nominee_relatonship", "card_facility", "passbook_facility", "chequebook_facility", "frozen", "no_debit", "no_credit", "credit_debit_indicator", "credit_line_included", "credit_line_amount", "credit_line_type", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	accountColumnsWithoutDefault = []string{"scheme_name", "account_identification", "secondary_identification", "bank_id", "branch_id", "account_name", "nickname", "product_id", "account_currency", "balance", "status", "type_of_balance", "account_opening_date", "account_closing_date", "account_type_id", "accountrefnumber", "isjointaccount", "isonlineaccessenabled", "usage", "nominee_name", "nominee_address", "nominee_phone_no", "nominee_dob", "nominee_relatonship", "card_facility", "passbook_facility", "chequebook_facility", "frozen", "no_debit", "no_credit", "credit_debit_indicator", "credit_line_included", "credit_line_amount", "credit_line_type", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	accountColumns               = []string{"account_id", "scheme_name", "account_identification", "secondary_identification", "bank_id", "branch_id", "account_name", "nickname", "product_id", "account_currency", "balance", "status", "type_of_balance", "account_opening_date", "account_closing_date", "account_type_id", "accountrefnumber", "isjointaccount", "isonlineaccessenabled", "usage", "nominee_name", "nominee_address", "nominee_phone_no", "nominee_dob", "nominee_relatonship", "card_facility", "passbook_facility", "chequebook_facility", "frozen", "no_debit", "no_credit", "credit_debit_indicator", "credit_line_type", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date", "account_risk_score"}
+	accountColumnsWithoutDefault = []string{"scheme_name", "account_identification", "secondary_identification", "bank_id", "branch_id", "account_name", "nickname", "product_id", "account_currency", "balance", "status", "type_of_balance", "account_opening_date", "account_closing_date", "account_type_id", "accountrefnumber", "isjointaccount", "isonlineaccessenabled", "usage", "nominee_name", "nominee_address", "nominee_phone_no", "nominee_dob", "nominee_relatonship", "card_facility", "passbook_facility", "chequebook_facility", "frozen", "no_debit", "no_credit", "credit_debit_indicator", "credit_line_type", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date", "account_risk_score"}
 	accountColumnsWithDefault    = []string{"account_id"}
 	accountPrimaryKeyColumns     = []string{"account_id"}
 )
@@ -990,6 +1000,27 @@ func (o *Account) DebtorAccountDirectDebits(mods ...qm.QueryMod) directDebitQuer
 	return query
 }
 
+// AccountFundConfirmations retrieves all the FundConfirmation's FundConfirmations with an executor via account_id column.
+func (o *Account) AccountFundConfirmations(mods ...qm.QueryMod) fundConfirmationQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`FundConfirmation`.`account_id`=?", o.AccountID),
+	)
+
+	query := FundConfirmations(queryMods...)
+	queries.SetFrom(query.Query, "`FundConfirmation`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`FundConfirmation`.*"})
+	}
+
+	return query
+}
+
 // AccountFxDeals retrieves all the FxDeal's FxDeals with an executor via account_id column.
 func (o *Account) AccountFxDeals(mods ...qm.QueryMod) fxDealQuery {
 	var queryMods []qm.QueryMod
@@ -1048,6 +1079,27 @@ func (o *Account) AccountLoans(mods ...qm.QueryMod) loanQuery {
 
 	if len(queries.GetSelect(query.Query)) == 0 {
 		queries.SetSelect(query.Query, []string{"`Loan`.*"})
+	}
+
+	return query
+}
+
+// AccountOBPFundConfirmationConsents retrieves all the OBPFundConfirmationConsent's OBPFundConfirmationConsents with an executor via account_id column.
+func (o *Account) AccountOBPFundConfirmationConsents(mods ...qm.QueryMod) oBPFundConfirmationConsentQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`OBPFundConfirmationConsent`.`account_id`=?", o.AccountID),
+	)
+
+	query := OBPFundConfirmationConsents(queryMods...)
+	queries.SetFrom(query.Query, "`OBPFundConfirmationConsent`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`OBPFundConfirmationConsent`.*"})
 	}
 
 	return query
@@ -1237,6 +1289,69 @@ func (o *Account) AccountRTPS(mods ...qm.QueryMod) rtpQuery {
 
 	if len(queries.GetSelect(query.Query)) == 0 {
 		queries.SetSelect(query.Query, []string{"`Rtp`.*"})
+	}
+
+	return query
+}
+
+// AccountSchedulePayments retrieves all the SchedulePayment's SchedulePayments with an executor via account_id column.
+func (o *Account) AccountSchedulePayments(mods ...qm.QueryMod) schedulePaymentQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`SchedulePayment`.`account_id`=?", o.AccountID),
+	)
+
+	query := SchedulePayments(queryMods...)
+	queries.SetFrom(query.Query, "`SchedulePayment`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`SchedulePayment`.*"})
+	}
+
+	return query
+}
+
+// DebtorAccountStandingOrders retrieves all the StandingOrder's StandingOrders with an executor via debtor_account_id column.
+func (o *Account) DebtorAccountStandingOrders(mods ...qm.QueryMod) standingOrderQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`StandingOrders`.`debtor_account_id`=?", o.AccountID),
+	)
+
+	query := StandingOrders(queryMods...)
+	queries.SetFrom(query.Query, "`StandingOrders`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`StandingOrders`.*"})
+	}
+
+	return query
+}
+
+// AccountStatements retrieves all the Statement's Statements with an executor via account_id column.
+func (o *Account) AccountStatements(mods ...qm.QueryMod) statementQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`Statement`.`account_id`=?", o.AccountID),
+	)
+
+	query := Statements(queryMods...)
+	queries.SetFrom(query.Query, "`Statement`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`Statement`.*"})
 	}
 
 	return query
@@ -2553,6 +2668,101 @@ func (accountL) LoadDebtorAccountDirectDebits(ctx context.Context, e boil.Contex
 	return nil
 }
 
+// LoadAccountFundConfirmations allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (accountL) LoadAccountFundConfirmations(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccount interface{}, mods queries.Applicator) error {
+	var slice []*Account
+	var object *Account
+
+	if singular {
+		object = maybeAccount.(*Account)
+	} else {
+		slice = *maybeAccount.(*[]*Account)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &accountR{}
+		}
+		args = append(args, object.AccountID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &accountR{}
+			}
+
+			for _, a := range args {
+				if a == obj.AccountID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.AccountID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`FundConfirmation`), qm.WhereIn(`account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load FundConfirmation")
+	}
+
+	var resultSlice []*FundConfirmation
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice FundConfirmation")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on FundConfirmation")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for FundConfirmation")
+	}
+
+	if len(fundConfirmationAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.AccountFundConfirmations = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &fundConfirmationR{}
+			}
+			foreign.R.Account = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.AccountID == foreign.AccountID {
+				local.R.AccountFundConfirmations = append(local.R.AccountFundConfirmations, foreign)
+				if foreign.R == nil {
+					foreign.R = &fundConfirmationR{}
+				}
+				foreign.R.Account = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // LoadAccountFxDeals allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
 func (accountL) LoadAccountFxDeals(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccount interface{}, mods queries.Applicator) error {
@@ -2828,6 +3038,101 @@ func (accountL) LoadAccountLoans(ctx context.Context, e boil.ContextExecutor, si
 				local.R.AccountLoans = append(local.R.AccountLoans, foreign)
 				if foreign.R == nil {
 					foreign.R = &loanR{}
+				}
+				foreign.R.Account = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadAccountOBPFundConfirmationConsents allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (accountL) LoadAccountOBPFundConfirmationConsents(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccount interface{}, mods queries.Applicator) error {
+	var slice []*Account
+	var object *Account
+
+	if singular {
+		object = maybeAccount.(*Account)
+	} else {
+		slice = *maybeAccount.(*[]*Account)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &accountR{}
+		}
+		args = append(args, object.AccountID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &accountR{}
+			}
+
+			for _, a := range args {
+				if a == obj.AccountID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.AccountID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`OBPFundConfirmationConsent`), qm.WhereIn(`account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load OBPFundConfirmationConsent")
+	}
+
+	var resultSlice []*OBPFundConfirmationConsent
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice OBPFundConfirmationConsent")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on OBPFundConfirmationConsent")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for OBPFundConfirmationConsent")
+	}
+
+	if len(oBPFundConfirmationConsentAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.AccountOBPFundConfirmationConsents = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &oBPFundConfirmationConsentR{}
+			}
+			foreign.R.Account = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.AccountID == foreign.AccountID {
+				local.R.AccountOBPFundConfirmationConsents = append(local.R.AccountOBPFundConfirmationConsents, foreign)
+				if foreign.R == nil {
+					foreign.R = &oBPFundConfirmationConsentR{}
 				}
 				foreign.R.Account = local
 				break
@@ -3683,6 +3988,291 @@ func (accountL) LoadAccountRTPS(ctx context.Context, e boil.ContextExecutor, sin
 				local.R.AccountRTPS = append(local.R.AccountRTPS, foreign)
 				if foreign.R == nil {
 					foreign.R = &rtpR{}
+				}
+				foreign.R.Account = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadAccountSchedulePayments allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (accountL) LoadAccountSchedulePayments(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccount interface{}, mods queries.Applicator) error {
+	var slice []*Account
+	var object *Account
+
+	if singular {
+		object = maybeAccount.(*Account)
+	} else {
+		slice = *maybeAccount.(*[]*Account)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &accountR{}
+		}
+		args = append(args, object.AccountID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &accountR{}
+			}
+
+			for _, a := range args {
+				if queries.Equal(a, obj.AccountID) {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.AccountID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`SchedulePayment`), qm.WhereIn(`account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load SchedulePayment")
+	}
+
+	var resultSlice []*SchedulePayment
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice SchedulePayment")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on SchedulePayment")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for SchedulePayment")
+	}
+
+	if len(schedulePaymentAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.AccountSchedulePayments = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &schedulePaymentR{}
+			}
+			foreign.R.Account = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if queries.Equal(local.AccountID, foreign.AccountID) {
+				local.R.AccountSchedulePayments = append(local.R.AccountSchedulePayments, foreign)
+				if foreign.R == nil {
+					foreign.R = &schedulePaymentR{}
+				}
+				foreign.R.Account = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadDebtorAccountStandingOrders allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (accountL) LoadDebtorAccountStandingOrders(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccount interface{}, mods queries.Applicator) error {
+	var slice []*Account
+	var object *Account
+
+	if singular {
+		object = maybeAccount.(*Account)
+	} else {
+		slice = *maybeAccount.(*[]*Account)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &accountR{}
+		}
+		args = append(args, object.AccountID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &accountR{}
+			}
+
+			for _, a := range args {
+				if a == obj.AccountID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.AccountID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`StandingOrders`), qm.WhereIn(`debtor_account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load StandingOrders")
+	}
+
+	var resultSlice []*StandingOrder
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice StandingOrders")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on StandingOrders")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for StandingOrders")
+	}
+
+	if len(standingOrderAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.DebtorAccountStandingOrders = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &standingOrderR{}
+			}
+			foreign.R.DebtorAccount = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.AccountID == foreign.DebtorAccountID {
+				local.R.DebtorAccountStandingOrders = append(local.R.DebtorAccountStandingOrders, foreign)
+				if foreign.R == nil {
+					foreign.R = &standingOrderR{}
+				}
+				foreign.R.DebtorAccount = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadAccountStatements allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (accountL) LoadAccountStatements(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccount interface{}, mods queries.Applicator) error {
+	var slice []*Account
+	var object *Account
+
+	if singular {
+		object = maybeAccount.(*Account)
+	} else {
+		slice = *maybeAccount.(*[]*Account)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &accountR{}
+		}
+		args = append(args, object.AccountID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &accountR{}
+			}
+
+			for _, a := range args {
+				if a == obj.AccountID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.AccountID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`Statement`), qm.WhereIn(`account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Statement")
+	}
+
+	var resultSlice []*Statement
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Statement")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on Statement")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Statement")
+	}
+
+	if len(statementAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.AccountStatements = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &statementR{}
+			}
+			foreign.R.Account = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.AccountID == foreign.AccountID {
+				local.R.AccountStatements = append(local.R.AccountStatements, foreign)
+				if foreign.R == nil {
+					foreign.R = &statementR{}
 				}
 				foreign.R.Account = local
 				break
@@ -5110,6 +5700,59 @@ func (o *Account) AddDebtorAccountDirectDebits(ctx context.Context, exec boil.Co
 	return nil
 }
 
+// AddAccountFundConfirmations adds the given related objects to the existing relationships
+// of the Account, optionally inserting them as new records.
+// Appends related to o.R.AccountFundConfirmations.
+// Sets related.R.Account appropriately.
+func (o *Account) AddAccountFundConfirmations(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*FundConfirmation) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.AccountID = o.AccountID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `FundConfirmation` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"account_id"}),
+				strmangle.WhereClause("`", "`", 0, fundConfirmationPrimaryKeyColumns),
+			)
+			values := []interface{}{o.AccountID, rel.FundConfirmationID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.AccountID = o.AccountID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &accountR{
+			AccountFundConfirmations: related,
+		}
+	} else {
+		o.R.AccountFundConfirmations = append(o.R.AccountFundConfirmations, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &fundConfirmationR{
+				Account: o,
+			}
+		} else {
+			rel.R.Account = o
+		}
+	}
+	return nil
+}
+
 // AddAccountFxDeals adds the given related objects to the existing relationships
 // of the Account, optionally inserting them as new records.
 // Appends related to o.R.AccountFxDeals.
@@ -5260,6 +5903,59 @@ func (o *Account) AddAccountLoans(ctx context.Context, exec boil.ContextExecutor
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &loanR{
+				Account: o,
+			}
+		} else {
+			rel.R.Account = o
+		}
+	}
+	return nil
+}
+
+// AddAccountOBPFundConfirmationConsents adds the given related objects to the existing relationships
+// of the Account, optionally inserting them as new records.
+// Appends related to o.R.AccountOBPFundConfirmationConsents.
+// Sets related.R.Account appropriately.
+func (o *Account) AddAccountOBPFundConfirmationConsents(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*OBPFundConfirmationConsent) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.AccountID = o.AccountID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `OBPFundConfirmationConsent` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"account_id"}),
+				strmangle.WhereClause("`", "`", 0, oBPFundConfirmationConsentPrimaryKeyColumns),
+			)
+			values := []interface{}{o.AccountID, rel.ObfundconfirmationconsentID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.AccountID = o.AccountID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &accountR{
+			AccountOBPFundConfirmationConsents: related,
+		}
+	} else {
+		o.R.AccountOBPFundConfirmationConsents = append(o.R.AccountOBPFundConfirmationConsents, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &oBPFundConfirmationConsentR{
 				Account: o,
 			}
 		} else {
@@ -5737,6 +6433,235 @@ func (o *Account) AddAccountRTPS(ctx context.Context, exec boil.ContextExecutor,
 	for _, rel := range related {
 		if rel.R == nil {
 			rel.R = &rtpR{
+				Account: o,
+			}
+		} else {
+			rel.R.Account = o
+		}
+	}
+	return nil
+}
+
+// AddAccountSchedulePayments adds the given related objects to the existing relationships
+// of the Account, optionally inserting them as new records.
+// Appends related to o.R.AccountSchedulePayments.
+// Sets related.R.Account appropriately.
+func (o *Account) AddAccountSchedulePayments(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*SchedulePayment) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			queries.Assign(&rel.AccountID, o.AccountID)
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `SchedulePayment` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"account_id"}),
+				strmangle.WhereClause("`", "`", 0, schedulePaymentPrimaryKeyColumns),
+			)
+			values := []interface{}{o.AccountID, rel.SchedulePaymentID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			queries.Assign(&rel.AccountID, o.AccountID)
+		}
+	}
+
+	if o.R == nil {
+		o.R = &accountR{
+			AccountSchedulePayments: related,
+		}
+	} else {
+		o.R.AccountSchedulePayments = append(o.R.AccountSchedulePayments, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &schedulePaymentR{
+				Account: o,
+			}
+		} else {
+			rel.R.Account = o
+		}
+	}
+	return nil
+}
+
+// SetAccountSchedulePayments removes all previously related items of the
+// Account replacing them completely with the passed
+// in related items, optionally inserting them as new records.
+// Sets o.R.Account's AccountSchedulePayments accordingly.
+// Replaces o.R.AccountSchedulePayments with related.
+// Sets related.R.Account's AccountSchedulePayments accordingly.
+func (o *Account) SetAccountSchedulePayments(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*SchedulePayment) error {
+	query := "update `SchedulePayment` set `account_id` = null where `account_id` = ?"
+	values := []interface{}{o.AccountID}
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, query)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	_, err := exec.ExecContext(ctx, query, values...)
+	if err != nil {
+		return errors.Wrap(err, "failed to remove relationships before set")
+	}
+
+	if o.R != nil {
+		for _, rel := range o.R.AccountSchedulePayments {
+			queries.SetScanner(&rel.AccountID, nil)
+			if rel.R == nil {
+				continue
+			}
+
+			rel.R.Account = nil
+		}
+
+		o.R.AccountSchedulePayments = nil
+	}
+	return o.AddAccountSchedulePayments(ctx, exec, insert, related...)
+}
+
+// RemoveAccountSchedulePayments relationships from objects passed in.
+// Removes related items from R.AccountSchedulePayments (uses pointer comparison, removal does not keep order)
+// Sets related.R.Account.
+func (o *Account) RemoveAccountSchedulePayments(ctx context.Context, exec boil.ContextExecutor, related ...*SchedulePayment) error {
+	var err error
+	for _, rel := range related {
+		queries.SetScanner(&rel.AccountID, nil)
+		if rel.R != nil {
+			rel.R.Account = nil
+		}
+		if _, err = rel.Update(ctx, exec, boil.Whitelist("account_id")); err != nil {
+			return err
+		}
+	}
+	if o.R == nil {
+		return nil
+	}
+
+	for _, rel := range related {
+		for i, ri := range o.R.AccountSchedulePayments {
+			if rel != ri {
+				continue
+			}
+
+			ln := len(o.R.AccountSchedulePayments)
+			if ln > 1 && i < ln-1 {
+				o.R.AccountSchedulePayments[i] = o.R.AccountSchedulePayments[ln-1]
+			}
+			o.R.AccountSchedulePayments = o.R.AccountSchedulePayments[:ln-1]
+			break
+		}
+	}
+
+	return nil
+}
+
+// AddDebtorAccountStandingOrders adds the given related objects to the existing relationships
+// of the Account, optionally inserting them as new records.
+// Appends related to o.R.DebtorAccountStandingOrders.
+// Sets related.R.DebtorAccount appropriately.
+func (o *Account) AddDebtorAccountStandingOrders(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StandingOrder) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.DebtorAccountID = o.AccountID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `StandingOrders` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"debtor_account_id"}),
+				strmangle.WhereClause("`", "`", 0, standingOrderPrimaryKeyColumns),
+			)
+			values := []interface{}{o.AccountID, rel.StandingOrderID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.DebtorAccountID = o.AccountID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &accountR{
+			DebtorAccountStandingOrders: related,
+		}
+	} else {
+		o.R.DebtorAccountStandingOrders = append(o.R.DebtorAccountStandingOrders, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &standingOrderR{
+				DebtorAccount: o,
+			}
+		} else {
+			rel.R.DebtorAccount = o
+		}
+	}
+	return nil
+}
+
+// AddAccountStatements adds the given related objects to the existing relationships
+// of the Account, optionally inserting them as new records.
+// Appends related to o.R.AccountStatements.
+// Sets related.R.Account appropriately.
+func (o *Account) AddAccountStatements(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*Statement) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.AccountID = o.AccountID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `Statement` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"account_id"}),
+				strmangle.WhereClause("`", "`", 0, statementPrimaryKeyColumns),
+			)
+			values := []interface{}{o.AccountID, rel.StatementID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.AccountID = o.AccountID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &accountR{
+			AccountStatements: related,
+		}
+	} else {
+		o.R.AccountStatements = append(o.R.AccountStatements, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &statementR{
 				Account: o,
 			}
 		} else {

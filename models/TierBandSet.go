@@ -87,8 +87,8 @@ type tierBandSetL struct{}
 
 var (
 	tierBandSetColumns               = []string{"tier_band_set_id", "product_id", "tier_band_method", "calculation_method", "destination", "notes"}
-	tierBandSetColumnsWithoutDefault = []string{"tier_band_set_id", "product_id", "destination"}
-	tierBandSetColumnsWithDefault    = []string{"tier_band_method", "calculation_method", "notes"}
+	tierBandSetColumnsWithoutDefault = []string{"tier_band_set_id", "product_id", "calculation_method", "destination", "notes"}
+	tierBandSetColumnsWithDefault    = []string{"tier_band_method"}
 	tierBandSetPrimaryKeyColumns     = []string{"tier_band_set_id"}
 )
 

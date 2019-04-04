@@ -26,6 +26,7 @@ import (
 type Party struct {
 	PartyID         int         `boil:"party_id" json:"party_id" toml:"party_id" yaml:"party_id"`
 	PartyType       string      `boil:"party_type" json:"party_type" toml:"party_type" yaml:"party_type"`
+	PartieRefID     string      `boil:"Partie_ref_id" json:"Partie_ref_id" toml:"Partie_ref_id" yaml:"Partie_ref_id"`
 	BankID          int         `boil:"bank_id" json:"bank_id" toml:"bank_id" yaml:"bank_id"`
 	CanOpenAccounts null.String `boil:"can_open_accounts" json:"can_open_accounts,omitempty" toml:"can_open_accounts" yaml:"can_open_accounts,omitempty"`
 	CanGuarantee    null.String `boil:"can_guarantee" json:"can_guarantee,omitempty" toml:"can_guarantee" yaml:"can_guarantee,omitempty"`
@@ -47,6 +48,7 @@ type Party struct {
 var PartyColumns = struct {
 	PartyID         string
 	PartyType       string
+	PartieRefID     string
 	BankID          string
 	CanOpenAccounts string
 	CanGuarantee    string
@@ -63,6 +65,7 @@ var PartyColumns = struct {
 }{
 	PartyID:         "party_id",
 	PartyType:       "party_type",
+	PartieRefID:     "Partie_ref_id",
 	BankID:          "bank_id",
 	CanOpenAccounts: "can_open_accounts",
 	CanGuarantee:    "can_guarantee",
@@ -83,6 +86,7 @@ var PartyColumns = struct {
 var PartyWhere = struct {
 	PartyID         whereHelperint
 	PartyType       whereHelperstring
+	PartieRefID     whereHelperstring
 	BankID          whereHelperint
 	CanOpenAccounts whereHelpernull_String
 	CanGuarantee    whereHelpernull_String
@@ -99,6 +103,7 @@ var PartyWhere = struct {
 }{
 	PartyID:         whereHelperint{field: `party_id`},
 	PartyType:       whereHelperstring{field: `party_type`},
+	PartieRefID:     whereHelperstring{field: `Partie_ref_id`},
 	BankID:          whereHelperint{field: `bank_id`},
 	CanOpenAccounts: whereHelpernull_String{field: `can_open_accounts`},
 	CanGuarantee:    whereHelpernull_String{field: `can_guarantee`},
@@ -123,7 +128,6 @@ var PartyRels = struct {
 	PartyPerson                    string
 	PartyPersonFinancialInfo       string
 	PartyRTP                       string
-	PartyAccountOwners             string
 	PartyAddresses                 string
 	PayeeBillers                   string
 	PayerBillers                   string
@@ -176,7 +180,6 @@ var PartyRels = struct {
 	PartyPerson:                    "PartyPerson",
 	PartyPersonFinancialInfo:       "PartyPersonFinancialInfo",
 	PartyRTP:                       "PartyRTP",
-	PartyAccountOwners:             "PartyAccountOwners",
 	PartyAddresses:                 "PartyAddresses",
 	PayeeBillers:                   "PayeeBillers",
 	PayerBillers:                   "PayerBillers",
@@ -232,7 +235,6 @@ type partyR struct {
 	PartyPerson                    *Person
 	PartyPersonFinancialInfo       *PersonFinancialInfo
 	PartyRTP                       *RTP
-	PartyAccountOwners             AccountOwnerSlice
 	PartyAddresses                 AddressSlice
 	PayeeBillers                   BillerSlice
 	PayerBillers                   BillerSlice
@@ -288,8 +290,8 @@ func (*partyR) NewStruct() *partyR {
 type partyL struct{}
 
 var (
-	partyColumns               = []string{"party_id", "party_type", "bank_id", "can_open_accounts", "can_guarantee", "require_id", "description", "is_debarred", "ispep", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	partyColumnsWithoutDefault = []string{"party_id", "party_type", "bank_id", "can_open_accounts", "can_guarantee", "require_id", "description", "is_debarred", "ispep", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	partyColumns               = []string{"party_id", "party_type", "Partie_ref_id", "bank_id", "can_open_accounts", "can_guarantee", "require_id", "description", "is_debarred", "ispep", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	partyColumnsWithoutDefault = []string{"party_id", "party_type", "Partie_ref_id", "bank_id", "can_open_accounts", "can_guarantee", "require_id", "description", "is_debarred", "ispep", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	partyColumnsWithDefault    = []string{}
 	partyPrimaryKeyColumns     = []string{"party_id"}
 )
@@ -663,27 +665,6 @@ func (o *Party) PartyRTP(mods ...qm.QueryMod) rtpQuery {
 
 	query := RTPS(queryMods...)
 	queries.SetFrom(query.Query, "`Rtp`")
-
-	return query
-}
-
-// PartyAccountOwners retrieves all the AccountOwner's AccountOwners with an executor via party_id column.
-func (o *Party) PartyAccountOwners(mods ...qm.QueryMod) accountOwnerQuery {
-	var queryMods []qm.QueryMod
-	if len(mods) != 0 {
-		queryMods = append(queryMods, mods...)
-	}
-
-	queryMods = append(queryMods,
-		qm.Where("`AccountOwners`.`party_id`=?", o.PartyID),
-	)
-
-	query := AccountOwners(queryMods...)
-	queries.SetFrom(query.Query, "`AccountOwners`")
-
-	if len(queries.GetSelect(query.Query)) == 0 {
-		queries.SetSelect(query.Query, []string{"`AccountOwners`.*"})
-	}
 
 	return query
 }
@@ -2291,101 +2272,6 @@ func (partyL) LoadPartyRTP(ctx context.Context, e boil.ContextExecutor, singular
 				local.R.PartyRTP = foreign
 				if foreign.R == nil {
 					foreign.R = &rtpR{}
-				}
-				foreign.R.Party = local
-				break
-			}
-		}
-	}
-
-	return nil
-}
-
-// LoadPartyAccountOwners allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for a 1-M or N-M relationship.
-func (partyL) LoadPartyAccountOwners(ctx context.Context, e boil.ContextExecutor, singular bool, maybeParty interface{}, mods queries.Applicator) error {
-	var slice []*Party
-	var object *Party
-
-	if singular {
-		object = maybeParty.(*Party)
-	} else {
-		slice = *maybeParty.(*[]*Party)
-	}
-
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &partyR{}
-		}
-		args = append(args, object.PartyID)
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &partyR{}
-			}
-
-			for _, a := range args {
-				if a == obj.PartyID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.PartyID)
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`AccountOwners`), qm.WhereIn(`party_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load AccountOwners")
-	}
-
-	var resultSlice []*AccountOwner
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice AccountOwners")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results in eager load on AccountOwners")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for AccountOwners")
-	}
-
-	if len(accountOwnerAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-	if singular {
-		object.R.PartyAccountOwners = resultSlice
-		for _, foreign := range resultSlice {
-			if foreign.R == nil {
-				foreign.R = &accountOwnerR{}
-			}
-			foreign.R.Party = object
-		}
-		return nil
-	}
-
-	for _, foreign := range resultSlice {
-		for _, local := range slice {
-			if local.PartyID == foreign.PartyID {
-				local.R.PartyAccountOwners = append(local.R.PartyAccountOwners, foreign)
-				if foreign.R == nil {
-					foreign.R = &accountOwnerR{}
 				}
 				foreign.R.Party = local
 				break
@@ -6925,59 +6811,6 @@ func (o *Party) SetPartyRTP(ctx context.Context, exec boil.ContextExecutor, inse
 		}
 	} else {
 		related.R.Party = o
-	}
-	return nil
-}
-
-// AddPartyAccountOwners adds the given related objects to the existing relationships
-// of the Party, optionally inserting them as new records.
-// Appends related to o.R.PartyAccountOwners.
-// Sets related.R.Party appropriately.
-func (o *Party) AddPartyAccountOwners(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*AccountOwner) error {
-	var err error
-	for _, rel := range related {
-		if insert {
-			rel.PartyID = o.PartyID
-			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
-				return errors.Wrap(err, "failed to insert into foreign table")
-			}
-		} else {
-			updateQuery := fmt.Sprintf(
-				"UPDATE `AccountOwners` SET %s WHERE %s",
-				strmangle.SetParamNames("`", "`", 0, []string{"party_id"}),
-				strmangle.WhereClause("`", "`", 0, accountOwnerPrimaryKeyColumns),
-			)
-			values := []interface{}{o.PartyID, rel.AccountOwnerID}
-
-			if boil.DebugMode {
-				fmt.Fprintln(boil.DebugWriter, updateQuery)
-				fmt.Fprintln(boil.DebugWriter, values)
-			}
-
-			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-				return errors.Wrap(err, "failed to update foreign table")
-			}
-
-			rel.PartyID = o.PartyID
-		}
-	}
-
-	if o.R == nil {
-		o.R = &partyR{
-			PartyAccountOwners: related,
-		}
-	} else {
-		o.R.PartyAccountOwners = append(o.R.PartyAccountOwners, related...)
-	}
-
-	for _, rel := range related {
-		if rel.R == nil {
-			rel.R = &accountOwnerR{
-				Party: o,
-			}
-		} else {
-			rel.R.Party = o
-		}
 	}
 	return nil
 }

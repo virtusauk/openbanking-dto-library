@@ -96,17 +96,17 @@ var EmailWhere = struct {
 
 // EmailRels is where relationship names are stored.
 var EmailRels = struct {
-	Bank  string
 	Party string
+	Bank  string
 }{
-	Bank:  "Bank",
 	Party: "Party",
+	Bank:  "Bank",
 }
 
 // emailR is where relationships are stored.
 type emailR struct {
-	Bank  *Bank
 	Party *Party
+	Bank  *Bank
 }
 
 // NewStruct creates a new relationship struct
@@ -119,8 +119,8 @@ type emailL struct{}
 
 var (
 	emailColumns               = []string{"party_id", "bank_id", "email_type", "email_id", "active", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	emailColumnsWithoutDefault = []string{"bank_id", "email_id", "active", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	emailColumnsWithDefault    = []string{"party_id", "email_type"}
+	emailColumnsWithoutDefault = []string{"party_id", "bank_id", "email_id", "active", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	emailColumnsWithDefault    = []string{"email_type"}
 	emailPrimaryKeyColumns     = []string{"party_id", "email_type"}
 )
 
@@ -399,20 +399,6 @@ func (q emailQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool
 	return count > 0, nil
 }
 
-// Bank pointed to by the foreign key.
-func (o *Email) Bank(mods ...qm.QueryMod) bankQuery {
-	queryMods := []qm.QueryMod{
-		qm.Where("bank_id=?", o.BankID),
-	}
-
-	queryMods = append(queryMods, mods...)
-
-	query := Banks(queryMods...)
-	queries.SetFrom(query.Query, "`Banks`")
-
-	return query
-}
-
 // Party pointed to by the foreign key.
 func (o *Email) Party(mods ...qm.QueryMod) partyQuery {
 	queryMods := []qm.QueryMod{
@@ -427,105 +413,18 @@ func (o *Email) Party(mods ...qm.QueryMod) partyQuery {
 	return query
 }
 
-// LoadBank allows an eager lookup of values, cached into the
-// loaded structs of the objects. This is for an N-1 relationship.
-func (emailL) LoadBank(ctx context.Context, e boil.ContextExecutor, singular bool, maybeEmail interface{}, mods queries.Applicator) error {
-	var slice []*Email
-	var object *Email
-
-	if singular {
-		object = maybeEmail.(*Email)
-	} else {
-		slice = *maybeEmail.(*[]*Email)
+// Bank pointed to by the foreign key.
+func (o *Email) Bank(mods ...qm.QueryMod) bankQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("bank_id=?", o.BankID),
 	}
 
-	args := make([]interface{}, 0, 1)
-	if singular {
-		if object.R == nil {
-			object.R = &emailR{}
-		}
-		args = append(args, object.BankID)
+	queryMods = append(queryMods, mods...)
 
-	} else {
-	Outer:
-		for _, obj := range slice {
-			if obj.R == nil {
-				obj.R = &emailR{}
-			}
+	query := Banks(queryMods...)
+	queries.SetFrom(query.Query, "`Banks`")
 
-			for _, a := range args {
-				if a == obj.BankID {
-					continue Outer
-				}
-			}
-
-			args = append(args, obj.BankID)
-
-		}
-	}
-
-	if len(args) == 0 {
-		return nil
-	}
-
-	query := NewQuery(qm.From(`Banks`), qm.WhereIn(`bank_id in ?`, args...))
-	if mods != nil {
-		mods.Apply(query)
-	}
-
-	results, err := query.QueryContext(ctx, e)
-	if err != nil {
-		return errors.Wrap(err, "failed to eager load Bank")
-	}
-
-	var resultSlice []*Bank
-	if err = queries.Bind(results, &resultSlice); err != nil {
-		return errors.Wrap(err, "failed to bind eager loaded slice Bank")
-	}
-
-	if err = results.Close(); err != nil {
-		return errors.Wrap(err, "failed to close results of eager load for Banks")
-	}
-	if err = results.Err(); err != nil {
-		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Banks")
-	}
-
-	if len(emailAfterSelectHooks) != 0 {
-		for _, obj := range resultSlice {
-			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
-				return err
-			}
-		}
-	}
-
-	if len(resultSlice) == 0 {
-		return nil
-	}
-
-	if singular {
-		foreign := resultSlice[0]
-		object.R.Bank = foreign
-		if foreign.R == nil {
-			foreign.R = &bankR{}
-		}
-		foreign.R.BankEmails = append(foreign.R.BankEmails, object)
-		return nil
-	}
-
-	for _, local := range slice {
-		for _, foreign := range resultSlice {
-			if local.BankID == foreign.BankID {
-				local.R.Bank = foreign
-				if foreign.R == nil {
-					foreign.R = &bankR{}
-				}
-				foreign.R.BankEmails = append(foreign.R.BankEmails, local)
-				break
-			}
-		}
-	}
-
-	return nil
+	return query
 }
 
 // LoadParty allows an eager lookup of values, cached into the
@@ -629,48 +528,102 @@ func (emailL) LoadParty(ctx context.Context, e boil.ContextExecutor, singular bo
 	return nil
 }
 
-// SetBank of the email to the related item.
-// Sets o.R.Bank to related.
-// Adds o to related.R.BankEmails.
-func (o *Email) SetBank(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Bank) error {
-	var err error
-	if insert {
-		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
-			return errors.Wrap(err, "failed to insert into foreign table")
-		}
-	}
+// LoadBank allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (emailL) LoadBank(ctx context.Context, e boil.ContextExecutor, singular bool, maybeEmail interface{}, mods queries.Applicator) error {
+	var slice []*Email
+	var object *Email
 
-	updateQuery := fmt.Sprintf(
-		"UPDATE `Emails` SET %s WHERE %s",
-		strmangle.SetParamNames("`", "`", 0, []string{"bank_id"}),
-		strmangle.WhereClause("`", "`", 0, emailPrimaryKeyColumns),
-	)
-	values := []interface{}{related.BankID, o.PartyID, o.EmailType}
-
-	if boil.DebugMode {
-		fmt.Fprintln(boil.DebugWriter, updateQuery)
-		fmt.Fprintln(boil.DebugWriter, values)
-	}
-
-	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
-		return errors.Wrap(err, "failed to update local table")
-	}
-
-	o.BankID = related.BankID
-	if o.R == nil {
-		o.R = &emailR{
-			Bank: related,
-		}
+	if singular {
+		object = maybeEmail.(*Email)
 	} else {
-		o.R.Bank = related
+		slice = *maybeEmail.(*[]*Email)
 	}
 
-	if related.R == nil {
-		related.R = &bankR{
-			BankEmails: EmailSlice{o},
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &emailR{}
 		}
+		args = append(args, object.BankID)
+
 	} else {
-		related.R.BankEmails = append(related.R.BankEmails, o)
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &emailR{}
+			}
+
+			for _, a := range args {
+				if a == obj.BankID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.BankID)
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`Banks`), qm.WhereIn(`bank_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Bank")
+	}
+
+	var resultSlice []*Bank
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Bank")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for Banks")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Banks")
+	}
+
+	if len(emailAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Bank = foreign
+		if foreign.R == nil {
+			foreign.R = &bankR{}
+		}
+		foreign.R.BankEmails = append(foreign.R.BankEmails, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.BankID == foreign.BankID {
+				local.R.Bank = foreign
+				if foreign.R == nil {
+					foreign.R = &bankR{}
+				}
+				foreign.R.BankEmails = append(foreign.R.BankEmails, local)
+				break
+			}
+		}
 	}
 
 	return nil
@@ -718,6 +671,53 @@ func (o *Email) SetParty(ctx context.Context, exec boil.ContextExecutor, insert 
 		}
 	} else {
 		related.R.PartyEmails = append(related.R.PartyEmails, o)
+	}
+
+	return nil
+}
+
+// SetBank of the email to the related item.
+// Sets o.R.Bank to related.
+// Adds o to related.R.BankEmails.
+func (o *Email) SetBank(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Bank) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE `Emails` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"bank_id"}),
+		strmangle.WhereClause("`", "`", 0, emailPrimaryKeyColumns),
+	)
+	values := []interface{}{related.BankID, o.PartyID, o.EmailType}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.BankID = related.BankID
+	if o.R == nil {
+		o.R = &emailR{
+			Bank: related,
+		}
+	} else {
+		o.R.Bank = related
+	}
+
+	if related.R == nil {
+		related.R = &bankR{
+			BankEmails: EmailSlice{o},
+		}
+	} else {
+		related.R.BankEmails = append(related.R.BankEmails, o)
 	}
 
 	return nil

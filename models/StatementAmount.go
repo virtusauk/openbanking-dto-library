@@ -102,10 +102,14 @@ var StatementAmountWhere = struct {
 
 // StatementAmountRels is where relationship names are stored.
 var StatementAmountRels = struct {
-}{}
+	Statement string
+}{
+	Statement: "Statement",
+}
 
 // statementAmountR is where relationships are stored.
 type statementAmountR struct {
+	Statement *Statement
 }
 
 // NewStruct creates a new relationship struct
@@ -396,6 +400,168 @@ func (q statementAmountQuery) Exists(ctx context.Context, exec boil.ContextExecu
 	}
 
 	return count > 0, nil
+}
+
+// Statement pointed to by the foreign key.
+func (o *StatementAmount) Statement(mods ...qm.QueryMod) statementQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("statement_id=?", o.StatementID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := Statements(queryMods...)
+	queries.SetFrom(query.Query, "`Statement`")
+
+	return query
+}
+
+// LoadStatement allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (statementAmountL) LoadStatement(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStatementAmount interface{}, mods queries.Applicator) error {
+	var slice []*StatementAmount
+	var object *StatementAmount
+
+	if singular {
+		object = maybeStatementAmount.(*StatementAmount)
+	} else {
+		slice = *maybeStatementAmount.(*[]*StatementAmount)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &statementAmountR{}
+		}
+		args = append(args, object.StatementID)
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &statementAmountR{}
+			}
+
+			for _, a := range args {
+				if a == obj.StatementID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.StatementID)
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`Statement`), qm.WhereIn(`statement_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Statement")
+	}
+
+	var resultSlice []*Statement
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Statement")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for Statement")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Statement")
+	}
+
+	if len(statementAmountAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Statement = foreign
+		if foreign.R == nil {
+			foreign.R = &statementR{}
+		}
+		foreign.R.StatementStatementAmounts = append(foreign.R.StatementStatementAmounts, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.StatementID == foreign.StatementID {
+				local.R.Statement = foreign
+				if foreign.R == nil {
+					foreign.R = &statementR{}
+				}
+				foreign.R.StatementStatementAmounts = append(foreign.R.StatementStatementAmounts, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// SetStatement of the statementAmount to the related item.
+// Sets o.R.Statement to related.
+// Adds o to related.R.StatementStatementAmounts.
+func (o *StatementAmount) SetStatement(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Statement) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE `StatementAmount` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"statement_id"}),
+		strmangle.WhereClause("`", "`", 0, statementAmountPrimaryKeyColumns),
+	)
+	values := []interface{}{related.StatementID, o.StatementAmountID}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.StatementID = related.StatementID
+	if o.R == nil {
+		o.R = &statementAmountR{
+			Statement: related,
+		}
+	} else {
+		o.R.Statement = related
+	}
+
+	if related.R == nil {
+		related.R = &statementR{
+			StatementStatementAmounts: StatementAmountSlice{o},
+		}
+	} else {
+		related.R.StatementStatementAmounts = append(related.R.StatementStatementAmounts, o)
+	}
+
+	return nil
 }
 
 // StatementAmounts retrieves all the records using an executor.

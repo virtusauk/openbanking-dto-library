@@ -26,8 +26,9 @@ import (
 // Offer is an object representing the database table.
 type Offer struct {
 	OfferID       int               `boil:"offer_id" json:"offer_id" toml:"offer_id" yaml:"offer_id"`
-	AccountID     null.Int          `boil:"account_id" json:"account_id,omitempty" toml:"account_id" yaml:"account_id,omitempty"`
+	AccountID     int               `boil:"account_id" json:"account_id" toml:"account_id" yaml:"account_id"`
 	OfferType     null.String       `boil:"offer_type" json:"offer_type,omitempty" toml:"offer_type" yaml:"offer_type,omitempty"`
+	OfferRefID    string            `boil:"offer_ref_id" json:"offer_ref_id" toml:"offer_ref_id" yaml:"offer_ref_id"`
 	Description   null.String       `boil:"description" json:"description,omitempty" toml:"description" yaml:"description,omitempty"`
 	StartDateTime null.Time         `boil:"start_date_time" json:"start_date_time,omitempty" toml:"start_date_time" yaml:"start_date_time,omitempty"`
 	EndDateTime   null.Time         `boil:"end_date_time" json:"end_date_time,omitempty" toml:"end_date_time" yaml:"end_date_time,omitempty"`
@@ -54,6 +55,7 @@ var OfferColumns = struct {
 	OfferID       string
 	AccountID     string
 	OfferType     string
+	OfferRefID    string
 	Description   string
 	StartDateTime string
 	EndDateTime   string
@@ -75,6 +77,7 @@ var OfferColumns = struct {
 	OfferID:       "offer_id",
 	AccountID:     "account_id",
 	OfferType:     "offer_type",
+	OfferRefID:    "offer_ref_id",
 	Description:   "description",
 	StartDateTime: "start_date_time",
 	EndDateTime:   "end_date_time",
@@ -98,8 +101,9 @@ var OfferColumns = struct {
 
 var OfferWhere = struct {
 	OfferID       whereHelperint
-	AccountID     whereHelpernull_Int
+	AccountID     whereHelperint
 	OfferType     whereHelpernull_String
+	OfferRefID    whereHelperstring
 	Description   whereHelpernull_String
 	StartDateTime whereHelpernull_Time
 	EndDateTime   whereHelpernull_Time
@@ -119,8 +123,9 @@ var OfferWhere = struct {
 	ModifiedDate  whereHelpernull_Time
 }{
 	OfferID:       whereHelperint{field: `offer_id`},
-	AccountID:     whereHelpernull_Int{field: `account_id`},
+	AccountID:     whereHelperint{field: `account_id`},
 	OfferType:     whereHelpernull_String{field: `offer_type`},
+	OfferRefID:    whereHelperstring{field: `offer_ref_id`},
 	Description:   whereHelpernull_String{field: `description`},
 	StartDateTime: whereHelpernull_Time{field: `start_date_time`},
 	EndDateTime:   whereHelpernull_Time{field: `end_date_time`},
@@ -157,8 +162,8 @@ func (*offerR) NewStruct() *offerR {
 type offerL struct{}
 
 var (
-	offerColumns               = []string{"offer_id", "account_id", "offer_type", "description", "start_date_time", "end_date_time", "rate", "value", "term", "url", "amount", "currency", "fee_amount", "fee_curency", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	offerColumnsWithoutDefault = []string{"account_id", "offer_type", "description", "start_date_time", "end_date_time", "rate", "value", "term", "url", "amount", "currency", "fee_amount", "fee_curency", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	offerColumns               = []string{"offer_id", "account_id", "offer_type", "offer_ref_id", "description", "start_date_time", "end_date_time", "rate", "value", "term", "url", "amount", "currency", "fee_amount", "fee_curency", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	offerColumnsWithoutDefault = []string{"account_id", "offer_type", "offer_ref_id", "description", "start_date_time", "end_date_time", "rate", "value", "term", "url", "amount", "currency", "fee_amount", "fee_curency", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	offerColumnsWithDefault    = []string{"offer_id"}
 	offerPrimaryKeyColumns     = []string{"offer_id"}
 )

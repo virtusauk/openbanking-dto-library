@@ -24,97 +24,148 @@ import (
 
 // Statement is an object representing the database table.
 type Statement struct {
-	StatementID          int         `boil:"statement_id" json:"statement_id" toml:"statement_id" yaml:"statement_id"`
-	AccountID            int         `boil:"account_id" json:"account_id" toml:"account_id" yaml:"account_id"`
-	StatementReference   null.String `boil:"statement_reference" json:"statement_reference,omitempty" toml:"statement_reference" yaml:"statement_reference,omitempty"`
-	StatementType        string      `boil:"statement_type" json:"statement_type" toml:"statement_type" yaml:"statement_type"`
-	StartDateTime        null.Time   `boil:"start_date_time" json:"start_date_time,omitempty" toml:"start_date_time" yaml:"start_date_time,omitempty"`
-	EndDateTime          null.Time   `boil:"end_date_time" json:"end_date_time,omitempty" toml:"end_date_time" yaml:"end_date_time,omitempty"`
-	CreationDateTime     null.Time   `boil:"creation_date_time" json:"creation_date_time,omitempty" toml:"creation_date_time" yaml:"creation_date_time,omitempty"`
-	StatementDescription null.String `boil:"statement_description" json:"statement_description,omitempty" toml:"statement_description" yaml:"statement_description,omitempty"`
-	MakerDate            time.Time   `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
-	CheckerDate          null.Time   `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
-	MakerID              string      `boil:"maker_id" json:"maker_id" toml:"maker_id" yaml:"maker_id"`
-	CheckerID            null.String `boil:"checker_id" json:"checker_id,omitempty" toml:"checker_id" yaml:"checker_id,omitempty"`
-	ModifiedBy           string      `boil:"modified_by" json:"modified_by" toml:"modified_by" yaml:"modified_by"`
-	ModifiedDate         time.Time   `boil:"modified_date" json:"modified_date" toml:"modified_date" yaml:"modified_date"`
+	StatementID               int         `boil:"statement_id" json:"statement_id" toml:"statement_id" yaml:"statement_id"`
+	StatementRefID            null.String `boil:"statement_ref_id" json:"statement_ref_id,omitempty" toml:"statement_ref_id" yaml:"statement_ref_id,omitempty"`
+	AccountID                 int         `boil:"account_id" json:"account_id" toml:"account_id" yaml:"account_id"`
+	StatementReference        null.String `boil:"statement_reference" json:"statement_reference,omitempty" toml:"statement_reference" yaml:"statement_reference,omitempty"`
+	StatementdatetimeDatetime null.Time   `boil:"statementdatetime_datetime" json:"statementdatetime_datetime,omitempty" toml:"statementdatetime_datetime" yaml:"statementdatetime_datetime,omitempty"`
+	StatementdatetimeType     null.String `boil:"statementdatetime_type" json:"statementdatetime_type,omitempty" toml:"statementdatetime_type" yaml:"statementdatetime_type,omitempty"`
+	StatementrateRate         null.String `boil:"statementrate_rate" json:"statementrate_rate,omitempty" toml:"statementrate_rate" yaml:"statementrate_rate,omitempty"`
+	StatementrateType         null.String `boil:"statementrate_type" json:"statementrate_type,omitempty" toml:"statementrate_type" yaml:"statementrate_type,omitempty"`
+	StatementvalueValue       null.String `boil:"statementvalue_value" json:"statementvalue_value,omitempty" toml:"statementvalue_value" yaml:"statementvalue_value,omitempty"`
+	StatementvalueType        null.String `boil:"statementvalue_type" json:"statementvalue_type,omitempty" toml:"statementvalue_type" yaml:"statementvalue_type,omitempty"`
+	StatementType             string      `boil:"statement_type" json:"statement_type" toml:"statement_type" yaml:"statement_type"`
+	StartDateTime             null.Time   `boil:"start_date_time" json:"start_date_time,omitempty" toml:"start_date_time" yaml:"start_date_time,omitempty"`
+	EndDateTime               null.Time   `boil:"end_date_time" json:"end_date_time,omitempty" toml:"end_date_time" yaml:"end_date_time,omitempty"`
+	CreationDateTime          null.Time   `boil:"creation_date_time" json:"creation_date_time,omitempty" toml:"creation_date_time" yaml:"creation_date_time,omitempty"`
+	StatementDescription      null.String `boil:"statement_description" json:"statement_description,omitempty" toml:"statement_description" yaml:"statement_description,omitempty"`
+	MakerDate                 time.Time   `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
+	CheckerDate               null.Time   `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
+	MakerID                   string      `boil:"maker_id" json:"maker_id" toml:"maker_id" yaml:"maker_id"`
+	CheckerID                 null.String `boil:"checker_id" json:"checker_id,omitempty" toml:"checker_id" yaml:"checker_id,omitempty"`
+	ModifiedBy                null.String `boil:"modified_by" json:"modified_by,omitempty" toml:"modified_by" yaml:"modified_by,omitempty"`
+	ModifiedDate              null.Time   `boil:"modified_date" json:"modified_date,omitempty" toml:"modified_date" yaml:"modified_date,omitempty"`
 
 	R *statementR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L statementL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
 var StatementColumns = struct {
-	StatementID          string
-	AccountID            string
-	StatementReference   string
-	StatementType        string
-	StartDateTime        string
-	EndDateTime          string
-	CreationDateTime     string
-	StatementDescription string
-	MakerDate            string
-	CheckerDate          string
-	MakerID              string
-	CheckerID            string
-	ModifiedBy           string
-	ModifiedDate         string
+	StatementID               string
+	StatementRefID            string
+	AccountID                 string
+	StatementReference        string
+	StatementdatetimeDatetime string
+	StatementdatetimeType     string
+	StatementrateRate         string
+	StatementrateType         string
+	StatementvalueValue       string
+	StatementvalueType        string
+	StatementType             string
+	StartDateTime             string
+	EndDateTime               string
+	CreationDateTime          string
+	StatementDescription      string
+	MakerDate                 string
+	CheckerDate               string
+	MakerID                   string
+	CheckerID                 string
+	ModifiedBy                string
+	ModifiedDate              string
 }{
-	StatementID:          "statement_id",
-	AccountID:            "account_id",
-	StatementReference:   "statement_reference",
-	StatementType:        "statement_type",
-	StartDateTime:        "start_date_time",
-	EndDateTime:          "end_date_time",
-	CreationDateTime:     "creation_date_time",
-	StatementDescription: "statement_description",
-	MakerDate:            "maker_date",
-	CheckerDate:          "checker_date",
-	MakerID:              "maker_id",
-	CheckerID:            "checker_id",
-	ModifiedBy:           "modified_by",
-	ModifiedDate:         "modified_date",
+	StatementID:               "statement_id",
+	StatementRefID:            "statement_ref_id",
+	AccountID:                 "account_id",
+	StatementReference:        "statement_reference",
+	StatementdatetimeDatetime: "statementdatetime_datetime",
+	StatementdatetimeType:     "statementdatetime_type",
+	StatementrateRate:         "statementrate_rate",
+	StatementrateType:         "statementrate_type",
+	StatementvalueValue:       "statementvalue_value",
+	StatementvalueType:        "statementvalue_type",
+	StatementType:             "statement_type",
+	StartDateTime:             "start_date_time",
+	EndDateTime:               "end_date_time",
+	CreationDateTime:          "creation_date_time",
+	StatementDescription:      "statement_description",
+	MakerDate:                 "maker_date",
+	CheckerDate:               "checker_date",
+	MakerID:                   "maker_id",
+	CheckerID:                 "checker_id",
+	ModifiedBy:                "modified_by",
+	ModifiedDate:              "modified_date",
 }
 
 // Generated where
 
 var StatementWhere = struct {
-	StatementID          whereHelperint
-	AccountID            whereHelperint
-	StatementReference   whereHelpernull_String
-	StatementType        whereHelperstring
-	StartDateTime        whereHelpernull_Time
-	EndDateTime          whereHelpernull_Time
-	CreationDateTime     whereHelpernull_Time
-	StatementDescription whereHelpernull_String
-	MakerDate            whereHelpertime_Time
-	CheckerDate          whereHelpernull_Time
-	MakerID              whereHelperstring
-	CheckerID            whereHelpernull_String
-	ModifiedBy           whereHelperstring
-	ModifiedDate         whereHelpertime_Time
+	StatementID               whereHelperint
+	StatementRefID            whereHelpernull_String
+	AccountID                 whereHelperint
+	StatementReference        whereHelpernull_String
+	StatementdatetimeDatetime whereHelpernull_Time
+	StatementdatetimeType     whereHelpernull_String
+	StatementrateRate         whereHelpernull_String
+	StatementrateType         whereHelpernull_String
+	StatementvalueValue       whereHelpernull_String
+	StatementvalueType        whereHelpernull_String
+	StatementType             whereHelperstring
+	StartDateTime             whereHelpernull_Time
+	EndDateTime               whereHelpernull_Time
+	CreationDateTime          whereHelpernull_Time
+	StatementDescription      whereHelpernull_String
+	MakerDate                 whereHelpertime_Time
+	CheckerDate               whereHelpernull_Time
+	MakerID                   whereHelperstring
+	CheckerID                 whereHelpernull_String
+	ModifiedBy                whereHelpernull_String
+	ModifiedDate              whereHelpernull_Time
 }{
-	StatementID:          whereHelperint{field: `statement_id`},
-	AccountID:            whereHelperint{field: `account_id`},
-	StatementReference:   whereHelpernull_String{field: `statement_reference`},
-	StatementType:        whereHelperstring{field: `statement_type`},
-	StartDateTime:        whereHelpernull_Time{field: `start_date_time`},
-	EndDateTime:          whereHelpernull_Time{field: `end_date_time`},
-	CreationDateTime:     whereHelpernull_Time{field: `creation_date_time`},
-	StatementDescription: whereHelpernull_String{field: `statement_description`},
-	MakerDate:            whereHelpertime_Time{field: `maker_date`},
-	CheckerDate:          whereHelpernull_Time{field: `checker_date`},
-	MakerID:              whereHelperstring{field: `maker_id`},
-	CheckerID:            whereHelpernull_String{field: `checker_id`},
-	ModifiedBy:           whereHelperstring{field: `modified_by`},
-	ModifiedDate:         whereHelpertime_Time{field: `modified_date`},
+	StatementID:               whereHelperint{field: `statement_id`},
+	StatementRefID:            whereHelpernull_String{field: `statement_ref_id`},
+	AccountID:                 whereHelperint{field: `account_id`},
+	StatementReference:        whereHelpernull_String{field: `statement_reference`},
+	StatementdatetimeDatetime: whereHelpernull_Time{field: `statementdatetime_datetime`},
+	StatementdatetimeType:     whereHelpernull_String{field: `statementdatetime_type`},
+	StatementrateRate:         whereHelpernull_String{field: `statementrate_rate`},
+	StatementrateType:         whereHelpernull_String{field: `statementrate_type`},
+	StatementvalueValue:       whereHelpernull_String{field: `statementvalue_value`},
+	StatementvalueType:        whereHelpernull_String{field: `statementvalue_type`},
+	StatementType:             whereHelperstring{field: `statement_type`},
+	StartDateTime:             whereHelpernull_Time{field: `start_date_time`},
+	EndDateTime:               whereHelpernull_Time{field: `end_date_time`},
+	CreationDateTime:          whereHelpernull_Time{field: `creation_date_time`},
+	StatementDescription:      whereHelpernull_String{field: `statement_description`},
+	MakerDate:                 whereHelpertime_Time{field: `maker_date`},
+	CheckerDate:               whereHelpernull_Time{field: `checker_date`},
+	MakerID:                   whereHelperstring{field: `maker_id`},
+	CheckerID:                 whereHelpernull_String{field: `checker_id`},
+	ModifiedBy:                whereHelpernull_String{field: `modified_by`},
+	ModifiedDate:              whereHelpernull_Time{field: `modified_date`},
 }
 
 // StatementRels is where relationship names are stored.
 var StatementRels = struct {
-}{}
+	Account                     string
+	StatementStatementAmounts   string
+	StatementStatementBenefits  string
+	StatementStatementFees      string
+	StatementStatementInterests string
+}{
+	Account:                     "Account",
+	StatementStatementAmounts:   "StatementStatementAmounts",
+	StatementStatementBenefits:  "StatementStatementBenefits",
+	StatementStatementFees:      "StatementStatementFees",
+	StatementStatementInterests: "StatementStatementInterests",
+}
 
 // statementR is where relationships are stored.
 type statementR struct {
+	Account                     *Account
+	StatementStatementAmounts   StatementAmountSlice
+	StatementStatementBenefits  StatementBenefitSlice
+	StatementStatementFees      StatementFeeSlice
+	StatementStatementInterests StatementInterestSlice
 }
 
 // NewStruct creates a new relationship struct
@@ -126,8 +177,8 @@ func (*statementR) NewStruct() *statementR {
 type statementL struct{}
 
 var (
-	statementColumns               = []string{"statement_id", "account_id", "statement_reference", "statement_type", "start_date_time", "end_date_time", "creation_date_time", "statement_description", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	statementColumnsWithoutDefault = []string{"statement_id", "account_id", "statement_reference", "statement_type", "start_date_time", "end_date_time", "creation_date_time", "statement_description", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	statementColumns               = []string{"statement_id", "statement_ref_id", "account_id", "statement_reference", "statementdatetime_datetime", "statementdatetime_type", "statementrate_rate", "statementrate_type", "statementvalue_value", "statementvalue_type", "statement_type", "start_date_time", "end_date_time", "creation_date_time", "statement_description", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	statementColumnsWithoutDefault = []string{"statement_id", "statement_ref_id", "account_id", "statement_reference", "statementdatetime_datetime", "statementdatetime_type", "statementrate_rate", "statementrate_type", "statementvalue_value", "statementvalue_type", "statement_type", "start_date_time", "end_date_time", "creation_date_time", "statement_description", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	statementColumnsWithDefault    = []string{}
 	statementPrimaryKeyColumns     = []string{"statement_id"}
 )
@@ -405,6 +456,844 @@ func (q statementQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (
 	}
 
 	return count > 0, nil
+}
+
+// Account pointed to by the foreign key.
+func (o *Statement) Account(mods ...qm.QueryMod) accountQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("account_id=?", o.AccountID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := Accounts(queryMods...)
+	queries.SetFrom(query.Query, "`Account`")
+
+	return query
+}
+
+// StatementStatementAmounts retrieves all the StatementAmount's StatementAmounts with an executor via statement_id column.
+func (o *Statement) StatementStatementAmounts(mods ...qm.QueryMod) statementAmountQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`StatementAmount`.`statement_id`=?", o.StatementID),
+	)
+
+	query := StatementAmounts(queryMods...)
+	queries.SetFrom(query.Query, "`StatementAmount`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`StatementAmount`.*"})
+	}
+
+	return query
+}
+
+// StatementStatementBenefits retrieves all the StatementBenefit's StatementBenefits with an executor via statement_id column.
+func (o *Statement) StatementStatementBenefits(mods ...qm.QueryMod) statementBenefitQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`StatementBenefit`.`statement_id`=?", o.StatementID),
+	)
+
+	query := StatementBenefits(queryMods...)
+	queries.SetFrom(query.Query, "`StatementBenefit`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`StatementBenefit`.*"})
+	}
+
+	return query
+}
+
+// StatementStatementFees retrieves all the StatementFee's StatementFees with an executor via statement_id column.
+func (o *Statement) StatementStatementFees(mods ...qm.QueryMod) statementFeeQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`StatementFee`.`statement_id`=?", o.StatementID),
+	)
+
+	query := StatementFees(queryMods...)
+	queries.SetFrom(query.Query, "`StatementFee`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`StatementFee`.*"})
+	}
+
+	return query
+}
+
+// StatementStatementInterests retrieves all the StatementInterest's StatementInterests with an executor via statement_id column.
+func (o *Statement) StatementStatementInterests(mods ...qm.QueryMod) statementInterestQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`StatementInterest`.`statement_id`=?", o.StatementID),
+	)
+
+	query := StatementInterests(queryMods...)
+	queries.SetFrom(query.Query, "`StatementInterest`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`StatementInterest`.*"})
+	}
+
+	return query
+}
+
+// LoadAccount allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (statementL) LoadAccount(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStatement interface{}, mods queries.Applicator) error {
+	var slice []*Statement
+	var object *Statement
+
+	if singular {
+		object = maybeStatement.(*Statement)
+	} else {
+		slice = *maybeStatement.(*[]*Statement)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &statementR{}
+		}
+		args = append(args, object.AccountID)
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &statementR{}
+			}
+
+			for _, a := range args {
+				if a == obj.AccountID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.AccountID)
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`Account`), qm.WhereIn(`account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Account")
+	}
+
+	var resultSlice []*Account
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Account")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for Account")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Account")
+	}
+
+	if len(statementAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Account = foreign
+		if foreign.R == nil {
+			foreign.R = &accountR{}
+		}
+		foreign.R.AccountStatements = append(foreign.R.AccountStatements, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.AccountID == foreign.AccountID {
+				local.R.Account = foreign
+				if foreign.R == nil {
+					foreign.R = &accountR{}
+				}
+				foreign.R.AccountStatements = append(foreign.R.AccountStatements, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadStatementStatementAmounts allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (statementL) LoadStatementStatementAmounts(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStatement interface{}, mods queries.Applicator) error {
+	var slice []*Statement
+	var object *Statement
+
+	if singular {
+		object = maybeStatement.(*Statement)
+	} else {
+		slice = *maybeStatement.(*[]*Statement)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &statementR{}
+		}
+		args = append(args, object.StatementID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &statementR{}
+			}
+
+			for _, a := range args {
+				if a == obj.StatementID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.StatementID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`StatementAmount`), qm.WhereIn(`statement_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load StatementAmount")
+	}
+
+	var resultSlice []*StatementAmount
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice StatementAmount")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on StatementAmount")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for StatementAmount")
+	}
+
+	if len(statementAmountAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.StatementStatementAmounts = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &statementAmountR{}
+			}
+			foreign.R.Statement = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.StatementID == foreign.StatementID {
+				local.R.StatementStatementAmounts = append(local.R.StatementStatementAmounts, foreign)
+				if foreign.R == nil {
+					foreign.R = &statementAmountR{}
+				}
+				foreign.R.Statement = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadStatementStatementBenefits allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (statementL) LoadStatementStatementBenefits(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStatement interface{}, mods queries.Applicator) error {
+	var slice []*Statement
+	var object *Statement
+
+	if singular {
+		object = maybeStatement.(*Statement)
+	} else {
+		slice = *maybeStatement.(*[]*Statement)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &statementR{}
+		}
+		args = append(args, object.StatementID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &statementR{}
+			}
+
+			for _, a := range args {
+				if a == obj.StatementID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.StatementID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`StatementBenefit`), qm.WhereIn(`statement_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load StatementBenefit")
+	}
+
+	var resultSlice []*StatementBenefit
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice StatementBenefit")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on StatementBenefit")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for StatementBenefit")
+	}
+
+	if len(statementBenefitAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.StatementStatementBenefits = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &statementBenefitR{}
+			}
+			foreign.R.Statement = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.StatementID == foreign.StatementID {
+				local.R.StatementStatementBenefits = append(local.R.StatementStatementBenefits, foreign)
+				if foreign.R == nil {
+					foreign.R = &statementBenefitR{}
+				}
+				foreign.R.Statement = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadStatementStatementFees allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (statementL) LoadStatementStatementFees(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStatement interface{}, mods queries.Applicator) error {
+	var slice []*Statement
+	var object *Statement
+
+	if singular {
+		object = maybeStatement.(*Statement)
+	} else {
+		slice = *maybeStatement.(*[]*Statement)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &statementR{}
+		}
+		args = append(args, object.StatementID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &statementR{}
+			}
+
+			for _, a := range args {
+				if a == obj.StatementID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.StatementID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`StatementFee`), qm.WhereIn(`statement_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load StatementFee")
+	}
+
+	var resultSlice []*StatementFee
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice StatementFee")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on StatementFee")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for StatementFee")
+	}
+
+	if len(statementFeeAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.StatementStatementFees = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &statementFeeR{}
+			}
+			foreign.R.Statement = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.StatementID == foreign.StatementID {
+				local.R.StatementStatementFees = append(local.R.StatementStatementFees, foreign)
+				if foreign.R == nil {
+					foreign.R = &statementFeeR{}
+				}
+				foreign.R.Statement = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadStatementStatementInterests allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (statementL) LoadStatementStatementInterests(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStatement interface{}, mods queries.Applicator) error {
+	var slice []*Statement
+	var object *Statement
+
+	if singular {
+		object = maybeStatement.(*Statement)
+	} else {
+		slice = *maybeStatement.(*[]*Statement)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &statementR{}
+		}
+		args = append(args, object.StatementID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &statementR{}
+			}
+
+			for _, a := range args {
+				if a == obj.StatementID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.StatementID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`StatementInterest`), qm.WhereIn(`statement_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load StatementInterest")
+	}
+
+	var resultSlice []*StatementInterest
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice StatementInterest")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on StatementInterest")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for StatementInterest")
+	}
+
+	if len(statementInterestAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.StatementStatementInterests = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &statementInterestR{}
+			}
+			foreign.R.Statement = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.StatementID == foreign.StatementID {
+				local.R.StatementStatementInterests = append(local.R.StatementStatementInterests, foreign)
+				if foreign.R == nil {
+					foreign.R = &statementInterestR{}
+				}
+				foreign.R.Statement = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// SetAccount of the statement to the related item.
+// Sets o.R.Account to related.
+// Adds o to related.R.AccountStatements.
+func (o *Statement) SetAccount(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Account) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE `Statement` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"account_id"}),
+		strmangle.WhereClause("`", "`", 0, statementPrimaryKeyColumns),
+	)
+	values := []interface{}{related.AccountID, o.StatementID}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.AccountID = related.AccountID
+	if o.R == nil {
+		o.R = &statementR{
+			Account: related,
+		}
+	} else {
+		o.R.Account = related
+	}
+
+	if related.R == nil {
+		related.R = &accountR{
+			AccountStatements: StatementSlice{o},
+		}
+	} else {
+		related.R.AccountStatements = append(related.R.AccountStatements, o)
+	}
+
+	return nil
+}
+
+// AddStatementStatementAmounts adds the given related objects to the existing relationships
+// of the Statement, optionally inserting them as new records.
+// Appends related to o.R.StatementStatementAmounts.
+// Sets related.R.Statement appropriately.
+func (o *Statement) AddStatementStatementAmounts(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StatementAmount) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.StatementID = o.StatementID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `StatementAmount` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"statement_id"}),
+				strmangle.WhereClause("`", "`", 0, statementAmountPrimaryKeyColumns),
+			)
+			values := []interface{}{o.StatementID, rel.StatementAmountID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.StatementID = o.StatementID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &statementR{
+			StatementStatementAmounts: related,
+		}
+	} else {
+		o.R.StatementStatementAmounts = append(o.R.StatementStatementAmounts, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &statementAmountR{
+				Statement: o,
+			}
+		} else {
+			rel.R.Statement = o
+		}
+	}
+	return nil
+}
+
+// AddStatementStatementBenefits adds the given related objects to the existing relationships
+// of the Statement, optionally inserting them as new records.
+// Appends related to o.R.StatementStatementBenefits.
+// Sets related.R.Statement appropriately.
+func (o *Statement) AddStatementStatementBenefits(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StatementBenefit) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.StatementID = o.StatementID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `StatementBenefit` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"statement_id"}),
+				strmangle.WhereClause("`", "`", 0, statementBenefitPrimaryKeyColumns),
+			)
+			values := []interface{}{o.StatementID, rel.StatementBenefitID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.StatementID = o.StatementID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &statementR{
+			StatementStatementBenefits: related,
+		}
+	} else {
+		o.R.StatementStatementBenefits = append(o.R.StatementStatementBenefits, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &statementBenefitR{
+				Statement: o,
+			}
+		} else {
+			rel.R.Statement = o
+		}
+	}
+	return nil
+}
+
+// AddStatementStatementFees adds the given related objects to the existing relationships
+// of the Statement, optionally inserting them as new records.
+// Appends related to o.R.StatementStatementFees.
+// Sets related.R.Statement appropriately.
+func (o *Statement) AddStatementStatementFees(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StatementFee) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.StatementID = o.StatementID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `StatementFee` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"statement_id"}),
+				strmangle.WhereClause("`", "`", 0, statementFeePrimaryKeyColumns),
+			)
+			values := []interface{}{o.StatementID, rel.StatementFeeID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.StatementID = o.StatementID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &statementR{
+			StatementStatementFees: related,
+		}
+	} else {
+		o.R.StatementStatementFees = append(o.R.StatementStatementFees, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &statementFeeR{
+				Statement: o,
+			}
+		} else {
+			rel.R.Statement = o
+		}
+	}
+	return nil
+}
+
+// AddStatementStatementInterests adds the given related objects to the existing relationships
+// of the Statement, optionally inserting them as new records.
+// Appends related to o.R.StatementStatementInterests.
+// Sets related.R.Statement appropriately.
+func (o *Statement) AddStatementStatementInterests(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*StatementInterest) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.StatementID = o.StatementID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `StatementInterest` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"statement_id"}),
+				strmangle.WhereClause("`", "`", 0, statementInterestPrimaryKeyColumns),
+			)
+			values := []interface{}{o.StatementID, rel.StatementInterestID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.StatementID = o.StatementID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &statementR{
+			StatementStatementInterests: related,
+		}
+	} else {
+		o.R.StatementStatementInterests = append(o.R.StatementStatementInterests, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &statementInterestR{
+				Statement: o,
+			}
+		} else {
+			rel.R.Statement = o
+		}
+	}
+	return nil
 }
 
 // Statements retrieves all the records using an executor.

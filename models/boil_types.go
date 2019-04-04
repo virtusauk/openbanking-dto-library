@@ -55,6 +55,9 @@ func makeCacheKey(cols boil.Columns, nzDefaults []string) string {
 const (
 	AccountSchemeNameSortCodeAccountNumber = "SortCodeAccountNumber"
 	AccountSchemeNameIBAN                  = "IBAN"
+	AccountSchemeNameBBAN                  = "BBAN"
+	AccountSchemeNamePAN                   = "PAN"
+	AccountSchemeNamePAYM                  = "PAYM"
 )
 
 // Enum values for Account.type_of_balance
@@ -79,6 +82,8 @@ const (
 
 // Enum values for Account.credit_line_type
 const (
+	AccountCreditLineTypeAvailable  = "Available"
+	AccountCreditLineTypeCrrdit     = "crrdit"
 	AccountCreditLineTypePre_Agreed = "Pre_Agreed"
 	AccountCreditLineTypeEmergency  = "Emergency"
 	AccountCreditLineTypeTemporary  = "Temporary"
@@ -95,6 +100,9 @@ const (
 const (
 	AccountRequestSchemeNameSortCodeAccountNumber = "SortCodeAccountNumber"
 	AccountRequestSchemeNameIBAN                  = "IBAN"
+	AccountRequestSchemeNameBBAN                  = "BBAN"
+	AccountRequestSchemeNamePAN                   = "PAN"
+	AccountRequestSchemeNamePAYM                  = "PAYM"
 )
 
 // Enum values for AccountRequest.status
@@ -323,10 +331,74 @@ const (
 	AccountRequestHistoryReadTransactionsDetailNo  = "No"
 )
 
+// Enum values for AccountType.account_type
+const (
+	AccountTypeAccountTypeBusiness = "business"
+	AccountTypeAccountTypePersonal = "personal"
+)
+
+// Enum values for AccountType.account_sub_type
+const (
+	AccountTypeAccountSubTypeChargeCard     = "ChargeCard"
+	AccountTypeAccountSubTypeCreditCard     = "CreditCard"
+	AccountTypeAccountSubTypeCurrentAccount = "CurrentAccount"
+	AccountTypeAccountSubTypeEMoney         = "EMoney"
+	AccountTypeAccountSubTypeLoan           = "Loan"
+	AccountTypeAccountSubTypeMortgage       = "Mortgage"
+	AccountTypeAccountSubTypePrePaidCard    = "PrePaidCard"
+	AccountTypeAccountSubTypeSavings        = "Savings"
+)
+
+// Enum values for Address.address_type
+const (
+	AddressAddressTypeSortCodeAccountNumber = "SortCodeAccountNumber"
+	AddressAddressTypeIBAN                  = "IBAN"
+	AddressAddressTypeBBAN                  = "BBAN"
+	AddressAddressTypePAN                   = "PAN"
+	AddressAddressTypePAYM                  = "PAYM"
+)
+
+// Enum values for Beneficiary.beneficiary_creditor_agent_schemename
+const (
+	BeneficiaryBeneficiaryCreditorAgentSchemenameBICFI = "BICFI"
+)
+
 // Enum values for Beneficiary.beneficiary_creditor_account_schemename
 const (
 	BeneficiaryBeneficiaryCreditorAccountSchemenameSortCodeAccountNumber = "SortCodeAccountNumber"
 	BeneficiaryBeneficiaryCreditorAccountSchemenameIBAN                  = "IBAN"
+	BeneficiaryBeneficiaryCreditorAccountSchemenameBBAN                  = "BBAN"
+	BeneficiaryBeneficiaryCreditorAccountSchemenamePAN                   = "PAN"
+	BeneficiaryBeneficiaryCreditorAccountSchemenamePAYM                  = "PAYM"
+)
+
+// Enum values for Beneficiary.beneficiary_creditor_agent_address_type
+const (
+	BeneficiaryBeneficiaryCreditorAgentAddressTypeBusiness       = "Business"
+	BeneficiaryBeneficiaryCreditorAgentAddressTypeCorrespondence = "Correspondence"
+	BeneficiaryBeneficiaryCreditorAgentAddressTypeDeliveryTo     = "DeliveryTo"
+	BeneficiaryBeneficiaryCreditorAgentAddressTypeMailTo         = "MailTo"
+	BeneficiaryBeneficiaryCreditorAgentAddressTypePOBox          = "POBox"
+	BeneficiaryBeneficiaryCreditorAgentAddressTypePostal         = "Postal"
+	BeneficiaryBeneficiaryCreditorAgentAddressTypeResidential    = "Residential"
+	BeneficiaryBeneficiaryCreditorAgentAddressTypeStatement      = "Statement"
+)
+
+// Enum values for Branches.servicer_schemename
+const (
+	BranchesServicerSchemenameBICFI = "BICFI"
+)
+
+// Enum values for Branches.address_type
+const (
+	BranchesAddressTypeBusiness       = "Business"
+	BranchesAddressTypeCorrespondence = "Correspondence"
+	BranchesAddressTypeDeliveryTo     = "DeliveryTo"
+	BranchesAddressTypeMailTo         = "MailTo"
+	BranchesAddressTypePOBox          = "POBox"
+	BranchesAddressTypePostal         = "Postal"
+	BranchesAddressTypeResidential    = "Residential"
+	BranchesAddressTypeStatement      = "Statement"
 )
 
 // Enum values for CurrencyMaster.currency_symbol_position
@@ -345,6 +417,23 @@ const (
 const (
 	DirectDebitsDirectdebitStatusCodeActive   = "Active"
 	DirectDebitsDirectdebitStatusCodeInactive = "Inactive"
+)
+
+// Enum values for FilePayment.local_instrument are not proper Go identifiers, cannot emit constants
+// Enum values for FilePayment.debtor_account_schemename
+const (
+	FilePaymentDebtorAccountSchemenameSortCodeAccountNumber = "SortCodeAccountNumber"
+	FilePaymentDebtorAccountSchemenameIBAN                  = "IBAN"
+	FilePaymentDebtorAccountSchemenameBBAN                  = "BBAN"
+	FilePaymentDebtorAccountSchemenamePAN                   = "PAN"
+	FilePaymentDebtorAccountSchemenamePAYM                  = "PAYM"
+)
+
+// Enum values for FxPayment.fx_rate_type
+const (
+	FxPaymentFXRateTypeActual     = "Actual"
+	FxPaymentFXRateTypeAgreed     = "Agreed"
+	FxPaymentFXRateTypeIndicative = "Indicative"
 )
 
 // Enum values for GLAccount.type
@@ -483,6 +572,40 @@ const (
 	LoanLoanPenaltyCalculationMethodOverdueBalanceAndInterest = "overdue_balance_and_interest"
 )
 
+// Enum values for OBPFundConfirmationConsent.status
+const (
+	OBPFundConfirmationConsentStatusAuthorised            = "Authorised"
+	OBPFundConfirmationConsentStatusAwaitingAuthorisation = "AwaitingAuthorisation"
+	OBPFundConfirmationConsentStatusConsumed              = "Consumed"
+	OBPFundConfirmationConsentStatusRejected              = "Rejected"
+)
+
+// Enum values for OBPPaymentConsent.status
+const (
+	OBPPaymentConsentStatusAuthorised            = "Authorised"
+	OBPPaymentConsentStatusAwaitingAuthorisation = "AwaitingAuthorisation"
+	OBPPaymentConsentStatusConsumed              = "Consumed"
+	OBPPaymentConsentStatusRejected              = "Rejected"
+)
+
+// Enum values for OBPPaymentConsent.permission
+const (
+	OBPPaymentConsentPermissionCreate = "create"
+)
+
+// Enum values for OBPPaymentConsent.authorization_status
+const (
+	OBPPaymentConsentAuthorizationStatusAuthorised               = "Authorised"
+	OBPPaymentConsentAuthorizationStatusAwaitingfutherAuthorised = "AwaitingfutherAuthorised"
+	OBPPaymentConsentAuthorizationStatusRejected                 = "Rejected"
+)
+
+// Enum values for OBPPaymentConsent.authorisation_type
+const (
+	OBPPaymentConsentAuthorisationTypeAny    = "Any"
+	OBPPaymentConsentAuthorisationTypeSingle = "Single"
+)
+
 // Enum values for Offer.offer_type
 const (
 	OfferOfferTypeBalanceTransfer = "BalanceTransfer"
@@ -492,16 +615,40 @@ const (
 	OfferOfferTypePromotionalRate = "PromotionalRate"
 )
 
+// Enum values for Parties.party_type
+const (
+	PartiesPartyTypeDelegate = "Delegate"
+	PartiesPartyTypeJoint    = "Joint"
+	PartiesPartyTypeSole     = "Sole"
+)
+
+// Enum values for Payment.local_instrument are not proper Go identifiers, cannot emit constants
+// Enum values for Payment.instruction_priority are not proper Go identifiers, cannot emit constants
 // Enum values for Payment.debtor_account_schemename
 const (
 	PaymentDebtorAccountSchemenameSortCodeAccountNumber = "SortCodeAccountNumber"
 	PaymentDebtorAccountSchemenameIBAN                  = "IBAN"
+	PaymentDebtorAccountSchemenameBBAN                  = "BBAN"
+	PaymentDebtorAccountSchemenamePAN                   = "PAN"
+	PaymentDebtorAccountSchemenamePAYM                  = "PAYM"
 )
 
 // Enum values for Payment.creditor_account_schemename
 const (
 	PaymentCreditorAccountSchemenameSortCodeAccountNumber = "SortCodeAccountNumber"
 	PaymentCreditorAccountSchemenameIBAN                  = "IBAN"
+	PaymentCreditorAccountSchemenameBBAN                  = "BBAN"
+	PaymentCreditorAccountSchemenamePAN                   = "PAN"
+	PaymentCreditorAccountSchemenamePAYM                  = "PAYM"
+)
+
+// Enum values for Payment.creditor_address_type
+const (
+	PaymentCreditorAddressTypeSortCodeAccountNumber = "SortCodeAccountNumber"
+	PaymentCreditorAddressTypeIBAN                  = "IBAN"
+	PaymentCreditorAddressTypeBBAN                  = "BBAN"
+	PaymentCreditorAddressTypePAN                   = "PAN"
+	PaymentCreditorAddressTypePAYM                  = "PAYM"
 )
 
 // Enum values for Payment.risk_payment_context_code
@@ -511,15 +658,6 @@ const (
 	PaymentRiskPaymentContextCodeEcommerceServices = "EcommerceServices"
 	PaymentRiskPaymentContextCodeOther             = "Other"
 	PaymentRiskPaymentContextCodePersonToPerson    = "PersonToPerson"
-)
-
-// Enum values for Payment.payment_status
-const (
-	PaymentPaymentStatusWip                = "wip"
-	PaymentPaymentStatusPendingwithpartner = "pendingwithpartner"
-	PaymentPaymentStatusCompleted          = "completed"
-	PaymentPaymentStatusFailed             = "failed"
-	PaymentPaymentStatusRejected           = "rejected"
 )
 
 // Enum values for Payment.payment_setup_status
@@ -560,6 +698,32 @@ const (
 	PaymentTransferModeImps = "imps"
 )
 
+// Enum values for PaymentCharges.charge_bearer
+const (
+	PaymentChargesChargeBearerBorneByCreditor       = "BorneByCreditor"
+	PaymentChargesChargeBearerBorneByDebtor         = "BorneByDebtor"
+	PaymentChargesChargeBearerFollowingServiceLevel = "FollowingServiceLevel"
+	PaymentChargesChargeBearerShared                = "Shared"
+)
+
+// Enum values for PaymentCharges.type
+const (
+	PaymentChargesTypeCHAPSOut           = "CHAPSOut"
+	PaymentChargesTypeBalanceTransferOut = "BalanceTransferOut"
+	PaymentChargesTypeMoneyTransferOut   = "MoneyTransferOut"
+)
+
+// Enum values for PaymentInitiation.payment_type
+const (
+	PaymentInitiationPaymentTypeDomesticPayment                = "DomesticPayment"
+	PaymentInitiationPaymentTypeDomesticScheduledPayments      = "DomesticScheduledPayments"
+	PaymentInitiationPaymentTypeDomensticStandingOrder         = "DomensticStandingOrder"
+	PaymentInitiationPaymentTypeInternationalPayment           = "InternationalPayment"
+	PaymentInitiationPaymentTypeInternationalScheduledPayments = "InternationalScheduledPayments"
+	PaymentInitiationPaymentTypeInternationalStandingOrder     = "InternationalStandingOrder"
+	PaymentInitiationPaymentTypeFilePayment                    = "FilePayment"
+)
+
 // Enum values for Person.state
 const (
 	PersonStatePENDING_APPROVAL = "PENDING_APPROVAL"
@@ -571,16 +735,21 @@ const (
 
 // Enum values for Product.product_type
 const (
-	ProductProductTypeCURRENT_ACCOUNT = "CURRENT_ACCOUNT"
-	ProductProductTypeSAVINGS_ACCOUNT = "SAVINGS_ACCOUNT"
-	ProductProductTypeLOAN            = "LOAN"
-	ProductProductTypeCARD            = "CARD"
-	ProductProductTypeREGULAR_SAVINGS = "REGULAR_SAVINGS"
-	ProductProductTypeFIXED_DEPOSIT   = "FIXED_DEPOSIT"
-	ProductProductTypeSAVINGS_PLAN    = "SAVINGS_PLAN"
-	ProductProductTypeMINIMUM         = "MINIMUM"
-	ProductProductTypeAVERAGE         = "AVERAGE"
-	ProductProductTypeOTHERS          = "OTHERS"
+	ProductProductTypeCURRENT_ACCOUNT         = "CURRENT_ACCOUNT"
+	ProductProductTypeSAVINGS_ACCOUNT         = "SAVINGS_ACCOUNT"
+	ProductProductTypeLOAN                    = "LOAN"
+	ProductProductTypeCARD                    = "CARD"
+	ProductProductTypeREGULAR_SAVINGS         = "REGULAR_SAVINGS"
+	ProductProductTypeFIXED_DEPOSIT           = "FIXED_DEPOSIT"
+	ProductProductTypeSAVINGS_PLAN            = "SAVINGS_PLAN"
+	ProductProductTypeMINIMUM                 = "MINIMUM"
+	ProductProductTypeAVERAGE                 = "AVERAGE"
+	ProductProductTypePERSONAL_LOAN           = "PERSONAL_LOAN"
+	ProductProductTypePersonalCurrentAccount  = "PersonalCurrentAccount"
+	ProductProductTypeBussinessCurrentAccount = "BussinessCurrentAccount"
+	ProductProductTypeCommercialCreditCard    = "CommercialCreditCard"
+	ProductProductTypeSMELoan                 = "SMELoan"
+	ProductProductTypeOTHERS                  = "OTHERS"
 )
 
 // Enum values for Product.product_group
@@ -645,10 +814,37 @@ const (
 	ProductLineOfCreditRequirementNOT_REQUIRED = "NOT_REQUIRED"
 )
 
+// Enum values for SchedulePayment.local_instrument are not proper Go identifiers, cannot emit constants
 // Enum values for SchedulePayment.schedule_type
 const (
 	SchedulePaymentScheduleTypeArrival   = "Arrival"
 	SchedulePaymentScheduleTypeExecution = "Execution"
+)
+
+// Enum values for SchedulePayment.creditoragent_scheme_name
+const (
+	SchedulePaymentCreditoragentSchemeNameBICFI = "BICFI"
+)
+
+// Enum values for SchedulePayment.creditoraccount_schemename
+const (
+	SchedulePaymentCreditoraccountSchemenameSortCodeAccountNumber = "SortCodeAccountNumber"
+	SchedulePaymentCreditoraccountSchemenameIBAN                  = "IBAN"
+	SchedulePaymentCreditoraccountSchemenameBBAN                  = "BBAN"
+	SchedulePaymentCreditoraccountSchemenamePAN                   = "PAN"
+	SchedulePaymentCreditoraccountSchemenamePAYM                  = "PAYM"
+)
+
+// Enum values for SchedulePayment.creditor_address_type
+const (
+	SchedulePaymentCreditorAddressTypeBusiness       = "Business"
+	SchedulePaymentCreditorAddressTypeCorrespondence = "Correspondence"
+	SchedulePaymentCreditorAddressTypeDeliveryTo     = "DeliveryTo"
+	SchedulePaymentCreditorAddressTypeMailTo         = "MailTo"
+	SchedulePaymentCreditorAddressTypePOBox          = "POBox"
+	SchedulePaymentCreditorAddressTypePostal         = "Postal"
+	SchedulePaymentCreditorAddressTypeResidential    = "Residential"
+	SchedulePaymentCreditorAddressTypeStatement      = "Statement"
 )
 
 // Enum values for SocialInfo.social_type
@@ -659,16 +855,151 @@ const (
 	SocialInfoSocialTypeLinkedin = "linkedin"
 )
 
+// Enum values for StandingOrders.creditor_agent_scheme_name
+const (
+	StandingOrdersCreditorAgentSchemeNameBICFI = "BICFI"
+)
+
 // Enum values for StandingOrders.creditor_account_scheme_name
 const (
 	StandingOrdersCreditorAccountSchemeNameSortCodeAccountNumber = "SortCodeAccountNumber"
 	StandingOrdersCreditorAccountSchemeNameIBAN                  = "IBAN"
+	StandingOrdersCreditorAccountSchemeNameBBAN                  = "BBAN"
+	StandingOrdersCreditorAccountSchemeNamePAN                   = "PAN"
+	StandingOrdersCreditorAccountSchemeNamePAYM                  = "PAYM"
+)
+
+// Enum values for StandingOrders.status_code
+const (
+	StandingOrdersStatusCodeActive   = "Active"
+	StandingOrdersStatusCodeInactive = "Inactive"
+)
+
+// Enum values for Statement.statementdatetime_type
+const (
+	StatementStatementdatetimeTypeBalanceTransferPromoEnd = "BalanceTransferPromoEnd"
+	StatementStatementdatetimeTypeDirectDebitDue          = "DirectDebitDue"
+	StatementStatementdatetimeTypeLastPayment             = "LastPayment"
+	StatementStatementdatetimeTypeLastStatement           = "LastStatement"
+	StatementStatementdatetimeTypeNextStatement           = "NextStatement"
+	StatementStatementdatetimeTypePaymentDue              = "PaymentDue"
+	StatementStatementdatetimeTypePurchasePromoEnd        = "PurchasePromoEnd"
+	StatementStatementdatetimeTypeStatementAvailable      = "StatementAvailable"
+)
+
+// Enum values for Statement.statementrate_rate
+const (
+	StatementStatementrateRateAnnualBalanceTransfer           = "AnnualBalanceTransfer"
+	StatementStatementrateRateAnnualBalanceTransferAfterPromo = "AnnualBalanceTransferAfterPromo"
+	StatementStatementrateRateAnnualBalanceTransferPromo      = "AnnualBalanceTransferPromo"
+	StatementStatementrateRateAnnualCash                      = "AnnualCash"
+	StatementStatementrateRateAnnualPurchase                  = "AnnualPurchase"
+	StatementStatementrateRateAnnualPurchaseAfterPromo        = "AnnualPurchaseAfterPromo"
+	StatementStatementrateRateAnnualPurchasePromo             = "AnnualPurchasePromo"
+	StatementStatementrateRateMonthlyBalanceTransfer          = "MonthlyBalanceTransfer"
+	StatementStatementrateRateMonthlyCash                     = "MonthlyCash"
+	StatementStatementrateRateMonthlyPurchase                 = "MonthlyPurchase"
+)
+
+// Enum values for Statement.statementvalue_value
+const (
+	StatementStatementvalueValueAirMilesPoints              = "AirMilesPoints"
+	StatementStatementvalueValueAirMilesPointsBalance       = "AirMilesPointsBalance"
+	StatementStatementvalueValueCredits                     = "Credits"
+	StatementStatementvalueValueDebits                      = "Debits"
+	StatementStatementvalueValueHotelPoints                 = "HotelPoints"
+	StatementStatementvalueValueHotelPointsBalance          = "HotelPointsBalance"
+	StatementStatementvalueValueRetailShoppingPoints        = "RetailShoppingPoints"
+	StatementStatementvalueValueRetailShoppingPointsBalance = "RetailShoppingPointsBalance"
 )
 
 // Enum values for Statement.statement_type
 const (
-	StatementStatementTypeArrival   = "Arrival"
-	StatementStatementTypeExecution = "Execution"
+	StatementStatementTypeAccountCloser   = "AccountCloser"
+	StatementStatementTypeAccountOpenning = "AccountOpenning"
+	StatementStatementTypeAnnual          = "Annual"
+	StatementStatementTypeInteram         = "Interam"
+	StatementStatementTypeRegularPeriodic = "RegularPeriodic"
+)
+
+// Enum values for StatementAmount.statement_amount_credit_debit_indicator
+const (
+	StatementAmountStatementAmountCreditDebitIndicatorCredit = "credit"
+	StatementAmountStatementAmountCreditDebitIndicatorDebit  = "debit"
+)
+
+// Enum values for StatementAmount.statement_amount_type
+const (
+	StatementAmountStatementAmountTypePreviousClosingBalance        = "PreviousClosingBalance"
+	StatementAmountStatementAmountTypeStartingBalance               = "StartingBalance"
+	StatementAmountStatementAmountTypeAvailableBalance              = "AvailableBalance"
+	StatementAmountStatementAmountTypeClosingBalance                = "ClosingBalance"
+	StatementAmountStatementAmountTypeArrearsClosingBalance         = "ArrearsClosingBalance"
+	StatementAmountStatementAmountTypeCashClosingBalance            = "CashClosingBalance"
+	StatementAmountStatementAmountTypePurchaseClosingBalance        = "PurchaseClosingBalance"
+	StatementAmountStatementAmountTypeBalanceTransferClosingBalance = "BalanceTransferClosingBalance"
+	StatementAmountStatementAmountTypeCreditLimit                   = "CreditLimit"
+	StatementAmountStatementAmountTypePreviousPayment               = "PreviousPayment"
+	StatementAmountStatementAmountTypeDirectDebitPaymentDue         = "DirectDebitPaymentDue"
+	StatementAmountStatementAmountTypeCurrentPayment                = "CurrentPayment"
+	StatementAmountStatementAmountTypeMinimumPaymentDue             = "MinimumPaymentDue"
+	StatementAmountStatementAmountTypeTotalPurchases                = "TotalPurchases"
+	StatementAmountStatementAmountTypeTotalCredits                  = "TotalCredits"
+	StatementAmountStatementAmountTypeTotalDebits                   = "TotalDebits"
+	StatementAmountStatementAmountTypeTotalCashAdvances             = "TotalCashAdvances"
+	StatementAmountStatementAmountTypeTotalAdjustments              = "TotalAdjustments"
+	StatementAmountStatementAmountTypeTotalCharges                  = "TotalCharges"
+	StatementAmountStatementAmountTypeAverageBalanceWhenInCredit    = "AverageBalanceWhenInCredit"
+	StatementAmountStatementAmountTypeAverageBalanceWhenInDebit     = "AverageBalanceWhenInDebit"
+	StatementAmountStatementAmountTypeAverageDailyBalance           = "AverageDailyBalance"
+	StatementAmountStatementAmountTypeFSCSInsurance                 = "FSCSInsurance"
+)
+
+// Enum values for StatementBenefit.statement_benefit_type
+const (
+	StatementBenefitStatementBenefitTypeCashBack        = "CashBack"
+	StatementBenefitStatementBenefitTypeInsurance       = "Insurance"
+	StatementBenefitStatementBenefitTypeTravelDiscount  = "TravelDiscount"
+	StatementBenefitStatementBenefitTypeTravelInsurance = "TravelInsurance"
+)
+
+// Enum values for StatementFee.statement_fee_credit_debit_indicator
+const (
+	StatementFeeStatementFeeCreditDebitIndicatorCredit = "credit"
+	StatementFeeStatementFeeCreditDebitIndicatorDebit  = "debit"
+)
+
+// Enum values for StatementFee.statement_fee_type
+const (
+	StatementFeeStatementFeeTypeAnnual             = "Annual"
+	StatementFeeStatementFeeTypeBalanceTransfer    = "BalanceTransfer"
+	StatementFeeStatementFeeTypeCashAdvance        = "CashAdvance"
+	StatementFeeStatementFeeTypeCashTransaction    = "CashTransaction"
+	StatementFeeStatementFeeTypeForeignTransaction = "ForeignTransaction"
+	StatementFeeStatementFeeTypeGambling           = "Gambling"
+	StatementFeeStatementFeeTypeLatePayment        = "LatePayment"
+	StatementFeeStatementFeeTypeMoneyTransfer      = "MoneyTransfer"
+	StatementFeeStatementFeeTypeMonthly            = "Monthly"
+	StatementFeeStatementFeeTypeOverlimit          = "Overlimit"
+	StatementFeeStatementFeeTypePostalOrder        = "PostalOrder"
+	StatementFeeStatementFeeTypePrizeEntry         = "PrizeEntry"
+	StatementFeeStatementFeeTypeStatementCopy      = "StatementCopy"
+	StatementFeeStatementFeeTypeTotal              = "Total"
+)
+
+// Enum values for StatementInterest.statement_interest_credit_debit_indicator
+const (
+	StatementInterestStatementInterestCreditDebitIndicatorCredit = "credit"
+	StatementInterestStatementInterestCreditDebitIndicatorDebit  = "debit"
+)
+
+// Enum values for StatementInterest.statement_interest_type
+const (
+	StatementInterestStatementInterestTypeBalanceTransfer = "BalanceTransfer"
+	StatementInterestStatementInterestTypeCash            = "Cash"
+	StatementInterestStatementInterestTypeEstimatedNext   = "EstimatedNext"
+	StatementInterestStatementInterestTypePurchase        = "Purchase"
+	StatementInterestStatementInterestTypeTotal           = "Total"
 )
 
 // Enum values for TFCharges.operation_code
@@ -708,6 +1039,18 @@ const (
 	TFTradeTradeStatusTradeConfirmedToBeClosed                     = "TradeConfirmedToBeClosed"
 )
 
+// Enum values for TierBandSet.calculation_method
+const (
+	TierBandSetCalculationMethodITCO = "ITCO"
+	TierBandSetCalculationMethodITSI = "ITSI"
+)
+
+// Enum values for TierBandSet.destination
+const (
+	TierBandSetDestinationISPA = "ISPA"
+	TierBandSetDestinationINSC = "INSC"
+)
+
 // Enum values for Trade.trade_status
 const (
 	TradeTradeStatusPurchaseorder                                = "purchaseorder"
@@ -727,36 +1070,10 @@ const (
 	TransactionCreditDebitIndicatorDebit  = "Debit"
 )
 
-// Enum values for Transaction.transaction_type
+// Enum values for Transaction.status
 const (
-	TransactionTransactionTypeCREATION                        = "CREATION"
-	TransactionTransactionTypeEDIT                            = "EDIT"
-	TransactionTransactionTypeSTATE_CHANGE                    = "STATE_CHANGE"
-	TransactionTransactionTypeDEPOSIT                         = "DEPOSIT"
-	TransactionTransactionTypeADJUSTMENT                      = "ADJUSTMENT"
-	TransactionTransactionTypeINTEREST_APPLIED                = "INTEREST_APPLIED"
-	TransactionTransactionTypeFEE_APPLIED                     = "FEE_APPLIED"
-	TransactionTransactionTypeFEE_ADJUSTED                    = "FEE_ADJUSTED"
-	TransactionTransactionTypeBEGIN_MATURITY_PERIOD           = "BEGIN_MATURITY_PERIOD"
-	TransactionTransactionTypeBRANCH_CHANGED                  = "BRANCH_CHANGED"
-	TransactionTransactionTypeFEE_REDUCTION_ADJUSTMENT        = "FEE_REDUCTION_ADJUSTMENT"
-	TransactionTransactionTypeFEES_DUE_REDUCED                = "FEES_DUE_REDUCED"
-	TransactionTransactionTypeIMPORT                          = "IMPORT"
-	TransactionTransactionTypeINTEREST_APPLIED_ADJUSTMENT     = "INTEREST_APPLIED_ADJUSTMENT"
-	TransactionTransactionTypeLOAN_FUNDED                     = "LOAN_FUNDED"
-	TransactionTransactionTypeLOAN_FUNDED_ADJUSTMENT          = "LOAN_FUNDED_ADJUSTMENT"
-	TransactionTransactionTypeLOAN_REPAID                     = "LOAN_REPAID"
-	TransactionTransactionTypeLOAN_REPAID_ADJUSTMENT          = "LOAN_REPAID_ADJUSTMENT"
-	TransactionTransactionTypeOVERDRAFT_INTEREST_RATE_CHANGED = "OVERDRAFT_INTEREST_RATE_CHANGED"
-	TransactionTransactionTypeTRANSFER                        = "TRANSFER"
-	TransactionTransactionTypeTRANSFER_ADJUSTMENT             = "TRANSFER_ADJUSTMENT"
-	TransactionTransactionTypeUNDO_BEGIN_MATURITY_PERIOD      = "UNDO_BEGIN_MATURITY_PERIOD"
-	TransactionTransactionTypeWITHHOLDING_TAX                 = "WITHHOLDING_TAX"
-	TransactionTransactionTypeWITHHOLDING_TAX_ADJUSTMENT      = "WITHHOLDING_TAX_ADJUSTMENT"
-	TransactionTransactionTypeWRITE_OFF_ADJUSTMENT            = "WRITE_OFF_ADJUSTMENT"
-	TransactionTransactionTypeWRITE_OFF                       = "WRITE_OFF"
-	TransactionTransactionTypeWITHDRAWAL_ADJUSTMENT           = "WITHDRAWAL_ADJUSTMENT"
-	TransactionTransactionTypeWITHDRAWAL                      = "WITHDRAWAL"
+	TransactionStatusBooked  = "booked"
+	TransactionStatusPending = "Pending"
 )
 
 // Enum values for Transaction.balance_type
@@ -791,4 +1108,42 @@ const (
 	TransactionObTransactionTypeOpeningAvailable       = "OpeningAvailable"
 	TransactionObTransactionTypeOpeningBooked          = "OpeningBooked"
 	TransactionObTransactionTypePreviouslyClosedBooked = "PreviouslyClosedBooked"
+)
+
+// Enum values for Transaction.counterparty_account_schemename
+const (
+	TransactionCounterpartyAccountSchemenameSortCodeAccountNumber = "SortCodeAccountNumber"
+	TransactionCounterpartyAccountSchemenameIBAN                  = "IBAN"
+	TransactionCounterpartyAccountSchemenameBBAN                  = "BBAN"
+	TransactionCounterpartyAccountSchemenamePAN                   = "PAN"
+	TransactionCounterpartyAccountSchemenamePAYM                  = "PAYM"
+)
+
+// Enum values for Transaction.counterparty_agent_address_type
+const (
+	TransactionCounterpartyAgentAddressTypeBusiness       = "Business"
+	TransactionCounterpartyAgentAddressTypeCorrespondence = "Correspondence"
+	TransactionCounterpartyAgentAddressTypeDeliveryTo     = "DeliveryTo"
+	TransactionCounterpartyAgentAddressTypeMailTo         = "MailTo"
+	TransactionCounterpartyAgentAddressTypePOBox          = "POBox"
+	TransactionCounterpartyAgentAddressTypePostal         = "Postal"
+	TransactionCounterpartyAgentAddressTypeResidential    = "Residential"
+	TransactionCounterpartyAgentAddressTypeStatement      = "Statement"
+)
+
+// Enum values for Transaction.card_schemename
+const (
+	TransactionCardSchemenameAmericanExpress = "AmericanExpress"
+	TransactionCardSchemenameDiners          = "Diners"
+	TransactionCardSchemenameDiscover        = "Discover"
+	TransactionCardSchemenameMasterCard      = "MasterCard"
+	TransactionCardSchemenameVISA            = "VISA"
+)
+
+// Enum values for Transaction.card_authorization_type
+const (
+	TransactionCardAuthorizationTypeConsumerDevice = "ConsumerDevice"
+	TransactionCardAuthorizationTypeContactless    = "Contactless"
+	TransactionCardAuthorizationTypeNone           = "None"
+	TransactionCardAuthorizationTypePIN            = "PIN"
 )

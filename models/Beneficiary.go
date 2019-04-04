@@ -39,9 +39,8 @@ type Beneficiary struct {
 	BeneficiaryCreditorAccountIdentification          string      `boil:"beneficiary_creditor_account_identification" json:"beneficiary_creditor_account_identification" toml:"beneficiary_creditor_account_identification" yaml:"beneficiary_creditor_account_identification"`
 	BeneficiaryCreditorAccountSecondaryIdentification string      `boil:"beneficiary_creditor_account_secondary_identification" json:"beneficiary_creditor_account_secondary_identification" toml:"beneficiary_creditor_account_secondary_identification" yaml:"beneficiary_creditor_account_secondary_identification"`
 	BeneficiaryCreditorAccountName                    string      `boil:"beneficiary_creditor_account_name" json:"beneficiary_creditor_account_name" toml:"beneficiary_creditor_account_name" yaml:"beneficiary_creditor_account_name"`
-	BeneficiaryServicerSchemename                     null.String `boil:"beneficiary_servicer_schemename" json:"beneficiary_servicer_schemename,omitempty" toml:"beneficiary_servicer_schemename" yaml:"beneficiary_servicer_schemename,omitempty"`
-	BeneficiaryServicerIdentification                 null.String `boil:"beneficiary_servicer_identification" json:"beneficiary_servicer_identification,omitempty" toml:"beneficiary_servicer_identification" yaml:"beneficiary_servicer_identification,omitempty"`
 	Reference                                         null.String `boil:"reference" json:"reference,omitempty" toml:"reference" yaml:"reference,omitempty"`
+	BeneficiaryCreditorAgentName                      null.String `boil:"beneficiary_creditor_agent_name" json:"beneficiary_creditor_agent_name,omitempty" toml:"beneficiary_creditor_agent_name" yaml:"beneficiary_creditor_agent_name,omitempty"`
 	BeneficiaryCreditorAgentAddressType               null.String `boil:"beneficiary_creditor_agent_address_type" json:"beneficiary_creditor_agent_address_type,omitempty" toml:"beneficiary_creditor_agent_address_type" yaml:"beneficiary_creditor_agent_address_type,omitempty"`
 	BeneficiaryCreditorAgentDepartment                null.String `boil:"beneficiary_creditor_agent_department" json:"beneficiary_creditor_agent_department,omitempty" toml:"beneficiary_creditor_agent_department" yaml:"beneficiary_creditor_agent_department,omitempty"`
 	BeneficiaryCreditorAgentSubdepartment             null.String `boil:"beneficiary_creditor_agent_subdepartment" json:"beneficiary_creditor_agent_subdepartment,omitempty" toml:"beneficiary_creditor_agent_subdepartment" yaml:"beneficiary_creditor_agent_subdepartment,omitempty"`
@@ -85,9 +84,8 @@ var BeneficiaryColumns = struct {
 	BeneficiaryCreditorAccountIdentification          string
 	BeneficiaryCreditorAccountSecondaryIdentification string
 	BeneficiaryCreditorAccountName                    string
-	BeneficiaryServicerSchemename                     string
-	BeneficiaryServicerIdentification                 string
 	Reference                                         string
+	BeneficiaryCreditorAgentName                      string
 	BeneficiaryCreditorAgentAddressType               string
 	BeneficiaryCreditorAgentDepartment                string
 	BeneficiaryCreditorAgentSubdepartment             string
@@ -126,9 +124,8 @@ var BeneficiaryColumns = struct {
 	BeneficiaryCreditorAccountIdentification:          "beneficiary_creditor_account_identification",
 	BeneficiaryCreditorAccountSecondaryIdentification: "beneficiary_creditor_account_secondary_identification",
 	BeneficiaryCreditorAccountName:                    "beneficiary_creditor_account_name",
-	BeneficiaryServicerSchemename:                     "beneficiary_servicer_schemename",
-	BeneficiaryServicerIdentification:                 "beneficiary_servicer_identification",
 	Reference:                                         "reference",
+	BeneficiaryCreditorAgentName:                      "beneficiary_creditor_agent_name",
 	BeneficiaryCreditorAgentAddressType:               "beneficiary_creditor_agent_address_type",
 	BeneficiaryCreditorAgentDepartment:                "beneficiary_creditor_agent_department",
 	BeneficiaryCreditorAgentSubdepartment:             "beneficiary_creditor_agent_subdepartment",
@@ -171,9 +168,8 @@ var BeneficiaryWhere = struct {
 	BeneficiaryCreditorAccountIdentification          whereHelperstring
 	BeneficiaryCreditorAccountSecondaryIdentification whereHelperstring
 	BeneficiaryCreditorAccountName                    whereHelperstring
-	BeneficiaryServicerSchemename                     whereHelpernull_String
-	BeneficiaryServicerIdentification                 whereHelpernull_String
 	Reference                                         whereHelpernull_String
+	BeneficiaryCreditorAgentName                      whereHelpernull_String
 	BeneficiaryCreditorAgentAddressType               whereHelpernull_String
 	BeneficiaryCreditorAgentDepartment                whereHelpernull_String
 	BeneficiaryCreditorAgentSubdepartment             whereHelpernull_String
@@ -212,9 +208,8 @@ var BeneficiaryWhere = struct {
 	BeneficiaryCreditorAccountIdentification:          whereHelperstring{field: `beneficiary_creditor_account_identification`},
 	BeneficiaryCreditorAccountSecondaryIdentification: whereHelperstring{field: `beneficiary_creditor_account_secondary_identification`},
 	BeneficiaryCreditorAccountName:                    whereHelperstring{field: `beneficiary_creditor_account_name`},
-	BeneficiaryServicerSchemename:                     whereHelpernull_String{field: `beneficiary_servicer_schemename`},
-	BeneficiaryServicerIdentification:                 whereHelpernull_String{field: `beneficiary_servicer_identification`},
 	Reference:                                         whereHelpernull_String{field: `reference`},
+	BeneficiaryCreditorAgentName:                      whereHelpernull_String{field: `beneficiary_creditor_agent_name`},
 	BeneficiaryCreditorAgentAddressType:               whereHelpernull_String{field: `beneficiary_creditor_agent_address_type`},
 	BeneficiaryCreditorAgentDepartment:                whereHelpernull_String{field: `beneficiary_creditor_agent_department`},
 	BeneficiaryCreditorAgentSubdepartment:             whereHelpernull_String{field: `beneficiary_creditor_agent_subdepartment`},
@@ -266,8 +261,8 @@ func (*beneficiaryR) NewStruct() *beneficiaryR {
 type beneficiaryL struct{}
 
 var (
-	beneficiaryColumns               = []string{"beneficiary_id", "debtor_account_id", "debtor_account_owner_id", "bank_id", "beneficiary_account_ref_id", "beneficiary_ref_id", "beneficiary_tran_reference", "beneficiary_bank_code", "beneficiary_bank_name", "beneficiary_creditor_agent_schemename", "beneficiary_creditor_agent_identification", "beneficiary_creditor_account_schemename", "beneficiary_creditor_account_identification", "beneficiary_creditor_account_secondary_identification", "beneficiary_creditor_account_name", "beneficiary_servicer_schemename", "beneficiary_servicer_identification", "reference", "beneficiary_creditor_agent_address_type", "beneficiary_creditor_agent_department", "beneficiary_creditor_agent_subdepartment", "beneficiary_creditor_agent_street_name", "beneficiary_creditor_agent_building_number", "beneficiary_creditor_agent_townname", "beneficiary_creditor_agent_addressline1", "beneficiary_creditor_agent_addressline2", "beneficiary_creditor_agent_addressline3", "beneficiary_creditor_agent_addressline4", "beneficiary_creditor_agent_addressline5", "beneficiary_creditor_agent_addressline6", "beneficiary_creditor_agent_addressline7", "beneficiary_creditor_agent_postcode", "beneficiary_creditor_agent_countrysubdivision", "beneficiary_creditor_agent_country", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	beneficiaryColumnsWithoutDefault = []string{"beneficiary_id", "debtor_account_id", "debtor_account_owner_id", "bank_id", "beneficiary_account_ref_id", "beneficiary_ref_id", "beneficiary_tran_reference", "beneficiary_bank_code", "beneficiary_bank_name", "beneficiary_creditor_agent_schemename", "beneficiary_creditor_agent_identification", "beneficiary_creditor_account_schemename", "beneficiary_creditor_account_identification", "beneficiary_creditor_account_secondary_identification", "beneficiary_creditor_account_name", "beneficiary_servicer_schemename", "beneficiary_servicer_identification", "reference", "beneficiary_creditor_agent_address_type", "beneficiary_creditor_agent_department", "beneficiary_creditor_agent_subdepartment", "beneficiary_creditor_agent_street_name", "beneficiary_creditor_agent_building_number", "beneficiary_creditor_agent_townname", "beneficiary_creditor_agent_addressline1", "beneficiary_creditor_agent_addressline2", "beneficiary_creditor_agent_addressline3", "beneficiary_creditor_agent_addressline4", "beneficiary_creditor_agent_addressline5", "beneficiary_creditor_agent_addressline6", "beneficiary_creditor_agent_addressline7", "beneficiary_creditor_agent_postcode", "beneficiary_creditor_agent_countrysubdivision", "beneficiary_creditor_agent_country", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	beneficiaryColumns               = []string{"beneficiary_id", "debtor_account_id", "debtor_account_owner_id", "bank_id", "beneficiary_account_ref_id", "beneficiary_ref_id", "beneficiary_tran_reference", "beneficiary_bank_code", "beneficiary_bank_name", "beneficiary_creditor_agent_schemename", "beneficiary_creditor_agent_identification", "beneficiary_creditor_account_schemename", "beneficiary_creditor_account_identification", "beneficiary_creditor_account_secondary_identification", "beneficiary_creditor_account_name", "reference", "beneficiary_creditor_agent_name", "beneficiary_creditor_agent_address_type", "beneficiary_creditor_agent_department", "beneficiary_creditor_agent_subdepartment", "beneficiary_creditor_agent_street_name", "beneficiary_creditor_agent_building_number", "beneficiary_creditor_agent_townname", "beneficiary_creditor_agent_addressline1", "beneficiary_creditor_agent_addressline2", "beneficiary_creditor_agent_addressline3", "beneficiary_creditor_agent_addressline4", "beneficiary_creditor_agent_addressline5", "beneficiary_creditor_agent_addressline6", "beneficiary_creditor_agent_addressline7", "beneficiary_creditor_agent_postcode", "beneficiary_creditor_agent_countrysubdivision", "beneficiary_creditor_agent_country", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	beneficiaryColumnsWithoutDefault = []string{"beneficiary_id", "debtor_account_id", "debtor_account_owner_id", "bank_id", "beneficiary_account_ref_id", "beneficiary_ref_id", "beneficiary_tran_reference", "beneficiary_bank_code", "beneficiary_bank_name", "beneficiary_creditor_agent_schemename", "beneficiary_creditor_agent_identification", "beneficiary_creditor_account_schemename", "beneficiary_creditor_account_identification", "beneficiary_creditor_account_secondary_identification", "beneficiary_creditor_account_name", "reference", "beneficiary_creditor_agent_name", "beneficiary_creditor_agent_address_type", "beneficiary_creditor_agent_department", "beneficiary_creditor_agent_subdepartment", "beneficiary_creditor_agent_street_name", "beneficiary_creditor_agent_building_number", "beneficiary_creditor_agent_townname", "beneficiary_creditor_agent_addressline1", "beneficiary_creditor_agent_addressline2", "beneficiary_creditor_agent_addressline3", "beneficiary_creditor_agent_addressline4", "beneficiary_creditor_agent_addressline5", "beneficiary_creditor_agent_addressline6", "beneficiary_creditor_agent_addressline7", "beneficiary_creditor_agent_postcode", "beneficiary_creditor_agent_countrysubdivision", "beneficiary_creditor_agent_country", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	beneficiaryColumnsWithDefault    = []string{}
 	beneficiaryPrimaryKeyColumns     = []string{"beneficiary_id"}
 )

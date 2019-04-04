@@ -43,13 +43,16 @@ type StandingOrder struct {
 	FinalPaymentCurrency                   null.String       `boil:"final_payment_currency" json:"final_payment_currency,omitempty" toml:"final_payment_currency" yaml:"final_payment_currency,omitempty"`
 	CreditorBankCode                       null.String       `boil:"creditor_bank_code" json:"creditor_bank_code,omitempty" toml:"creditor_bank_code" yaml:"creditor_bank_code,omitempty"`
 	CreditorBankName                       null.String       `boil:"creditor_bank_name" json:"creditor_bank_name,omitempty" toml:"creditor_bank_name" yaml:"creditor_bank_name,omitempty"`
-	ServicerSchemeName                     null.String       `boil:"servicer_scheme_name" json:"servicer_scheme_name,omitempty" toml:"servicer_scheme_name" yaml:"servicer_scheme_name,omitempty"`
-	ServicerIdentification                 null.String       `boil:"servicer_identification" json:"servicer_identification,omitempty" toml:"servicer_identification" yaml:"servicer_identification,omitempty"`
+	CreditorAgentSchemeName                null.String       `boil:"creditor_agent_scheme_name" json:"creditor_agent_scheme_name,omitempty" toml:"creditor_agent_scheme_name" yaml:"creditor_agent_scheme_name,omitempty"`
+	CreditorAgentIdentification            null.String       `boil:"creditor_agent_identification" json:"creditor_agent_identification,omitempty" toml:"creditor_agent_identification" yaml:"creditor_agent_identification,omitempty"`
 	CreditorAccountSchemeName              string            `boil:"creditor_account_scheme_name" json:"creditor_account_scheme_name" toml:"creditor_account_scheme_name" yaml:"creditor_account_scheme_name"`
 	CreditorAccountIdentification          string            `boil:"creditor_account_identification" json:"creditor_account_identification" toml:"creditor_account_identification" yaml:"creditor_account_identification"`
 	CreditorAccountName                    string            `boil:"creditor_account_name" json:"creditor_account_name" toml:"creditor_account_name" yaml:"creditor_account_name"`
 	CreditorAccountSecondaryIdentification string            `boil:"creditor_account_secondary_identification" json:"creditor_account_secondary_identification" toml:"creditor_account_secondary_identification" yaml:"creditor_account_secondary_identification"`
 	CreditorAccountID                      null.Int          `boil:"creditor_account_id" json:"creditor_account_id,omitempty" toml:"creditor_account_id" yaml:"creditor_account_id,omitempty"`
+	StatusCode                             null.String       `boil:"status_code" json:"status_code,omitempty" toml:"status_code" yaml:"status_code,omitempty"`
+	SupplementaryData                      null.String       `boil:"supplementary_data" json:"supplementary_data,omitempty" toml:"supplementary_data" yaml:"supplementary_data,omitempty"`
+	NumberOfPayments                       null.Int          `boil:"number_of_payments" json:"number_of_payments,omitempty" toml:"number_of_payments" yaml:"number_of_payments,omitempty"`
 	MakerDate                              time.Time         `boil:"maker_date" json:"maker_date" toml:"maker_date" yaml:"maker_date"`
 	CheckerDate                            null.Time         `boil:"checker_date" json:"checker_date,omitempty" toml:"checker_date" yaml:"checker_date,omitempty"`
 	MakerID                                int               `boil:"maker_id" json:"maker_id" toml:"maker_id" yaml:"maker_id"`
@@ -80,13 +83,16 @@ var StandingOrderColumns = struct {
 	FinalPaymentCurrency                   string
 	CreditorBankCode                       string
 	CreditorBankName                       string
-	ServicerSchemeName                     string
-	ServicerIdentification                 string
+	CreditorAgentSchemeName                string
+	CreditorAgentIdentification            string
 	CreditorAccountSchemeName              string
 	CreditorAccountIdentification          string
 	CreditorAccountName                    string
 	CreditorAccountSecondaryIdentification string
 	CreditorAccountID                      string
+	StatusCode                             string
+	SupplementaryData                      string
+	NumberOfPayments                       string
 	MakerDate                              string
 	CheckerDate                            string
 	MakerID                                string
@@ -112,13 +118,16 @@ var StandingOrderColumns = struct {
 	FinalPaymentCurrency:                   "final_payment_currency",
 	CreditorBankCode:                       "creditor_bank_code",
 	CreditorBankName:                       "creditor_bank_name",
-	ServicerSchemeName:                     "servicer_scheme_name",
-	ServicerIdentification:                 "servicer_identification",
+	CreditorAgentSchemeName:                "creditor_agent_scheme_name",
+	CreditorAgentIdentification:            "creditor_agent_identification",
 	CreditorAccountSchemeName:              "creditor_account_scheme_name",
 	CreditorAccountIdentification:          "creditor_account_identification",
 	CreditorAccountName:                    "creditor_account_name",
 	CreditorAccountSecondaryIdentification: "creditor_account_secondary_identification",
 	CreditorAccountID:                      "creditor_account_id",
+	StatusCode:                             "status_code",
+	SupplementaryData:                      "supplementary_data",
+	NumberOfPayments:                       "number_of_payments",
 	MakerDate:                              "maker_date",
 	CheckerDate:                            "checker_date",
 	MakerID:                                "maker_id",
@@ -148,13 +157,16 @@ var StandingOrderWhere = struct {
 	FinalPaymentCurrency                   whereHelpernull_String
 	CreditorBankCode                       whereHelpernull_String
 	CreditorBankName                       whereHelpernull_String
-	ServicerSchemeName                     whereHelpernull_String
-	ServicerIdentification                 whereHelpernull_String
+	CreditorAgentSchemeName                whereHelpernull_String
+	CreditorAgentIdentification            whereHelpernull_String
 	CreditorAccountSchemeName              whereHelperstring
 	CreditorAccountIdentification          whereHelperstring
 	CreditorAccountName                    whereHelperstring
 	CreditorAccountSecondaryIdentification whereHelperstring
 	CreditorAccountID                      whereHelpernull_Int
+	StatusCode                             whereHelpernull_String
+	SupplementaryData                      whereHelpernull_String
+	NumberOfPayments                       whereHelpernull_Int
 	MakerDate                              whereHelpertime_Time
 	CheckerDate                            whereHelpernull_Time
 	MakerID                                whereHelperint
@@ -180,13 +192,16 @@ var StandingOrderWhere = struct {
 	FinalPaymentCurrency:                   whereHelpernull_String{field: `final_payment_currency`},
 	CreditorBankCode:                       whereHelpernull_String{field: `creditor_bank_code`},
 	CreditorBankName:                       whereHelpernull_String{field: `creditor_bank_name`},
-	ServicerSchemeName:                     whereHelpernull_String{field: `servicer_scheme_name`},
-	ServicerIdentification:                 whereHelpernull_String{field: `servicer_identification`},
+	CreditorAgentSchemeName:                whereHelpernull_String{field: `creditor_agent_scheme_name`},
+	CreditorAgentIdentification:            whereHelpernull_String{field: `creditor_agent_identification`},
 	CreditorAccountSchemeName:              whereHelperstring{field: `creditor_account_scheme_name`},
 	CreditorAccountIdentification:          whereHelperstring{field: `creditor_account_identification`},
 	CreditorAccountName:                    whereHelperstring{field: `creditor_account_name`},
 	CreditorAccountSecondaryIdentification: whereHelperstring{field: `creditor_account_secondary_identification`},
 	CreditorAccountID:                      whereHelpernull_Int{field: `creditor_account_id`},
+	StatusCode:                             whereHelpernull_String{field: `status_code`},
+	SupplementaryData:                      whereHelpernull_String{field: `supplementary_data`},
+	NumberOfPayments:                       whereHelpernull_Int{field: `number_of_payments`},
 	MakerDate:                              whereHelpertime_Time{field: `maker_date`},
 	CheckerDate:                            whereHelpernull_Time{field: `checker_date`},
 	MakerID:                                whereHelperint{field: `maker_id`},
@@ -197,14 +212,17 @@ var StandingOrderWhere = struct {
 
 // StandingOrderRels is where relationship names are stored.
 var StandingOrderRels = struct {
-	Bank string
+	Bank          string
+	DebtorAccount string
 }{
-	Bank: "Bank",
+	Bank:          "Bank",
+	DebtorAccount: "DebtorAccount",
 }
 
 // standingOrderR is where relationships are stored.
 type standingOrderR struct {
-	Bank *Bank
+	Bank          *Bank
+	DebtorAccount *Account
 }
 
 // NewStruct creates a new relationship struct
@@ -216,8 +234,8 @@ func (*standingOrderR) NewStruct() *standingOrderR {
 type standingOrderL struct{}
 
 var (
-	standingOrderColumns               = []string{"standing_order_id", "debtor_account_id", "bank_id", "standing_order_account_ref_id", "standing_order_id_ref", "frequency", "reference", "first_payment_date_time", "first_payment_amount", "first_payment_currency", "next_payment_date_time", "next_payment_amount", "next_payment_currency", "final_payment_date_time", "final_payment_amount", "final_payment_currency", "creditor_bank_code", "creditor_bank_name", "servicer_scheme_name", "servicer_identification", "creditor_account_scheme_name", "creditor_account_identification", "creditor_account_name", "creditor_account_secondary_identification", "creditor_account_id", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	standingOrderColumnsWithoutDefault = []string{"standing_order_id", "debtor_account_id", "bank_id", "standing_order_account_ref_id", "standing_order_id_ref", "frequency", "reference", "first_payment_date_time", "first_payment_amount", "first_payment_currency", "next_payment_date_time", "next_payment_amount", "next_payment_currency", "final_payment_date_time", "final_payment_amount", "final_payment_currency", "creditor_bank_code", "creditor_bank_name", "servicer_scheme_name", "servicer_identification", "creditor_account_scheme_name", "creditor_account_identification", "creditor_account_name", "creditor_account_secondary_identification", "creditor_account_id", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	standingOrderColumns               = []string{"standing_order_id", "debtor_account_id", "bank_id", "standing_order_account_ref_id", "standing_order_id_ref", "frequency", "reference", "first_payment_date_time", "first_payment_amount", "first_payment_currency", "next_payment_date_time", "next_payment_amount", "next_payment_currency", "final_payment_date_time", "final_payment_amount", "final_payment_currency", "creditor_bank_code", "creditor_bank_name", "creditor_agent_scheme_name", "creditor_agent_identification", "creditor_account_scheme_name", "creditor_account_identification", "creditor_account_name", "creditor_account_secondary_identification", "creditor_account_id", "status_code", "supplementary_data", "number_of_payments", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	standingOrderColumnsWithoutDefault = []string{"standing_order_id", "debtor_account_id", "bank_id", "standing_order_account_ref_id", "standing_order_id_ref", "frequency", "reference", "first_payment_date_time", "first_payment_amount", "first_payment_currency", "next_payment_date_time", "next_payment_amount", "next_payment_currency", "final_payment_date_time", "final_payment_amount", "final_payment_currency", "creditor_bank_code", "creditor_bank_name", "creditor_agent_scheme_name", "creditor_agent_identification", "creditor_account_scheme_name", "creditor_account_identification", "creditor_account_name", "creditor_account_secondary_identification", "creditor_account_id", "status_code", "supplementary_data", "number_of_payments", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	standingOrderColumnsWithDefault    = []string{}
 	standingOrderPrimaryKeyColumns     = []string{"standing_order_id"}
 )
@@ -511,6 +529,20 @@ func (o *StandingOrder) Bank(mods ...qm.QueryMod) bankQuery {
 	return query
 }
 
+// DebtorAccount pointed to by the foreign key.
+func (o *StandingOrder) DebtorAccount(mods ...qm.QueryMod) accountQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("account_id=?", o.DebtorAccountID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := Accounts(queryMods...)
+	queries.SetFrom(query.Query, "`Account`")
+
+	return query
+}
+
 // LoadBank allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
 func (standingOrderL) LoadBank(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStandingOrder interface{}, mods queries.Applicator) error {
@@ -612,6 +644,107 @@ func (standingOrderL) LoadBank(ctx context.Context, e boil.ContextExecutor, sing
 	return nil
 }
 
+// LoadDebtorAccount allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (standingOrderL) LoadDebtorAccount(ctx context.Context, e boil.ContextExecutor, singular bool, maybeStandingOrder interface{}, mods queries.Applicator) error {
+	var slice []*StandingOrder
+	var object *StandingOrder
+
+	if singular {
+		object = maybeStandingOrder.(*StandingOrder)
+	} else {
+		slice = *maybeStandingOrder.(*[]*StandingOrder)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &standingOrderR{}
+		}
+		args = append(args, object.DebtorAccountID)
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &standingOrderR{}
+			}
+
+			for _, a := range args {
+				if a == obj.DebtorAccountID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.DebtorAccountID)
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`Account`), qm.WhereIn(`account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Account")
+	}
+
+	var resultSlice []*Account
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Account")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for Account")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Account")
+	}
+
+	if len(standingOrderAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.DebtorAccount = foreign
+		if foreign.R == nil {
+			foreign.R = &accountR{}
+		}
+		foreign.R.DebtorAccountStandingOrders = append(foreign.R.DebtorAccountStandingOrders, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.DebtorAccountID == foreign.AccountID {
+				local.R.DebtorAccount = foreign
+				if foreign.R == nil {
+					foreign.R = &accountR{}
+				}
+				foreign.R.DebtorAccountStandingOrders = append(foreign.R.DebtorAccountStandingOrders, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // SetBank of the standingOrder to the related item.
 // Sets o.R.Bank to related.
 // Adds o to related.R.BankStandingOrders.
@@ -654,6 +787,53 @@ func (o *StandingOrder) SetBank(ctx context.Context, exec boil.ContextExecutor, 
 		}
 	} else {
 		related.R.BankStandingOrders = append(related.R.BankStandingOrders, o)
+	}
+
+	return nil
+}
+
+// SetDebtorAccount of the standingOrder to the related item.
+// Sets o.R.DebtorAccount to related.
+// Adds o to related.R.DebtorAccountStandingOrders.
+func (o *StandingOrder) SetDebtorAccount(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Account) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE `StandingOrders` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"debtor_account_id"}),
+		strmangle.WhereClause("`", "`", 0, standingOrderPrimaryKeyColumns),
+	)
+	values := []interface{}{related.AccountID, o.StandingOrderID}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.DebtorAccountID = related.AccountID
+	if o.R == nil {
+		o.R = &standingOrderR{
+			DebtorAccount: related,
+		}
+	} else {
+		o.R.DebtorAccount = related
+	}
+
+	if related.R == nil {
+		related.R = &accountR{
+			DebtorAccountStandingOrders: StandingOrderSlice{o},
+		}
+	} else {
+		related.R.DebtorAccountStandingOrders = append(related.R.DebtorAccountStandingOrders, o)
 	}
 
 	return nil

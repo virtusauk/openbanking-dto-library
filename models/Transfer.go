@@ -441,7 +441,7 @@ func (o *Transfer) FromParty(mods ...qm.QueryMod) partyQuery {
 }
 
 // TransferMethodCode pointed to by the foreign key.
-func (o *Transfer) TransferMethodCode1(mods ...qm.QueryMod) transferMethodQuery {
+func (o *Transfer) TransferMethodCode(mods ...qm.QueryMod) transferMethodQuery {
 	queryMods := []qm.QueryMod{
 		qm.Where("transfer_method_code=?", o.TransferMethodCode),
 	}
