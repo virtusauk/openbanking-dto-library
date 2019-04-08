@@ -25,7 +25,7 @@ import (
 // TierBandSet is an object representing the database table.
 type TierBandSet struct {
 	TierBandSetID     int         `boil:"tier_band_set_id" json:"tier_band_set_id" toml:"tier_band_set_id" yaml:"tier_band_set_id"`
-	ProductID         null.Int    `boil:"product_id" json:"product_id,omitempty" toml:"product_id" yaml:"product_id,omitempty"`
+	ProductID         int         `boil:"product_id" json:"product_id" toml:"product_id" yaml:"product_id"`
 	TierBandMethod    null.String `boil:"tier_band_method" json:"tier_band_method,omitempty" toml:"tier_band_method" yaml:"tier_band_method,omitempty"`
 	CalculationMethod null.String `boil:"calculation_method" json:"calculation_method,omitempty" toml:"calculation_method" yaml:"calculation_method,omitempty"`
 	Destination       null.String `boil:"destination" json:"destination,omitempty" toml:"destination" yaml:"destination,omitempty"`
@@ -55,14 +55,14 @@ var TierBandSetColumns = struct {
 
 var TierBandSetWhere = struct {
 	TierBandSetID     whereHelperint
-	ProductID         whereHelpernull_Int
+	ProductID         whereHelperint
 	TierBandMethod    whereHelpernull_String
 	CalculationMethod whereHelpernull_String
 	Destination       whereHelpernull_String
 	Notes             whereHelpernull_String
 }{
 	TierBandSetID:     whereHelperint{field: `tier_band_set_id`},
-	ProductID:         whereHelpernull_Int{field: `product_id`},
+	ProductID:         whereHelperint{field: `product_id`},
 	TierBandMethod:    whereHelpernull_String{field: `tier_band_method`},
 	CalculationMethod: whereHelpernull_String{field: `calculation_method`},
 	Destination:       whereHelpernull_String{field: `destination`},
@@ -71,10 +71,17 @@ var TierBandSetWhere = struct {
 
 // TierBandSetRels is where relationship names are stored.
 var TierBandSetRels = struct {
-}{}
+	Product              string
+	TierBandSetTierBands string
+}{
+	Product:              "Product",
+	TierBandSetTierBands: "TierBandSetTierBands",
+}
 
 // tierBandSetR is where relationships are stored.
 type tierBandSetR struct {
+	Product              *Product
+	TierBandSetTierBands TierBandSlice
 }
 
 // NewStruct creates a new relationship struct
@@ -365,6 +372,337 @@ func (q tierBandSetQuery) Exists(ctx context.Context, exec boil.ContextExecutor)
 	}
 
 	return count > 0, nil
+}
+
+// Product pointed to by the foreign key.
+func (o *TierBandSet) Product(mods ...qm.QueryMod) productQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("product_id=?", o.ProductID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := Products(queryMods...)
+	queries.SetFrom(query.Query, "`Product`")
+
+	return query
+}
+
+// TierBandSetTierBands retrieves all the TierBand's TierBands with an executor via tier_band_set_id column.
+func (o *TierBandSet) TierBandSetTierBands(mods ...qm.QueryMod) tierBandQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`TierBand`.`tier_band_set_id`=?", o.TierBandSetID),
+	)
+
+	query := TierBands(queryMods...)
+	queries.SetFrom(query.Query, "`TierBand`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`TierBand`.*"})
+	}
+
+	return query
+}
+
+// LoadProduct allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (tierBandSetL) LoadProduct(ctx context.Context, e boil.ContextExecutor, singular bool, maybeTierBandSet interface{}, mods queries.Applicator) error {
+	var slice []*TierBandSet
+	var object *TierBandSet
+
+	if singular {
+		object = maybeTierBandSet.(*TierBandSet)
+	} else {
+		slice = *maybeTierBandSet.(*[]*TierBandSet)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &tierBandSetR{}
+		}
+		args = append(args, object.ProductID)
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &tierBandSetR{}
+			}
+
+			for _, a := range args {
+				if a == obj.ProductID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.ProductID)
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`Product`), qm.WhereIn(`product_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Product")
+	}
+
+	var resultSlice []*Product
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Product")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for Product")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Product")
+	}
+
+	if len(tierBandSetAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Product = foreign
+		if foreign.R == nil {
+			foreign.R = &productR{}
+		}
+		foreign.R.ProductTierBandSets = append(foreign.R.ProductTierBandSets, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.ProductID == foreign.ProductID {
+				local.R.Product = foreign
+				if foreign.R == nil {
+					foreign.R = &productR{}
+				}
+				foreign.R.ProductTierBandSets = append(foreign.R.ProductTierBandSets, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// LoadTierBandSetTierBands allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (tierBandSetL) LoadTierBandSetTierBands(ctx context.Context, e boil.ContextExecutor, singular bool, maybeTierBandSet interface{}, mods queries.Applicator) error {
+	var slice []*TierBandSet
+	var object *TierBandSet
+
+	if singular {
+		object = maybeTierBandSet.(*TierBandSet)
+	} else {
+		slice = *maybeTierBandSet.(*[]*TierBandSet)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &tierBandSetR{}
+		}
+		args = append(args, object.TierBandSetID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &tierBandSetR{}
+			}
+
+			for _, a := range args {
+				if a == obj.TierBandSetID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.TierBandSetID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`TierBand`), qm.WhereIn(`tier_band_set_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load TierBand")
+	}
+
+	var resultSlice []*TierBand
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice TierBand")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on TierBand")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for TierBand")
+	}
+
+	if len(tierBandAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.TierBandSetTierBands = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &tierBandR{}
+			}
+			foreign.R.TierBandSet = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.TierBandSetID == foreign.TierBandSetID {
+				local.R.TierBandSetTierBands = append(local.R.TierBandSetTierBands, foreign)
+				if foreign.R == nil {
+					foreign.R = &tierBandR{}
+				}
+				foreign.R.TierBandSet = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// SetProduct of the tierBandSet to the related item.
+// Sets o.R.Product to related.
+// Adds o to related.R.ProductTierBandSets.
+func (o *TierBandSet) SetProduct(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Product) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE `TierBandSet` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"product_id"}),
+		strmangle.WhereClause("`", "`", 0, tierBandSetPrimaryKeyColumns),
+	)
+	values := []interface{}{related.ProductID, o.TierBandSetID}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.ProductID = related.ProductID
+	if o.R == nil {
+		o.R = &tierBandSetR{
+			Product: related,
+		}
+	} else {
+		o.R.Product = related
+	}
+
+	if related.R == nil {
+		related.R = &productR{
+			ProductTierBandSets: TierBandSetSlice{o},
+		}
+	} else {
+		related.R.ProductTierBandSets = append(related.R.ProductTierBandSets, o)
+	}
+
+	return nil
+}
+
+// AddTierBandSetTierBands adds the given related objects to the existing relationships
+// of the TierBandSet, optionally inserting them as new records.
+// Appends related to o.R.TierBandSetTierBands.
+// Sets related.R.TierBandSet appropriately.
+func (o *TierBandSet) AddTierBandSetTierBands(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*TierBand) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.TierBandSetID = o.TierBandSetID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `TierBand` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"tier_band_set_id"}),
+				strmangle.WhereClause("`", "`", 0, tierBandPrimaryKeyColumns),
+			)
+			values := []interface{}{o.TierBandSetID, rel.TierbandID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.TierBandSetID = o.TierBandSetID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &tierBandSetR{
+			TierBandSetTierBands: related,
+		}
+	} else {
+		o.R.TierBandSetTierBands = append(o.R.TierBandSetTierBands, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &tierBandR{
+				TierBandSet: o,
+			}
+		} else {
+			rel.R.TierBandSet = o
+		}
+	}
+	return nil
 }
 
 // TierBandSets retrieves all the records using an executor.

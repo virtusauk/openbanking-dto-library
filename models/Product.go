@@ -320,10 +320,12 @@ var ProductRels = struct {
 	Bank                    string
 	ProductAccounts         string
 	ProductInterestProducts string
+	ProductTierBandSets     string
 }{
 	Bank:                    "Bank",
 	ProductAccounts:         "ProductAccounts",
 	ProductInterestProducts: "ProductInterestProducts",
+	ProductTierBandSets:     "ProductTierBandSets",
 }
 
 // productR is where relationships are stored.
@@ -331,6 +333,7 @@ type productR struct {
 	Bank                    *Bank
 	ProductAccounts         AccountSlice
 	ProductInterestProducts InterestProductSlice
+	ProductTierBandSets     TierBandSetSlice
 }
 
 // NewStruct creates a new relationship struct
@@ -679,6 +682,27 @@ func (o *Product) ProductInterestProducts(mods ...qm.QueryMod) interestProductQu
 	return query
 }
 
+// ProductTierBandSets retrieves all the TierBandSet's TierBandSets with an executor via product_id column.
+func (o *Product) ProductTierBandSets(mods ...qm.QueryMod) tierBandSetQuery {
+	var queryMods []qm.QueryMod
+	if len(mods) != 0 {
+		queryMods = append(queryMods, mods...)
+	}
+
+	queryMods = append(queryMods,
+		qm.Where("`TierBandSet`.`product_id`=?", o.ProductID),
+	)
+
+	query := TierBandSets(queryMods...)
+	queries.SetFrom(query.Query, "`TierBandSet`")
+
+	if len(queries.GetSelect(query.Query)) == 0 {
+		queries.SetSelect(query.Query, []string{"`TierBandSet`.*"})
+	}
+
+	return query
+}
+
 // LoadBank allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for an N-1 relationship.
 func (productL) LoadBank(ctx context.Context, e boil.ContextExecutor, singular bool, maybeProduct interface{}, mods queries.Applicator) error {
@@ -970,6 +994,101 @@ func (productL) LoadProductInterestProducts(ctx context.Context, e boil.ContextE
 	return nil
 }
 
+// LoadProductTierBandSets allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-M or N-M relationship.
+func (productL) LoadProductTierBandSets(ctx context.Context, e boil.ContextExecutor, singular bool, maybeProduct interface{}, mods queries.Applicator) error {
+	var slice []*Product
+	var object *Product
+
+	if singular {
+		object = maybeProduct.(*Product)
+	} else {
+		slice = *maybeProduct.(*[]*Product)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &productR{}
+		}
+		args = append(args, object.ProductID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &productR{}
+			}
+
+			for _, a := range args {
+				if a == obj.ProductID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.ProductID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`TierBandSet`), qm.WhereIn(`product_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load TierBandSet")
+	}
+
+	var resultSlice []*TierBandSet
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice TierBandSet")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results in eager load on TierBandSet")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for TierBandSet")
+	}
+
+	if len(tierBandSetAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+	if singular {
+		object.R.ProductTierBandSets = resultSlice
+		for _, foreign := range resultSlice {
+			if foreign.R == nil {
+				foreign.R = &tierBandSetR{}
+			}
+			foreign.R.Product = object
+		}
+		return nil
+	}
+
+	for _, foreign := range resultSlice {
+		for _, local := range slice {
+			if local.ProductID == foreign.ProductID {
+				local.R.ProductTierBandSets = append(local.R.ProductTierBandSets, foreign)
+				if foreign.R == nil {
+					foreign.R = &tierBandSetR{}
+				}
+				foreign.R.Product = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // SetBank of the product to the related item.
 // Sets o.R.Bank to related.
 // Adds o to related.R.BankProducts.
@@ -1190,6 +1309,59 @@ func (o *Product) RemoveProductInterestProducts(ctx context.Context, exec boil.C
 		}
 	}
 
+	return nil
+}
+
+// AddProductTierBandSets adds the given related objects to the existing relationships
+// of the Product, optionally inserting them as new records.
+// Appends related to o.R.ProductTierBandSets.
+// Sets related.R.Product appropriately.
+func (o *Product) AddProductTierBandSets(ctx context.Context, exec boil.ContextExecutor, insert bool, related ...*TierBandSet) error {
+	var err error
+	for _, rel := range related {
+		if insert {
+			rel.ProductID = o.ProductID
+			if err = rel.Insert(ctx, exec, boil.Infer()); err != nil {
+				return errors.Wrap(err, "failed to insert into foreign table")
+			}
+		} else {
+			updateQuery := fmt.Sprintf(
+				"UPDATE `TierBandSet` SET %s WHERE %s",
+				strmangle.SetParamNames("`", "`", 0, []string{"product_id"}),
+				strmangle.WhereClause("`", "`", 0, tierBandSetPrimaryKeyColumns),
+			)
+			values := []interface{}{o.ProductID, rel.TierBandSetID}
+
+			if boil.DebugMode {
+				fmt.Fprintln(boil.DebugWriter, updateQuery)
+				fmt.Fprintln(boil.DebugWriter, values)
+			}
+
+			if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+				return errors.Wrap(err, "failed to update foreign table")
+			}
+
+			rel.ProductID = o.ProductID
+		}
+	}
+
+	if o.R == nil {
+		o.R = &productR{
+			ProductTierBandSets: related,
+		}
+	} else {
+		o.R.ProductTierBandSets = append(o.R.ProductTierBandSets, related...)
+	}
+
+	for _, rel := range related {
+		if rel.R == nil {
+			rel.R = &tierBandSetR{
+				Product: o,
+			}
+		} else {
+			rel.R.Product = o
+		}
+	}
 	return nil
 }
 

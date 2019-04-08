@@ -5,6 +5,7 @@ package models
 
 var TableNames = struct {
 	Account                        string
+	AccountCreditLine              string
 	AccountLink                    string
 	AccountOwners                  string
 	AccountRequest                 string
@@ -137,6 +138,7 @@ var TableNames = struct {
 	TFTracer                       string
 	TFTrade                        string
 	TFTradeItem                    string
+	TierBand                       string
 	TierBandSet                    string
 	Trade                          string
 	Transaction                    string
@@ -148,6 +150,7 @@ var TableNames = struct {
 	UserLogin                      string
 }{
 	Account:                        "Account",
+	AccountCreditLine:              "AccountCreditLine",
 	AccountLink:                    "AccountLink",
 	AccountOwners:                  "AccountOwners",
 	AccountRequest:                 "AccountRequest",
@@ -280,6 +283,7 @@ var TableNames = struct {
 	TFTracer:                       "TFTracer",
 	TFTrade:                        "TFTrade",
 	TFTradeItem:                    "TFTradeItem",
+	TierBand:                       "TierBand",
 	TierBandSet:                    "TierBandSet",
 	Trade:                          "Trade",
 	Transaction:                    "Transaction",

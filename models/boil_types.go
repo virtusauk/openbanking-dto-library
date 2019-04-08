@@ -83,13 +83,14 @@ const (
 // Enum values for Account.credit_line_type
 const (
 	AccountCreditLineTypeAvailable  = "Available"
-	AccountCreditLineTypeCrrdit     = "crrdit"
+	AccountCreditLineTypeCredit     = "Credit"
 	AccountCreditLineTypePre_Agreed = "Pre_Agreed"
 	AccountCreditLineTypeEmergency  = "Emergency"
 	AccountCreditLineTypeTemporary  = "Temporary"
 	AccountCreditLineTypeNone       = "None"
 )
 
+// Enum values for AccountCreditLine.credit_line_type are not proper Go identifiers, cannot emit constants
 // Enum values for AccountOwners.scheme_name
 const (
 	AccountOwnersSchemeNameSortCodeAccountNumber = "SortCodeAccountNumber"
@@ -351,11 +352,14 @@ const (
 
 // Enum values for Address.address_type
 const (
-	AddressAddressTypeSortCodeAccountNumber = "SortCodeAccountNumber"
-	AddressAddressTypeIBAN                  = "IBAN"
-	AddressAddressTypeBBAN                  = "BBAN"
-	AddressAddressTypePAN                   = "PAN"
-	AddressAddressTypePAYM                  = "PAYM"
+	AddressAddressTypeBusiness       = "Business"
+	AddressAddressTypeCorrespondence = "Correspondence"
+	AddressAddressTypeDeliveryTo     = "DeliveryTo"
+	AddressAddressTypeMailTo         = "MailTo"
+	AddressAddressTypePOBox          = "POBox"
+	AddressAddressTypePostal         = "Postal"
+	AddressAddressTypeResidential    = "Residential"
+	AddressAddressTypeStatement      = "Statement"
 )
 
 // Enum values for Beneficiary.beneficiary_creditor_agent_schemename
@@ -1037,6 +1041,48 @@ const (
 	TFTradeTradeStatusMoneyReleasedByIssuingBank                   = "MoneyReleasedByIssuingBank"
 	TFTradeTradeStatusExcesMoneyReleasedByConfirmingBankToExporter = "ExcesMoneyReleasedByConfirmingBankToExporter"
 	TFTradeTradeStatusTradeConfirmedToBeClosed                     = "TradeConfirmedToBeClosed"
+)
+
+// Enum values for TierBand.calculation_frequency
+const (
+	TierBandCalculationFrequencyFQDY = "FQDY"
+	TierBandCalculationFrequencyFQHY = "FQHY"
+	TierBandCalculationFrequencyFQMY = "FQMY"
+	TierBandCalculationFrequencyFQOT = "FQOT"
+	TierBandCalculationFrequencyFQQY = "FQQY"
+	TierBandCalculationFrequencyFQSD = "FQSD"
+	TierBandCalculationFrequencyFQWD = "FQWD"
+	TierBandCalculationFrequencyFQYY = "FQYY"
+)
+
+// Enum values for TierBand.application_frequency
+const (
+	TierBandApplicationFrequencyFQDY = "FQDY"
+	TierBandApplicationFrequencyFQHY = "FQHY"
+	TierBandApplicationFrequencyFQMY = "FQMY"
+	TierBandApplicationFrequencyFQOT = "FQOT"
+	TierBandApplicationFrequencyFQQY = "FQQY"
+	TierBandApplicationFrequencyFQSD = "FQSD"
+	TierBandApplicationFrequencyFQWD = "FQWD"
+	TierBandApplicationFrequencyFQYY = "FQYY"
+)
+
+// Enum values for TierBand.deposit_interest_applied_coverage
+const (
+	TierBandDepositInterestAppliedCoverageINBA = "INBA"
+	TierBandDepositInterestAppliedCoverageIWAH = "IWAH"
+)
+
+// Enum values for TierBand.fixed_variable_interest_rate
+const (
+	TierBandFixedVariableInterestRateINFI = "INFI"
+	TierBandFixedVariableInterestRateINVA = "INVA"
+)
+
+// Enum values for TierBand.bank_interest_rate_type
+const (
+	TierBandBankInterestRateTypeINGR = "INGR"
+	TierBandBankInterestRateTypeINOT = "INOT"
 )
 
 // Enum values for TierBandSet.calculation_method
