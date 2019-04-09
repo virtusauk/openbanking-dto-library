@@ -135,10 +135,14 @@ var AccountCreditLineWhere = struct {
 
 // AccountCreditLineRels is where relationship names are stored.
 var AccountCreditLineRels = struct {
-}{}
+	Account string
+}{
+	Account: "Account",
+}
 
 // accountCreditLineR is where relationships are stored.
 type accountCreditLineR struct {
+	Account *Account
 }
 
 // NewStruct creates a new relationship struct
@@ -429,6 +433,203 @@ func (q accountCreditLineQuery) Exists(ctx context.Context, exec boil.ContextExe
 	}
 
 	return count > 0, nil
+}
+
+// Account pointed to by the foreign key.
+func (o *AccountCreditLine) Account(mods ...qm.QueryMod) accountQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("account_id=?", o.AccountID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := Accounts(queryMods...)
+	queries.SetFrom(query.Query, "`Account`")
+
+	return query
+}
+
+// LoadAccount allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for an N-1 relationship.
+func (accountCreditLineL) LoadAccount(ctx context.Context, e boil.ContextExecutor, singular bool, maybeAccountCreditLine interface{}, mods queries.Applicator) error {
+	var slice []*AccountCreditLine
+	var object *AccountCreditLine
+
+	if singular {
+		object = maybeAccountCreditLine.(*AccountCreditLine)
+	} else {
+		slice = *maybeAccountCreditLine.(*[]*AccountCreditLine)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &accountCreditLineR{}
+		}
+		if !queries.IsNil(object.AccountID) {
+			args = append(args, object.AccountID)
+		}
+
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &accountCreditLineR{}
+			}
+
+			for _, a := range args {
+				if queries.Equal(a, obj.AccountID) {
+					continue Outer
+				}
+			}
+
+			if !queries.IsNil(obj.AccountID) {
+				args = append(args, obj.AccountID)
+			}
+
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`Account`), qm.WhereIn(`account_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load Account")
+	}
+
+	var resultSlice []*Account
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice Account")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for Account")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for Account")
+	}
+
+	if len(accountCreditLineAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.Account = foreign
+		if foreign.R == nil {
+			foreign.R = &accountR{}
+		}
+		foreign.R.AccountAccountCreditLines = append(foreign.R.AccountAccountCreditLines, object)
+		return nil
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if queries.Equal(local.AccountID, foreign.AccountID) {
+				local.R.Account = foreign
+				if foreign.R == nil {
+					foreign.R = &accountR{}
+				}
+				foreign.R.AccountAccountCreditLines = append(foreign.R.AccountAccountCreditLines, local)
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
+// SetAccount of the accountCreditLine to the related item.
+// Sets o.R.Account to related.
+// Adds o to related.R.AccountAccountCreditLines.
+func (o *AccountCreditLine) SetAccount(ctx context.Context, exec boil.ContextExecutor, insert bool, related *Account) error {
+	var err error
+	if insert {
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	}
+
+	updateQuery := fmt.Sprintf(
+		"UPDATE `AccountCreditLine` SET %s WHERE %s",
+		strmangle.SetParamNames("`", "`", 0, []string{"account_id"}),
+		strmangle.WhereClause("`", "`", 0, accountCreditLinePrimaryKeyColumns),
+	)
+	values := []interface{}{related.AccountID, o.AccountCreditLineID}
+
+	if boil.DebugMode {
+		fmt.Fprintln(boil.DebugWriter, updateQuery)
+		fmt.Fprintln(boil.DebugWriter, values)
+	}
+
+	if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	queries.Assign(&o.AccountID, related.AccountID)
+	if o.R == nil {
+		o.R = &accountCreditLineR{
+			Account: related,
+		}
+	} else {
+		o.R.Account = related
+	}
+
+	if related.R == nil {
+		related.R = &accountR{
+			AccountAccountCreditLines: AccountCreditLineSlice{o},
+		}
+	} else {
+		related.R.AccountAccountCreditLines = append(related.R.AccountAccountCreditLines, o)
+	}
+
+	return nil
+}
+
+// RemoveAccount relationship.
+// Sets o.R.Account to nil.
+// Removes o from all passed in related items' relationships struct (Optional).
+func (o *AccountCreditLine) RemoveAccount(ctx context.Context, exec boil.ContextExecutor, related *Account) error {
+	var err error
+
+	queries.SetScanner(&o.AccountID, nil)
+	if _, err = o.Update(ctx, exec, boil.Whitelist("account_id")); err != nil {
+		return errors.Wrap(err, "failed to update local table")
+	}
+
+	o.R.Account = nil
+	if related == nil || related.R == nil {
+		return nil
+	}
+
+	for i, ri := range related.R.AccountAccountCreditLines {
+		if queries.Equal(o.AccountID, ri.AccountID) {
+			continue
+		}
+
+		ln := len(related.R.AccountAccountCreditLines)
+		if ln > 1 && i < ln-1 {
+			related.R.AccountAccountCreditLines[i] = related.R.AccountAccountCreditLines[ln-1]
+		}
+		related.R.AccountAccountCreditLines = related.R.AccountAccountCreditLines[:ln-1]
+		break
+	}
+	return nil
 }
 
 // AccountCreditLines retrieves all the records using an executor.
