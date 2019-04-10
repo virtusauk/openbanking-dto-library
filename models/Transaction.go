@@ -445,11 +445,13 @@ var TransactionRels = struct {
 	Account                      string
 	Bank                         string
 	CurrencyCode                 string
+	TransactionTransactionFxInfo string
 	TransactionJournalEntryLines string
 }{
 	Account:                      "Account",
 	Bank:                         "Bank",
 	CurrencyCode:                 "CurrencyCode",
+	TransactionTransactionFxInfo: "TransactionTransactionFxInfo",
 	TransactionJournalEntryLines: "TransactionJournalEntryLines",
 }
 
@@ -458,6 +460,7 @@ type transactionR struct {
 	Account                      *Account
 	Bank                         *Bank
 	CurrencyCode                 *CurrencyMaster
+	TransactionTransactionFxInfo *TransactionFxInfo
 	TransactionJournalEntryLines JournalEntryLineSlice
 }
 
@@ -793,6 +796,20 @@ func (o *Transaction) CurrencyCode1(mods ...qm.QueryMod) currencyMasterQuery {
 	return query
 }
 
+// TransactionTransactionFxInfo pointed to by the foreign key.
+func (o *Transaction) TransactionTransactionFxInfo(mods ...qm.QueryMod) transactionFxInfoQuery {
+	queryMods := []qm.QueryMod{
+		qm.Where("transaction_id=?", o.TransactionID),
+	}
+
+	queryMods = append(queryMods, mods...)
+
+	query := TransactionFxInfos(queryMods...)
+	queries.SetFrom(query.Query, "`TransactionFxInfo`")
+
+	return query
+}
+
 // TransactionJournalEntryLines retrieves all the JournalEntryLine's JournalEntryLines with an executor via transaction_id column.
 func (o *Transaction) TransactionJournalEntryLines(mods ...qm.QueryMod) journalEntryLineQuery {
 	var queryMods []qm.QueryMod
@@ -1121,6 +1138,104 @@ func (transactionL) LoadCurrencyCode(ctx context.Context, e boil.ContextExecutor
 	return nil
 }
 
+// LoadTransactionTransactionFxInfo allows an eager lookup of values, cached into the
+// loaded structs of the objects. This is for a 1-1 relationship.
+func (transactionL) LoadTransactionTransactionFxInfo(ctx context.Context, e boil.ContextExecutor, singular bool, maybeTransaction interface{}, mods queries.Applicator) error {
+	var slice []*Transaction
+	var object *Transaction
+
+	if singular {
+		object = maybeTransaction.(*Transaction)
+	} else {
+		slice = *maybeTransaction.(*[]*Transaction)
+	}
+
+	args := make([]interface{}, 0, 1)
+	if singular {
+		if object.R == nil {
+			object.R = &transactionR{}
+		}
+		args = append(args, object.TransactionID)
+	} else {
+	Outer:
+		for _, obj := range slice {
+			if obj.R == nil {
+				obj.R = &transactionR{}
+			}
+
+			for _, a := range args {
+				if a == obj.TransactionID {
+					continue Outer
+				}
+			}
+
+			args = append(args, obj.TransactionID)
+		}
+	}
+
+	if len(args) == 0 {
+		return nil
+	}
+
+	query := NewQuery(qm.From(`TransactionFxInfo`), qm.WhereIn(`transaction_id in ?`, args...))
+	if mods != nil {
+		mods.Apply(query)
+	}
+
+	results, err := query.QueryContext(ctx, e)
+	if err != nil {
+		return errors.Wrap(err, "failed to eager load TransactionFxInfo")
+	}
+
+	var resultSlice []*TransactionFxInfo
+	if err = queries.Bind(results, &resultSlice); err != nil {
+		return errors.Wrap(err, "failed to bind eager loaded slice TransactionFxInfo")
+	}
+
+	if err = results.Close(); err != nil {
+		return errors.Wrap(err, "failed to close results of eager load for TransactionFxInfo")
+	}
+	if err = results.Err(); err != nil {
+		return errors.Wrap(err, "error occurred during iteration of eager loaded relations for TransactionFxInfo")
+	}
+
+	if len(transactionAfterSelectHooks) != 0 {
+		for _, obj := range resultSlice {
+			if err := obj.doAfterSelectHooks(ctx, e); err != nil {
+				return err
+			}
+		}
+	}
+
+	if len(resultSlice) == 0 {
+		return nil
+	}
+
+	if singular {
+		foreign := resultSlice[0]
+		object.R.TransactionTransactionFxInfo = foreign
+		if foreign.R == nil {
+			foreign.R = &transactionFxInfoR{}
+		}
+		foreign.R.Transaction = object
+	}
+
+	for _, local := range slice {
+		for _, foreign := range resultSlice {
+			if local.TransactionID == foreign.TransactionID {
+				local.R.TransactionTransactionFxInfo = foreign
+				if foreign.R == nil {
+					foreign.R = &transactionFxInfoR{}
+				}
+				foreign.R.Transaction = local
+				break
+			}
+		}
+	}
+
+	return nil
+}
+
 // LoadTransactionJournalEntryLines allows an eager lookup of values, cached into the
 // loaded structs of the objects. This is for a 1-M or N-M relationship.
 func (transactionL) LoadTransactionJournalEntryLines(ctx context.Context, e boil.ContextExecutor, singular bool, maybeTransaction interface{}, mods queries.Applicator) error {
@@ -1384,6 +1499,57 @@ func (o *Transaction) RemoveCurrencyCode(ctx context.Context, exec boil.ContextE
 		}
 		related.R.CurrencyCodeTransactions = related.R.CurrencyCodeTransactions[:ln-1]
 		break
+	}
+	return nil
+}
+
+// SetTransactionTransactionFxInfo of the transaction to the related item.
+// Sets o.R.TransactionTransactionFxInfo to related.
+// Adds o to related.R.Transaction.
+func (o *Transaction) SetTransactionTransactionFxInfo(ctx context.Context, exec boil.ContextExecutor, insert bool, related *TransactionFxInfo) error {
+	var err error
+
+	if insert {
+		related.TransactionID = o.TransactionID
+
+		if err = related.Insert(ctx, exec, boil.Infer()); err != nil {
+			return errors.Wrap(err, "failed to insert into foreign table")
+		}
+	} else {
+		updateQuery := fmt.Sprintf(
+			"UPDATE `TransactionFxInfo` SET %s WHERE %s",
+			strmangle.SetParamNames("`", "`", 0, []string{"transaction_id"}),
+			strmangle.WhereClause("`", "`", 0, transactionFxInfoPrimaryKeyColumns),
+		)
+		values := []interface{}{o.TransactionID, related.TransactionFXInfoID}
+
+		if boil.DebugMode {
+			fmt.Fprintln(boil.DebugWriter, updateQuery)
+			fmt.Fprintln(boil.DebugWriter, values)
+		}
+
+		if _, err = exec.ExecContext(ctx, updateQuery, values...); err != nil {
+			return errors.Wrap(err, "failed to update foreign table")
+		}
+
+		related.TransactionID = o.TransactionID
+
+	}
+
+	if o.R == nil {
+		o.R = &transactionR{
+			TransactionTransactionFxInfo: related,
+		}
+	} else {
+		o.R.TransactionTransactionFxInfo = related
+	}
+
+	if related.R == nil {
+		related.R = &transactionFxInfoR{
+			Transaction: o,
+		}
+	} else {
+		related.R.Transaction = o
 	}
 	return nil
 }

@@ -142,6 +142,7 @@ var TableNames = struct {
 	TierBandSet                    string
 	Trade                          string
 	Transaction                    string
+	TransactionFxInfo              string
 	TransactionType                string
 	Transfer                       string
 	TransferAch                    string
@@ -287,6 +288,7 @@ var TableNames = struct {
 	TierBandSet:                    "TierBandSet",
 	Trade:                          "Trade",
 	Transaction:                    "Transaction",
+	TransactionFxInfo:              "TransactionFxInfo",
 	TransactionType:                "TransactionType",
 	Transfer:                       "Transfer",
 	TransferAch:                    "TransferAch",
