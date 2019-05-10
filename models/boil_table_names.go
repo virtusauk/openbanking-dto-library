@@ -12,6 +12,7 @@ var TableNames = struct {
 	AccountRequestHistory          string
 	AccountType                    string
 	Address                        string
+	Application                    string
 	AssetCondition                 string
 	Assets                         string
 	AssetsType                     string
@@ -158,6 +159,7 @@ var TableNames = struct {
 	AccountRequestHistory:          "AccountRequestHistory",
 	AccountType:                    "AccountType",
 	Address:                        "Address",
+	Application:                    "Application",
 	AssetCondition:                 "AssetCondition",
 	Assets:                         "Assets",
 	AssetsType:                     "AssetsType",

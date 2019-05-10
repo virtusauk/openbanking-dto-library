@@ -599,9 +599,9 @@ const (
 
 // Enum values for OBPPaymentConsent.authorization_status
 const (
-	OBPPaymentConsentAuthorizationStatusAuthorised               = "Authorised"
-	OBPPaymentConsentAuthorizationStatusAwaitingfutherAuthorised = "AwaitingfutherAuthorised"
-	OBPPaymentConsentAuthorizationStatusRejected                 = "Rejected"
+	OBPPaymentConsentAuthorizationStatusAuthorised                   = "Authorised"
+	OBPPaymentConsentAuthorizationStatusAwaitingFurtherAuthorisation = "AwaitingFurtherAuthorisation"
+	OBPPaymentConsentAuthorizationStatusRejected                     = "Rejected"
 )
 
 // Enum values for OBPPaymentConsent.authorisation_type
@@ -626,8 +626,28 @@ const (
 	PartiesPartyTypeSole     = "Sole"
 )
 
-// Enum values for Payment.local_instrument are not proper Go identifiers, cannot emit constants
-// Enum values for Payment.instruction_priority are not proper Go identifiers, cannot emit constants
+// Enum values for Payment.local_instrument
+const (
+	PaymentLocalInstrumentBACS                      = "BACS"
+	PaymentLocalInstrumentCHAPS                     = "CHAPS"
+	PaymentLocalInstrumentFPS                       = "FPS"
+	PaymentLocalInstrumentSWIFT                     = "SWIFT"
+	PaymentLocalInstrumentBalanceTransfer           = "BalanceTransfer"
+	PaymentLocalInstrumentMoneyTransfer             = "MoneyTransfer"
+	PaymentLocalInstrumentPaym                      = "Paym"
+	PaymentLocalInstrumentEuro1                     = "Euro1"
+	PaymentLocalInstrumentSEPACreditTransfer        = "SEPACreditTransfer"
+	PaymentLocalInstrumentSEPAInstantCreditTransfer = "SEPAInstantCreditTransfer"
+	PaymentLocalInstrumentLink                      = "Link"
+	PaymentLocalInstrumentTarget2                   = "Target2"
+)
+
+// Enum values for Payment.instruction_priority
+const (
+	PaymentInstructionPriorityNormal = "Normal"
+	PaymentInstructionPriorityUrgent = "Urgent"
+)
+
 // Enum values for Payment.debtor_account_schemename
 const (
 	PaymentDebtorAccountSchemenameSortCodeAccountNumber = "SortCodeAccountNumber"
@@ -648,11 +668,14 @@ const (
 
 // Enum values for Payment.creditor_address_type
 const (
-	PaymentCreditorAddressTypeSortCodeAccountNumber = "SortCodeAccountNumber"
-	PaymentCreditorAddressTypeIBAN                  = "IBAN"
-	PaymentCreditorAddressTypeBBAN                  = "BBAN"
-	PaymentCreditorAddressTypePAN                   = "PAN"
-	PaymentCreditorAddressTypePAYM                  = "PAYM"
+	PaymentCreditorAddressTypeBusiness       = "Business"
+	PaymentCreditorAddressTypeCorrespondence = "Correspondence"
+	PaymentCreditorAddressTypeDeliveryTo     = "DeliveryTo"
+	PaymentCreditorAddressTypeMailTo         = "MailTo"
+	PaymentCreditorAddressTypePOBox          = "POBox"
+	PaymentCreditorAddressTypePostal         = "Postal"
+	PaymentCreditorAddressTypeResidential    = "Residential"
+	PaymentCreditorAddressTypeStatement      = "Statement"
 )
 
 // Enum values for Payment.risk_payment_context_code
