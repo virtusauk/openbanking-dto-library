@@ -685,6 +685,7 @@ const (
 	PaymentRiskPaymentContextCodeEcommerceServices = "EcommerceServices"
 	PaymentRiskPaymentContextCodeOther             = "Other"
 	PaymentRiskPaymentContextCodePersonToPerson    = "PersonToPerson"
+	PaymentRiskPaymentContextCodePartyToParty      = "PartyToParty"
 )
 
 // Enum values for Payment.payment_setup_status
