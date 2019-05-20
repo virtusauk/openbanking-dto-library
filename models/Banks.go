@@ -26,6 +26,7 @@ import (
 type Bank struct {
 	BankID                 int         `boil:"bank_id" json:"bank_id" toml:"bank_id" yaml:"bank_id"`
 	BankRegNumber          string      `boil:"bank_reg_number" json:"bank_reg_number" toml:"bank_reg_number" yaml:"bank_reg_number"`
+	ObBankRegNumber        null.String `boil:"ob_bank_reg_number" json:"ob_bank_reg_number,omitempty" toml:"ob_bank_reg_number" yaml:"ob_bank_reg_number,omitempty"`
 	BankIdentificationCode string      `boil:"bank_identification_code" json:"bank_identification_code" toml:"bank_identification_code" yaml:"bank_identification_code"`
 	BankName               string      `boil:"bank_name" json:"bank_name" toml:"bank_name" yaml:"bank_name"`
 	Country                string      `boil:"country" json:"country" toml:"country" yaml:"country"`
@@ -44,6 +45,7 @@ type Bank struct {
 var BankColumns = struct {
 	BankID                 string
 	BankRegNumber          string
+	ObBankRegNumber        string
 	BankIdentificationCode string
 	BankName               string
 	Country                string
@@ -57,6 +59,7 @@ var BankColumns = struct {
 }{
 	BankID:                 "bank_id",
 	BankRegNumber:          "bank_reg_number",
+	ObBankRegNumber:        "ob_bank_reg_number",
 	BankIdentificationCode: "bank_identification_code",
 	BankName:               "bank_name",
 	Country:                "country",
@@ -74,6 +77,7 @@ var BankColumns = struct {
 var BankWhere = struct {
 	BankID                 whereHelperint
 	BankRegNumber          whereHelperstring
+	ObBankRegNumber        whereHelpernull_String
 	BankIdentificationCode whereHelperstring
 	BankName               whereHelperstring
 	Country                whereHelperstring
@@ -87,6 +91,7 @@ var BankWhere = struct {
 }{
 	BankID:                 whereHelperint{field: `bank_id`},
 	BankRegNumber:          whereHelperstring{field: `bank_reg_number`},
+	ObBankRegNumber:        whereHelpernull_String{field: `ob_bank_reg_number`},
 	BankIdentificationCode: whereHelperstring{field: `bank_identification_code`},
 	BankName:               whereHelperstring{field: `bank_name`},
 	Country:                whereHelperstring{field: `country`},
@@ -225,8 +230,8 @@ func (*bankR) NewStruct() *bankR {
 type bankL struct{}
 
 var (
-	bankColumns               = []string{"bank_id", "bank_reg_number", "bank_identification_code", "bank_name", "country", "registered_address", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	bankColumnsWithoutDefault = []string{"bank_reg_number", "bank_identification_code", "bank_name", "country", "registered_address", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	bankColumns               = []string{"bank_id", "bank_reg_number", "ob_bank_reg_number", "bank_identification_code", "bank_name", "country", "registered_address", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	bankColumnsWithoutDefault = []string{"bank_reg_number", "ob_bank_reg_number", "bank_identification_code", "bank_name", "country", "registered_address", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
 	bankColumnsWithDefault    = []string{"bank_id"}
 	bankPrimaryKeyColumns     = []string{"bank_id"}
 )

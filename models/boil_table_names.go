@@ -71,6 +71,7 @@ var TableNames = struct {
 	Notifications                  string
 	OBPFundConfirmationConsent     string
 	OBPPaymentConsent              string
+	OBHEADER                       string
 	Offer                          string
 	Organization                   string
 	OrganizationContacts           string
@@ -218,6 +219,7 @@ var TableNames = struct {
 	Notifications:                  "Notifications",
 	OBPFundConfirmationConsent:     "OBPFundConfirmationConsent",
 	OBPPaymentConsent:              "OBPPaymentConsent",
+	OBHEADER:                       "OB_HEADER",
 	Offer:                          "Offer",
 	Organization:                   "Organization",
 	OrganizationContacts:           "OrganizationContacts",
