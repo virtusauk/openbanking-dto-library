@@ -41,6 +41,7 @@ type ClientPayment struct {
 	ResContentType                 null.String `boil:"res_content_type" json:"res_content_type,omitempty" toml:"res_content_type" yaml:"res_content_type,omitempty"`
 	ResXFapiInteractionID          null.String `boil:"res_x_fapi_interaction_id" json:"res_x_fapi_interaction_id,omitempty" toml:"res_x_fapi_interaction_id" yaml:"res_x_fapi_interaction_id,omitempty"`
 	ResXJWSSignature               null.String `boil:"res_x_jws_signature" json:"res_x_jws_signature,omitempty" toml:"res_x_jws_signature" yaml:"res_x_jws_signature,omitempty"`
+	KeyExpirationDate              null.Time   `boil:"key_expiration_date" json:"key_expiration_date,omitempty" toml:"key_expiration_date" yaml:"key_expiration_date,omitempty"`
 
 	R *clientPaymentR `boil:"-" json:"-" toml:"-" yaml:"-"`
 	L clientPaymentL  `boil:"-" json:"-" toml:"-" yaml:"-"`
@@ -64,6 +65,7 @@ var ClientPaymentColumns = struct {
 	ResContentType                 string
 	ResXFapiInteractionID          string
 	ResXJWSSignature               string
+	KeyExpirationDate              string
 }{
 	ClientPaymentID:                "client_payment_id",
 	PaymentRefID:                   "payment_ref_id",
@@ -82,9 +84,33 @@ var ClientPaymentColumns = struct {
 	ResContentType:                 "res_content_type",
 	ResXFapiInteractionID:          "res_x_fapi_interaction_id",
 	ResXJWSSignature:               "res_x_jws_signature",
+	KeyExpirationDate:              "key_expiration_date",
 }
 
 // Generated where
+
+type whereHelpernull_Time struct{ field string }
+
+func (w whereHelpernull_Time) EQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, false, x)
+}
+func (w whereHelpernull_Time) NEQ(x null.Time) qm.QueryMod {
+	return qmhelper.WhereNullEQ(w.field, true, x)
+}
+func (w whereHelpernull_Time) IsNull() qm.QueryMod    { return qmhelper.WhereIsNull(w.field) }
+func (w whereHelpernull_Time) IsNotNull() qm.QueryMod { return qmhelper.WhereIsNotNull(w.field) }
+func (w whereHelpernull_Time) LT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LT, x)
+}
+func (w whereHelpernull_Time) LTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.LTE, x)
+}
+func (w whereHelpernull_Time) GT(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GT, x)
+}
+func (w whereHelpernull_Time) GTE(x null.Time) qm.QueryMod {
+	return qmhelper.Where(w.field, qmhelper.GTE, x)
+}
 
 var ClientPaymentWhere = struct {
 	ClientPaymentID                whereHelperint
@@ -104,6 +130,7 @@ var ClientPaymentWhere = struct {
 	ResContentType                 whereHelpernull_String
 	ResXFapiInteractionID          whereHelpernull_String
 	ResXJWSSignature               whereHelpernull_String
+	KeyExpirationDate              whereHelpernull_Time
 }{
 	ClientPaymentID:                whereHelperint{field: `client_payment_id`},
 	PaymentRefID:                   whereHelperstring{field: `payment_ref_id`},
@@ -122,6 +149,7 @@ var ClientPaymentWhere = struct {
 	ResContentType:                 whereHelpernull_String{field: `res_content_type`},
 	ResXFapiInteractionID:          whereHelpernull_String{field: `res_x_fapi_interaction_id`},
 	ResXJWSSignature:               whereHelpernull_String{field: `res_x_jws_signature`},
+	KeyExpirationDate:              whereHelpernull_Time{field: `key_expiration_date`},
 }
 
 // ClientPaymentRels is where relationship names are stored.
@@ -141,8 +169,8 @@ func (*clientPaymentR) NewStruct() *clientPaymentR {
 type clientPaymentL struct{}
 
 var (
-	clientPaymentColumns               = []string{"client_payment_id", "payment_ref_id", "payment_submission_id", "client_id", "req_accept", "req_authorization", "req_x_fapi_customer_ip_address", "req_x_fapi_customer_last_logged_time", "req_x_fapi_financial_id", "req_x_fapi_interaction_id", "req_x_idempotency_key", "req_x_jws_signature", "http_status", "response_status", "res_content_type", "res_x_fapi_interaction_id", "res_x_jws_signature"}
-	clientPaymentColumnsWithoutDefault = []string{"payment_ref_id", "payment_submission_id", "client_id", "req_accept", "req_authorization", "req_x_fapi_customer_ip_address", "req_x_fapi_customer_last_logged_time", "req_x_fapi_financial_id", "req_x_fapi_interaction_id", "req_x_idempotency_key", "req_x_jws_signature", "http_status", "response_status", "res_content_type", "res_x_fapi_interaction_id", "res_x_jws_signature"}
+	clientPaymentColumns               = []string{"client_payment_id", "payment_ref_id", "payment_submission_id", "client_id", "req_accept", "req_authorization", "req_x_fapi_customer_ip_address", "req_x_fapi_customer_last_logged_time", "req_x_fapi_financial_id", "req_x_fapi_interaction_id", "req_x_idempotency_key", "req_x_jws_signature", "http_status", "response_status", "res_content_type", "res_x_fapi_interaction_id", "res_x_jws_signature", "key_expiration_date"}
+	clientPaymentColumnsWithoutDefault = []string{"payment_ref_id", "payment_submission_id", "client_id", "req_accept", "req_authorization", "req_x_fapi_customer_ip_address", "req_x_fapi_customer_last_logged_time", "req_x_fapi_financial_id", "req_x_fapi_interaction_id", "req_x_idempotency_key", "req_x_jws_signature", "http_status", "response_status", "res_content_type", "res_x_fapi_interaction_id", "res_x_jws_signature", "key_expiration_date"}
 	clientPaymentColumnsWithDefault    = []string{"client_payment_id"}
 	clientPaymentPrimaryKeyColumns     = []string{"client_payment_id"}
 )

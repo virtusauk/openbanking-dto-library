@@ -22,10 +22,10 @@ import (
 	"github.com/volatiletech/sqlboiler/strmangle"
 )
 
-// ClientAccount is an object representing the database table.
-type ClientAccount struct {
-	ClientAccountID                int         `boil:"client_account_id" json:"client_account_id" toml:"client_account_id" yaml:"client_account_id"`
-	AccountRequestID               string      `boil:"account_request_id" json:"account_request_id" toml:"account_request_id" yaml:"account_request_id"`
+// ClientFund is an object representing the database table.
+type ClientFund struct {
+	ClientFundsID                  int         `boil:"client_funds_id" json:"client_funds_id" toml:"client_funds_id" yaml:"client_funds_id"`
+	FundsConsentID                 string      `boil:"funds_consent_id" json:"funds_consent_id" toml:"funds_consent_id" yaml:"funds_consent_id"`
 	ClientID                       string      `boil:"client_id" json:"client_id" toml:"client_id" yaml:"client_id"`
 	ClientName                     null.String `boil:"client_name" json:"client_name,omitempty" toml:"client_name" yaml:"client_name,omitempty"`
 	ReqAccept                      null.String `boil:"req_accept" json:"req_accept,omitempty" toml:"req_accept" yaml:"req_accept,omitempty"`
@@ -42,13 +42,13 @@ type ClientAccount struct {
 	ResXFapiInteractionID          null.String `boil:"res_x_fapi_interaction_id" json:"res_x_fapi_interaction_id,omitempty" toml:"res_x_fapi_interaction_id" yaml:"res_x_fapi_interaction_id,omitempty"`
 	ResXJWSSignature               null.String `boil:"res_x_jws_signature" json:"res_x_jws_signature,omitempty" toml:"res_x_jws_signature" yaml:"res_x_jws_signature,omitempty"`
 
-	R *clientAccountR `boil:"-" json:"-" toml:"-" yaml:"-"`
-	L clientAccountL  `boil:"-" json:"-" toml:"-" yaml:"-"`
+	R *clientFundR `boil:"-" json:"-" toml:"-" yaml:"-"`
+	L clientFundL  `boil:"-" json:"-" toml:"-" yaml:"-"`
 }
 
-var ClientAccountColumns = struct {
-	ClientAccountID                string
-	AccountRequestID               string
+var ClientFundColumns = struct {
+	ClientFundsID                  string
+	FundsConsentID                 string
 	ClientID                       string
 	ClientName                     string
 	ReqAccept                      string
@@ -65,8 +65,8 @@ var ClientAccountColumns = struct {
 	ResXFapiInteractionID          string
 	ResXJWSSignature               string
 }{
-	ClientAccountID:                "client_account_id",
-	AccountRequestID:               "account_request_id",
+	ClientFundsID:                  "client_funds_id",
+	FundsConsentID:                 "funds_consent_id",
 	ClientID:                       "client_id",
 	ClientName:                     "client_name",
 	ReqAccept:                      "req_accept",
@@ -86,18 +86,9 @@ var ClientAccountColumns = struct {
 
 // Generated where
 
-type whereHelperint struct{ field string }
-
-func (w whereHelperint) EQ(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.EQ, x) }
-func (w whereHelperint) NEQ(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.NEQ, x) }
-func (w whereHelperint) LT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.LT, x) }
-func (w whereHelperint) LTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.LTE, x) }
-func (w whereHelperint) GT(x int) qm.QueryMod  { return qmhelper.Where(w.field, qmhelper.GT, x) }
-func (w whereHelperint) GTE(x int) qm.QueryMod { return qmhelper.Where(w.field, qmhelper.GTE, x) }
-
-var ClientAccountWhere = struct {
-	ClientAccountID                whereHelperint
-	AccountRequestID               whereHelperstring
+var ClientFundWhere = struct {
+	ClientFundsID                  whereHelperint
+	FundsConsentID                 whereHelperstring
 	ClientID                       whereHelperstring
 	ClientName                     whereHelpernull_String
 	ReqAccept                      whereHelpernull_String
@@ -114,8 +105,8 @@ var ClientAccountWhere = struct {
 	ResXFapiInteractionID          whereHelpernull_String
 	ResXJWSSignature               whereHelpernull_String
 }{
-	ClientAccountID:                whereHelperint{field: `client_account_id`},
-	AccountRequestID:               whereHelperstring{field: `account_request_id`},
+	ClientFundsID:                  whereHelperint{field: `client_funds_id`},
+	FundsConsentID:                 whereHelperstring{field: `funds_consent_id`},
 	ClientID:                       whereHelperstring{field: `client_id`},
 	ClientName:                     whereHelpernull_String{field: `client_name`},
 	ReqAccept:                      whereHelpernull_String{field: `req_accept`},
@@ -133,52 +124,52 @@ var ClientAccountWhere = struct {
 	ResXJWSSignature:               whereHelpernull_String{field: `res_x_jws_signature`},
 }
 
-// ClientAccountRels is where relationship names are stored.
-var ClientAccountRels = struct {
+// ClientFundRels is where relationship names are stored.
+var ClientFundRels = struct {
 }{}
 
-// clientAccountR is where relationships are stored.
-type clientAccountR struct {
+// clientFundR is where relationships are stored.
+type clientFundR struct {
 }
 
 // NewStruct creates a new relationship struct
-func (*clientAccountR) NewStruct() *clientAccountR {
-	return &clientAccountR{}
+func (*clientFundR) NewStruct() *clientFundR {
+	return &clientFundR{}
 }
 
-// clientAccountL is where Load methods for each relationship are stored.
-type clientAccountL struct{}
+// clientFundL is where Load methods for each relationship are stored.
+type clientFundL struct{}
 
 var (
-	clientAccountColumns               = []string{"client_account_id", "account_request_id", "client_id", "client_name", "req_accept", "req_authorization", "req_x_fapi_customer_ip_address", "req_x_fapi_customer_last_logged_time", "req_x_fapi_financial_id", "req_x_fapi_interaction_id", "req_x_idempotency_key", "req_x_jws_signature", "http_status", "response_status", "res_content_type", "res_x_fapi_interaction_id", "res_x_jws_signature"}
-	clientAccountColumnsWithoutDefault = []string{"account_request_id", "client_id", "client_name", "req_accept", "req_authorization", "req_x_fapi_customer_ip_address", "req_x_fapi_customer_last_logged_time", "req_x_fapi_financial_id", "req_x_fapi_interaction_id", "req_x_idempotency_key", "req_x_jws_signature", "http_status", "response_status", "res_content_type", "res_x_fapi_interaction_id", "res_x_jws_signature"}
-	clientAccountColumnsWithDefault    = []string{"client_account_id"}
-	clientAccountPrimaryKeyColumns     = []string{"client_account_id"}
+	clientFundColumns               = []string{"client_funds_id", "funds_consent_id", "client_id", "client_name", "req_accept", "req_authorization", "req_x_fapi_customer_ip_address", "req_x_fapi_customer_last_logged_time", "req_x_fapi_financial_id", "req_x_fapi_interaction_id", "req_x_idempotency_key", "req_x_jws_signature", "http_status", "response_status", "res_content_type", "res_x_fapi_interaction_id", "res_x_jws_signature"}
+	clientFundColumnsWithoutDefault = []string{"funds_consent_id", "client_id", "client_name", "req_accept", "req_authorization", "req_x_fapi_customer_ip_address", "req_x_fapi_customer_last_logged_time", "req_x_fapi_financial_id", "req_x_fapi_interaction_id", "req_x_idempotency_key", "req_x_jws_signature", "http_status", "response_status", "res_content_type", "res_x_fapi_interaction_id", "res_x_jws_signature"}
+	clientFundColumnsWithDefault    = []string{"client_funds_id"}
+	clientFundPrimaryKeyColumns     = []string{"client_funds_id"}
 )
 
 type (
-	// ClientAccountSlice is an alias for a slice of pointers to ClientAccount.
-	// This should generally be used opposed to []ClientAccount.
-	ClientAccountSlice []*ClientAccount
-	// ClientAccountHook is the signature for custom ClientAccount hook methods
-	ClientAccountHook func(context.Context, boil.ContextExecutor, *ClientAccount) error
+	// ClientFundSlice is an alias for a slice of pointers to ClientFund.
+	// This should generally be used opposed to []ClientFund.
+	ClientFundSlice []*ClientFund
+	// ClientFundHook is the signature for custom ClientFund hook methods
+	ClientFundHook func(context.Context, boil.ContextExecutor, *ClientFund) error
 
-	clientAccountQuery struct {
+	clientFundQuery struct {
 		*queries.Query
 	}
 )
 
 // Cache for insert, update and upsert
 var (
-	clientAccountType                 = reflect.TypeOf(&ClientAccount{})
-	clientAccountMapping              = queries.MakeStructMapping(clientAccountType)
-	clientAccountPrimaryKeyMapping, _ = queries.BindMapping(clientAccountType, clientAccountMapping, clientAccountPrimaryKeyColumns)
-	clientAccountInsertCacheMut       sync.RWMutex
-	clientAccountInsertCache          = make(map[string]insertCache)
-	clientAccountUpdateCacheMut       sync.RWMutex
-	clientAccountUpdateCache          = make(map[string]updateCache)
-	clientAccountUpsertCacheMut       sync.RWMutex
-	clientAccountUpsertCache          = make(map[string]insertCache)
+	clientFundType                 = reflect.TypeOf(&ClientFund{})
+	clientFundMapping              = queries.MakeStructMapping(clientFundType)
+	clientFundPrimaryKeyMapping, _ = queries.BindMapping(clientFundType, clientFundMapping, clientFundPrimaryKeyColumns)
+	clientFundInsertCacheMut       sync.RWMutex
+	clientFundInsertCache          = make(map[string]insertCache)
+	clientFundUpdateCacheMut       sync.RWMutex
+	clientFundUpdateCache          = make(map[string]updateCache)
+	clientFundUpsertCacheMut       sync.RWMutex
+	clientFundUpsertCache          = make(map[string]insertCache)
 )
 
 var (
@@ -189,24 +180,24 @@ var (
 	_ = qmhelper.Where
 )
 
-var clientAccountBeforeInsertHooks []ClientAccountHook
-var clientAccountBeforeUpdateHooks []ClientAccountHook
-var clientAccountBeforeDeleteHooks []ClientAccountHook
-var clientAccountBeforeUpsertHooks []ClientAccountHook
+var clientFundBeforeInsertHooks []ClientFundHook
+var clientFundBeforeUpdateHooks []ClientFundHook
+var clientFundBeforeDeleteHooks []ClientFundHook
+var clientFundBeforeUpsertHooks []ClientFundHook
 
-var clientAccountAfterInsertHooks []ClientAccountHook
-var clientAccountAfterSelectHooks []ClientAccountHook
-var clientAccountAfterUpdateHooks []ClientAccountHook
-var clientAccountAfterDeleteHooks []ClientAccountHook
-var clientAccountAfterUpsertHooks []ClientAccountHook
+var clientFundAfterInsertHooks []ClientFundHook
+var clientFundAfterSelectHooks []ClientFundHook
+var clientFundAfterUpdateHooks []ClientFundHook
+var clientFundAfterDeleteHooks []ClientFundHook
+var clientFundAfterUpsertHooks []ClientFundHook
 
 // doBeforeInsertHooks executes all "before insert" hooks.
-func (o *ClientAccount) doBeforeInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doBeforeInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountBeforeInsertHooks {
+	for _, hook := range clientFundBeforeInsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -216,12 +207,12 @@ func (o *ClientAccount) doBeforeInsertHooks(ctx context.Context, exec boil.Conte
 }
 
 // doBeforeUpdateHooks executes all "before Update" hooks.
-func (o *ClientAccount) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doBeforeUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountBeforeUpdateHooks {
+	for _, hook := range clientFundBeforeUpdateHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -231,12 +222,12 @@ func (o *ClientAccount) doBeforeUpdateHooks(ctx context.Context, exec boil.Conte
 }
 
 // doBeforeDeleteHooks executes all "before Delete" hooks.
-func (o *ClientAccount) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doBeforeDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountBeforeDeleteHooks {
+	for _, hook := range clientFundBeforeDeleteHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -246,12 +237,12 @@ func (o *ClientAccount) doBeforeDeleteHooks(ctx context.Context, exec boil.Conte
 }
 
 // doBeforeUpsertHooks executes all "before Upsert" hooks.
-func (o *ClientAccount) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doBeforeUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountBeforeUpsertHooks {
+	for _, hook := range clientFundBeforeUpsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -261,12 +252,12 @@ func (o *ClientAccount) doBeforeUpsertHooks(ctx context.Context, exec boil.Conte
 }
 
 // doAfterInsertHooks executes all "after Insert" hooks.
-func (o *ClientAccount) doAfterInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doAfterInsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountAfterInsertHooks {
+	for _, hook := range clientFundAfterInsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -276,12 +267,12 @@ func (o *ClientAccount) doAfterInsertHooks(ctx context.Context, exec boil.Contex
 }
 
 // doAfterSelectHooks executes all "after Select" hooks.
-func (o *ClientAccount) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doAfterSelectHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountAfterSelectHooks {
+	for _, hook := range clientFundAfterSelectHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -291,12 +282,12 @@ func (o *ClientAccount) doAfterSelectHooks(ctx context.Context, exec boil.Contex
 }
 
 // doAfterUpdateHooks executes all "after Update" hooks.
-func (o *ClientAccount) doAfterUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doAfterUpdateHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountAfterUpdateHooks {
+	for _, hook := range clientFundAfterUpdateHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -306,12 +297,12 @@ func (o *ClientAccount) doAfterUpdateHooks(ctx context.Context, exec boil.Contex
 }
 
 // doAfterDeleteHooks executes all "after Delete" hooks.
-func (o *ClientAccount) doAfterDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doAfterDeleteHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountAfterDeleteHooks {
+	for _, hook := range clientFundAfterDeleteHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -321,12 +312,12 @@ func (o *ClientAccount) doAfterDeleteHooks(ctx context.Context, exec boil.Contex
 }
 
 // doAfterUpsertHooks executes all "after Upsert" hooks.
-func (o *ClientAccount) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
+func (o *ClientFund) doAfterUpsertHooks(ctx context.Context, exec boil.ContextExecutor) (err error) {
 	if boil.HooksAreSkipped(ctx) {
 		return nil
 	}
 
-	for _, hook := range clientAccountAfterUpsertHooks {
+	for _, hook := range clientFundAfterUpsertHooks {
 		if err := hook(ctx, exec, o); err != nil {
 			return err
 		}
@@ -335,33 +326,33 @@ func (o *ClientAccount) doAfterUpsertHooks(ctx context.Context, exec boil.Contex
 	return nil
 }
 
-// AddClientAccountHook registers your hook function for all future operations.
-func AddClientAccountHook(hookPoint boil.HookPoint, clientAccountHook ClientAccountHook) {
+// AddClientFundHook registers your hook function for all future operations.
+func AddClientFundHook(hookPoint boil.HookPoint, clientFundHook ClientFundHook) {
 	switch hookPoint {
 	case boil.BeforeInsertHook:
-		clientAccountBeforeInsertHooks = append(clientAccountBeforeInsertHooks, clientAccountHook)
+		clientFundBeforeInsertHooks = append(clientFundBeforeInsertHooks, clientFundHook)
 	case boil.BeforeUpdateHook:
-		clientAccountBeforeUpdateHooks = append(clientAccountBeforeUpdateHooks, clientAccountHook)
+		clientFundBeforeUpdateHooks = append(clientFundBeforeUpdateHooks, clientFundHook)
 	case boil.BeforeDeleteHook:
-		clientAccountBeforeDeleteHooks = append(clientAccountBeforeDeleteHooks, clientAccountHook)
+		clientFundBeforeDeleteHooks = append(clientFundBeforeDeleteHooks, clientFundHook)
 	case boil.BeforeUpsertHook:
-		clientAccountBeforeUpsertHooks = append(clientAccountBeforeUpsertHooks, clientAccountHook)
+		clientFundBeforeUpsertHooks = append(clientFundBeforeUpsertHooks, clientFundHook)
 	case boil.AfterInsertHook:
-		clientAccountAfterInsertHooks = append(clientAccountAfterInsertHooks, clientAccountHook)
+		clientFundAfterInsertHooks = append(clientFundAfterInsertHooks, clientFundHook)
 	case boil.AfterSelectHook:
-		clientAccountAfterSelectHooks = append(clientAccountAfterSelectHooks, clientAccountHook)
+		clientFundAfterSelectHooks = append(clientFundAfterSelectHooks, clientFundHook)
 	case boil.AfterUpdateHook:
-		clientAccountAfterUpdateHooks = append(clientAccountAfterUpdateHooks, clientAccountHook)
+		clientFundAfterUpdateHooks = append(clientFundAfterUpdateHooks, clientFundHook)
 	case boil.AfterDeleteHook:
-		clientAccountAfterDeleteHooks = append(clientAccountAfterDeleteHooks, clientAccountHook)
+		clientFundAfterDeleteHooks = append(clientFundAfterDeleteHooks, clientFundHook)
 	case boil.AfterUpsertHook:
-		clientAccountAfterUpsertHooks = append(clientAccountAfterUpsertHooks, clientAccountHook)
+		clientFundAfterUpsertHooks = append(clientFundAfterUpsertHooks, clientFundHook)
 	}
 }
 
-// One returns a single clientAccount record from the query.
-func (q clientAccountQuery) One(ctx context.Context, exec boil.ContextExecutor) (*ClientAccount, error) {
-	o := &ClientAccount{}
+// One returns a single clientFund record from the query.
+func (q clientFundQuery) One(ctx context.Context, exec boil.ContextExecutor) (*ClientFund, error) {
+	o := &ClientFund{}
 
 	queries.SetLimit(q.Query, 1)
 
@@ -370,7 +361,7 @@ func (q clientAccountQuery) One(ctx context.Context, exec boil.ContextExecutor) 
 		if errors.Cause(err) == sql.ErrNoRows {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "ClientAppModels: failed to execute a one query for ClientAccount")
+		return nil, errors.Wrap(err, "ClientAppModels: failed to execute a one query for ClientFunds")
 	}
 
 	if err := o.doAfterSelectHooks(ctx, exec); err != nil {
@@ -380,16 +371,16 @@ func (q clientAccountQuery) One(ctx context.Context, exec boil.ContextExecutor) 
 	return o, nil
 }
 
-// All returns all ClientAccount records from the query.
-func (q clientAccountQuery) All(ctx context.Context, exec boil.ContextExecutor) (ClientAccountSlice, error) {
-	var o []*ClientAccount
+// All returns all ClientFund records from the query.
+func (q clientFundQuery) All(ctx context.Context, exec boil.ContextExecutor) (ClientFundSlice, error) {
+	var o []*ClientFund
 
 	err := q.Bind(ctx, exec, &o)
 	if err != nil {
-		return nil, errors.Wrap(err, "ClientAppModels: failed to assign all query results to ClientAccount slice")
+		return nil, errors.Wrap(err, "ClientAppModels: failed to assign all query results to ClientFund slice")
 	}
 
-	if len(clientAccountAfterSelectHooks) != 0 {
+	if len(clientFundAfterSelectHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doAfterSelectHooks(ctx, exec); err != nil {
 				return o, err
@@ -400,8 +391,8 @@ func (q clientAccountQuery) All(ctx context.Context, exec boil.ContextExecutor) 
 	return o, nil
 }
 
-// Count returns the count of all ClientAccount records in the query.
-func (q clientAccountQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+// Count returns the count of all ClientFund records in the query.
+func (q clientFundQuery) Count(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	var count int64
 
 	queries.SetSelect(q.Query, nil)
@@ -409,14 +400,14 @@ func (q clientAccountQuery) Count(ctx context.Context, exec boil.ContextExecutor
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: failed to count ClientAccount rows")
+		return 0, errors.Wrap(err, "ClientAppModels: failed to count ClientFunds rows")
 	}
 
 	return count, nil
 }
 
 // Exists checks if the row exists in the table.
-func (q clientAccountQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
+func (q clientFundQuery) Exists(ctx context.Context, exec boil.ContextExecutor) (bool, error) {
 	var count int64
 
 	queries.SetSelect(q.Query, nil)
@@ -425,49 +416,49 @@ func (q clientAccountQuery) Exists(ctx context.Context, exec boil.ContextExecuto
 
 	err := q.Query.QueryRowContext(ctx, exec).Scan(&count)
 	if err != nil {
-		return false, errors.Wrap(err, "ClientAppModels: failed to check if ClientAccount exists")
+		return false, errors.Wrap(err, "ClientAppModels: failed to check if ClientFunds exists")
 	}
 
 	return count > 0, nil
 }
 
-// ClientAccounts retrieves all the records using an executor.
-func ClientAccounts(mods ...qm.QueryMod) clientAccountQuery {
-	mods = append(mods, qm.From("`ClientAccount`"))
-	return clientAccountQuery{NewQuery(mods...)}
+// ClientFunds retrieves all the records using an executor.
+func ClientFunds(mods ...qm.QueryMod) clientFundQuery {
+	mods = append(mods, qm.From("`ClientFunds`"))
+	return clientFundQuery{NewQuery(mods...)}
 }
 
-// FindClientAccount retrieves a single record by ID with an executor.
+// FindClientFund retrieves a single record by ID with an executor.
 // If selectCols is empty Find will return all columns.
-func FindClientAccount(ctx context.Context, exec boil.ContextExecutor, clientAccountID int, selectCols ...string) (*ClientAccount, error) {
-	clientAccountObj := &ClientAccount{}
+func FindClientFund(ctx context.Context, exec boil.ContextExecutor, clientFundsID int, selectCols ...string) (*ClientFund, error) {
+	clientFundObj := &ClientFund{}
 
 	sel := "*"
 	if len(selectCols) > 0 {
 		sel = strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, selectCols), ",")
 	}
 	query := fmt.Sprintf(
-		"select %s from `ClientAccount` where `client_account_id`=?", sel,
+		"select %s from `ClientFunds` where `client_funds_id`=?", sel,
 	)
 
-	q := queries.Raw(query, clientAccountID)
+	q := queries.Raw(query, clientFundsID)
 
-	err := q.Bind(ctx, exec, clientAccountObj)
+	err := q.Bind(ctx, exec, clientFundObj)
 	if err != nil {
 		if errors.Cause(err) == sql.ErrNoRows {
 			return nil, sql.ErrNoRows
 		}
-		return nil, errors.Wrap(err, "ClientAppModels: unable to select from ClientAccount")
+		return nil, errors.Wrap(err, "ClientAppModels: unable to select from ClientFunds")
 	}
 
-	return clientAccountObj, nil
+	return clientFundObj, nil
 }
 
 // Insert a single record using an executor.
 // See boil.Columns.InsertColumnSet documentation to understand column list inference for inserts.
-func (o *ClientAccount) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
+func (o *ClientFund) Insert(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) error {
 	if o == nil {
-		return errors.New("ClientAppModels: no ClientAccount provided for insertion")
+		return errors.New("ClientAppModels: no ClientFunds provided for insertion")
 	}
 
 	var err error
@@ -476,39 +467,39 @@ func (o *ClientAccount) Insert(ctx context.Context, exec boil.ContextExecutor, c
 		return err
 	}
 
-	nzDefaults := queries.NonZeroDefaultSet(clientAccountColumnsWithDefault, o)
+	nzDefaults := queries.NonZeroDefaultSet(clientFundColumnsWithDefault, o)
 
 	key := makeCacheKey(columns, nzDefaults)
-	clientAccountInsertCacheMut.RLock()
-	cache, cached := clientAccountInsertCache[key]
-	clientAccountInsertCacheMut.RUnlock()
+	clientFundInsertCacheMut.RLock()
+	cache, cached := clientFundInsertCache[key]
+	clientFundInsertCacheMut.RUnlock()
 
 	if !cached {
 		wl, returnColumns := columns.InsertColumnSet(
-			clientAccountColumns,
-			clientAccountColumnsWithDefault,
-			clientAccountColumnsWithoutDefault,
+			clientFundColumns,
+			clientFundColumnsWithDefault,
+			clientFundColumnsWithoutDefault,
 			nzDefaults,
 		)
 
-		cache.valueMapping, err = queries.BindMapping(clientAccountType, clientAccountMapping, wl)
+		cache.valueMapping, err = queries.BindMapping(clientFundType, clientFundMapping, wl)
 		if err != nil {
 			return err
 		}
-		cache.retMapping, err = queries.BindMapping(clientAccountType, clientAccountMapping, returnColumns)
+		cache.retMapping, err = queries.BindMapping(clientFundType, clientFundMapping, returnColumns)
 		if err != nil {
 			return err
 		}
 		if len(wl) != 0 {
-			cache.query = fmt.Sprintf("INSERT INTO `ClientAccount` (`%s`) %%sVALUES (%s)%%s", strings.Join(wl, "`,`"), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
+			cache.query = fmt.Sprintf("INSERT INTO `ClientFunds` (`%s`) %%sVALUES (%s)%%s", strings.Join(wl, "`,`"), strmangle.Placeholders(dialect.UseIndexPlaceholders, len(wl), 1, 1))
 		} else {
-			cache.query = "INSERT INTO `ClientAccount` () VALUES ()%s%s"
+			cache.query = "INSERT INTO `ClientFunds` () VALUES ()%s%s"
 		}
 
 		var queryOutput, queryReturning string
 
 		if len(cache.retMapping) != 0 {
-			cache.retQuery = fmt.Sprintf("SELECT `%s` FROM `ClientAccount` WHERE %s", strings.Join(returnColumns, "`,`"), strmangle.WhereClause("`", "`", 0, clientAccountPrimaryKeyColumns))
+			cache.retQuery = fmt.Sprintf("SELECT `%s` FROM `ClientFunds` WHERE %s", strings.Join(returnColumns, "`,`"), strmangle.WhereClause("`", "`", 0, clientFundPrimaryKeyColumns))
 		}
 
 		cache.query = fmt.Sprintf(cache.query, queryOutput, queryReturning)
@@ -525,7 +516,7 @@ func (o *ClientAccount) Insert(ctx context.Context, exec boil.ContextExecutor, c
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
 
 	if err != nil {
-		return errors.Wrap(err, "ClientAppModels: unable to insert into ClientAccount")
+		return errors.Wrap(err, "ClientAppModels: unable to insert into ClientFunds")
 	}
 
 	var lastID int64
@@ -540,13 +531,13 @@ func (o *ClientAccount) Insert(ctx context.Context, exec boil.ContextExecutor, c
 		return ErrSyncFail
 	}
 
-	o.ClientAccountID = int(lastID)
-	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == clientAccountMapping["ClientAccountID"] {
+	o.ClientFundsID = int(lastID)
+	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == clientFundMapping["ClientFundsID"] {
 		goto CacheNoHooks
 	}
 
 	identifierCols = []interface{}{
-		o.ClientAccountID,
+		o.ClientFundsID,
 	}
 
 	if boil.DebugMode {
@@ -556,50 +547,50 @@ func (o *ClientAccount) Insert(ctx context.Context, exec boil.ContextExecutor, c
 
 	err = exec.QueryRowContext(ctx, cache.retQuery, identifierCols...).Scan(queries.PtrsFromMapping(value, cache.retMapping)...)
 	if err != nil {
-		return errors.Wrap(err, "ClientAppModels: unable to populate default values for ClientAccount")
+		return errors.Wrap(err, "ClientAppModels: unable to populate default values for ClientFunds")
 	}
 
 CacheNoHooks:
 	if !cached {
-		clientAccountInsertCacheMut.Lock()
-		clientAccountInsertCache[key] = cache
-		clientAccountInsertCacheMut.Unlock()
+		clientFundInsertCacheMut.Lock()
+		clientFundInsertCache[key] = cache
+		clientFundInsertCacheMut.Unlock()
 	}
 
 	return o.doAfterInsertHooks(ctx, exec)
 }
 
-// Update uses an executor to update the ClientAccount.
+// Update uses an executor to update the ClientFund.
 // See boil.Columns.UpdateColumnSet documentation to understand column list inference for updates.
 // Update does not automatically update the record in case of default values. Use .Reload() to refresh the records.
-func (o *ClientAccount) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
+func (o *ClientFund) Update(ctx context.Context, exec boil.ContextExecutor, columns boil.Columns) (int64, error) {
 	var err error
 	if err = o.doBeforeUpdateHooks(ctx, exec); err != nil {
 		return 0, err
 	}
 	key := makeCacheKey(columns, nil)
-	clientAccountUpdateCacheMut.RLock()
-	cache, cached := clientAccountUpdateCache[key]
-	clientAccountUpdateCacheMut.RUnlock()
+	clientFundUpdateCacheMut.RLock()
+	cache, cached := clientFundUpdateCache[key]
+	clientFundUpdateCacheMut.RUnlock()
 
 	if !cached {
 		wl := columns.UpdateColumnSet(
-			clientAccountColumns,
-			clientAccountPrimaryKeyColumns,
+			clientFundColumns,
+			clientFundPrimaryKeyColumns,
 		)
 
 		if !columns.IsWhitelist() {
 			wl = strmangle.SetComplement(wl, []string{"created_at"})
 		}
 		if len(wl) == 0 {
-			return 0, errors.New("ClientAppModels: unable to update ClientAccount, could not build whitelist")
+			return 0, errors.New("ClientAppModels: unable to update ClientFunds, could not build whitelist")
 		}
 
-		cache.query = fmt.Sprintf("UPDATE `ClientAccount` SET %s WHERE %s",
+		cache.query = fmt.Sprintf("UPDATE `ClientFunds` SET %s WHERE %s",
 			strmangle.SetParamNames("`", "`", 0, wl),
-			strmangle.WhereClause("`", "`", 0, clientAccountPrimaryKeyColumns),
+			strmangle.WhereClause("`", "`", 0, clientFundPrimaryKeyColumns),
 		)
-		cache.valueMapping, err = queries.BindMapping(clientAccountType, clientAccountMapping, append(wl, clientAccountPrimaryKeyColumns...))
+		cache.valueMapping, err = queries.BindMapping(clientFundType, clientFundMapping, append(wl, clientFundPrimaryKeyColumns...))
 		if err != nil {
 			return 0, err
 		}
@@ -615,42 +606,42 @@ func (o *ClientAccount) Update(ctx context.Context, exec boil.ContextExecutor, c
 	var result sql.Result
 	result, err = exec.ExecContext(ctx, cache.query, values...)
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: unable to update ClientAccount row")
+		return 0, errors.Wrap(err, "ClientAppModels: unable to update ClientFunds row")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: failed to get rows affected by update for ClientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: failed to get rows affected by update for ClientFunds")
 	}
 
 	if !cached {
-		clientAccountUpdateCacheMut.Lock()
-		clientAccountUpdateCache[key] = cache
-		clientAccountUpdateCacheMut.Unlock()
+		clientFundUpdateCacheMut.Lock()
+		clientFundUpdateCache[key] = cache
+		clientFundUpdateCacheMut.Unlock()
 	}
 
 	return rowsAff, o.doAfterUpdateHooks(ctx, exec)
 }
 
 // UpdateAll updates all rows with the specified column values.
-func (q clientAccountQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
+func (q clientFundQuery) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	queries.SetUpdate(q.Query, cols)
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: unable to update all for ClientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: unable to update all for ClientFunds")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: unable to retrieve rows affected for ClientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: unable to retrieve rows affected for ClientFunds")
 	}
 
 	return rowsAff, nil
 }
 
 // UpdateAll updates all rows with the specified column values, using an executor.
-func (o ClientAccountSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
+func (o ClientFundSlice) UpdateAll(ctx context.Context, exec boil.ContextExecutor, cols M) (int64, error) {
 	ln := int64(len(o))
 	if ln == 0 {
 		return 0, nil
@@ -672,13 +663,13 @@ func (o ClientAccountSlice) UpdateAll(ctx context.Context, exec boil.ContextExec
 
 	// Append all of the primary key values for each column
 	for _, obj := range o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), clientAccountPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), clientFundPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := fmt.Sprintf("UPDATE `ClientAccount` SET %s WHERE %s",
+	sql := fmt.Sprintf("UPDATE `ClientFunds` SET %s WHERE %s",
 		strmangle.SetParamNames("`", "`", 0, colNames),
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 0, clientAccountPrimaryKeyColumns, len(o)))
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 0, clientFundPrimaryKeyColumns, len(o)))
 
 	if boil.DebugMode {
 		fmt.Fprintln(boil.DebugWriter, sql)
@@ -687,33 +678,33 @@ func (o ClientAccountSlice) UpdateAll(ctx context.Context, exec boil.ContextExec
 
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: unable to update all in clientAccount slice")
+		return 0, errors.Wrap(err, "ClientAppModels: unable to update all in clientFund slice")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: unable to retrieve rows affected all in update all clientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: unable to retrieve rows affected all in update all clientFund")
 	}
 	return rowsAff, nil
 }
 
-var mySQLClientAccountUniqueColumns = []string{
-	"client_account_id",
+var mySQLClientFundUniqueColumns = []string{
+	"client_funds_id",
 }
 
 // Upsert attempts an insert using an executor, and does an update or ignore on conflict.
 // See boil.Columns documentation for how to properly use updateColumns and insertColumns.
-func (o *ClientAccount) Upsert(ctx context.Context, exec boil.ContextExecutor, updateColumns, insertColumns boil.Columns) error {
+func (o *ClientFund) Upsert(ctx context.Context, exec boil.ContextExecutor, updateColumns, insertColumns boil.Columns) error {
 	if o == nil {
-		return errors.New("ClientAppModels: no ClientAccount provided for upsert")
+		return errors.New("ClientAppModels: no ClientFunds provided for upsert")
 	}
 
 	if err := o.doBeforeUpsertHooks(ctx, exec); err != nil {
 		return err
 	}
 
-	nzDefaults := queries.NonZeroDefaultSet(clientAccountColumnsWithDefault, o)
-	nzUniques := queries.NonZeroDefaultSet(mySQLClientAccountUniqueColumns, o)
+	nzDefaults := queries.NonZeroDefaultSet(clientFundColumnsWithDefault, o)
+	nzUniques := queries.NonZeroDefaultSet(mySQLClientFundUniqueColumns, o)
 
 	if len(nzUniques) == 0 {
 		return errors.New("cannot upsert with a table that cannot conflict on a unique column")
@@ -741,42 +732,42 @@ func (o *ClientAccount) Upsert(ctx context.Context, exec boil.ContextExecutor, u
 	key := buf.String()
 	strmangle.PutBuffer(buf)
 
-	clientAccountUpsertCacheMut.RLock()
-	cache, cached := clientAccountUpsertCache[key]
-	clientAccountUpsertCacheMut.RUnlock()
+	clientFundUpsertCacheMut.RLock()
+	cache, cached := clientFundUpsertCache[key]
+	clientFundUpsertCacheMut.RUnlock()
 
 	var err error
 
 	if !cached {
 		insert, ret := insertColumns.InsertColumnSet(
-			clientAccountColumns,
-			clientAccountColumnsWithDefault,
-			clientAccountColumnsWithoutDefault,
+			clientFundColumns,
+			clientFundColumnsWithDefault,
+			clientFundColumnsWithoutDefault,
 			nzDefaults,
 		)
 		update := updateColumns.UpdateColumnSet(
-			clientAccountColumns,
-			clientAccountPrimaryKeyColumns,
+			clientFundColumns,
+			clientFundPrimaryKeyColumns,
 		)
 
 		if len(update) == 0 {
-			return errors.New("ClientAppModels: unable to upsert ClientAccount, could not build update column list")
+			return errors.New("ClientAppModels: unable to upsert ClientFunds, could not build update column list")
 		}
 
 		ret = strmangle.SetComplement(ret, nzUniques)
-		cache.query = buildUpsertQueryMySQL(dialect, "ClientAccount", update, insert)
+		cache.query = buildUpsertQueryMySQL(dialect, "ClientFunds", update, insert)
 		cache.retQuery = fmt.Sprintf(
-			"SELECT %s FROM `ClientAccount` WHERE %s",
+			"SELECT %s FROM `ClientFunds` WHERE %s",
 			strings.Join(strmangle.IdentQuoteSlice(dialect.LQ, dialect.RQ, ret), ","),
 			strmangle.WhereClause("`", "`", 0, nzUniques),
 		)
 
-		cache.valueMapping, err = queries.BindMapping(clientAccountType, clientAccountMapping, insert)
+		cache.valueMapping, err = queries.BindMapping(clientFundType, clientFundMapping, insert)
 		if err != nil {
 			return err
 		}
 		if len(ret) != 0 {
-			cache.retMapping, err = queries.BindMapping(clientAccountType, clientAccountMapping, ret)
+			cache.retMapping, err = queries.BindMapping(clientFundType, clientFundMapping, ret)
 			if err != nil {
 				return err
 			}
@@ -798,7 +789,7 @@ func (o *ClientAccount) Upsert(ctx context.Context, exec boil.ContextExecutor, u
 	result, err := exec.ExecContext(ctx, cache.query, vals...)
 
 	if err != nil {
-		return errors.Wrap(err, "ClientAppModels: unable to upsert for ClientAccount")
+		return errors.Wrap(err, "ClientAppModels: unable to upsert for ClientFunds")
 	}
 
 	var lastID int64
@@ -814,14 +805,14 @@ func (o *ClientAccount) Upsert(ctx context.Context, exec boil.ContextExecutor, u
 		return ErrSyncFail
 	}
 
-	o.ClientAccountID = int(lastID)
-	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == clientAccountMapping["client_account_id"] {
+	o.ClientFundsID = int(lastID)
+	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == clientFundMapping["client_funds_id"] {
 		goto CacheNoHooks
 	}
 
-	uniqueMap, err = queries.BindMapping(clientAccountType, clientAccountMapping, nzUniques)
+	uniqueMap, err = queries.BindMapping(clientFundType, clientFundMapping, nzUniques)
 	if err != nil {
-		return errors.Wrap(err, "ClientAppModels: unable to retrieve unique values for ClientAccount")
+		return errors.Wrap(err, "ClientAppModels: unable to retrieve unique values for ClientFunds")
 	}
 	nzUniqueCols = queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), uniqueMap)
 
@@ -832,32 +823,32 @@ func (o *ClientAccount) Upsert(ctx context.Context, exec boil.ContextExecutor, u
 
 	err = exec.QueryRowContext(ctx, cache.retQuery, nzUniqueCols...).Scan(returns...)
 	if err != nil {
-		return errors.Wrap(err, "ClientAppModels: unable to populate default values for ClientAccount")
+		return errors.Wrap(err, "ClientAppModels: unable to populate default values for ClientFunds")
 	}
 
 CacheNoHooks:
 	if !cached {
-		clientAccountUpsertCacheMut.Lock()
-		clientAccountUpsertCache[key] = cache
-		clientAccountUpsertCacheMut.Unlock()
+		clientFundUpsertCacheMut.Lock()
+		clientFundUpsertCache[key] = cache
+		clientFundUpsertCacheMut.Unlock()
 	}
 
 	return o.doAfterUpsertHooks(ctx, exec)
 }
 
-// Delete deletes a single ClientAccount record with an executor.
+// Delete deletes a single ClientFund record with an executor.
 // Delete will match against the primary key column to find the record to delete.
-func (o *ClientAccount) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (o *ClientFund) Delete(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if o == nil {
-		return 0, errors.New("ClientAppModels: no ClientAccount provided for delete")
+		return 0, errors.New("ClientAppModels: no ClientFund provided for delete")
 	}
 
 	if err := o.doBeforeDeleteHooks(ctx, exec); err != nil {
 		return 0, err
 	}
 
-	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), clientAccountPrimaryKeyMapping)
-	sql := "DELETE FROM `ClientAccount` WHERE `client_account_id`=?"
+	args := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(o)), clientFundPrimaryKeyMapping)
+	sql := "DELETE FROM `ClientFunds` WHERE `client_funds_id`=?"
 
 	if boil.DebugMode {
 		fmt.Fprintln(boil.DebugWriter, sql)
@@ -866,12 +857,12 @@ func (o *ClientAccount) Delete(ctx context.Context, exec boil.ContextExecutor) (
 
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: unable to delete from ClientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: unable to delete from ClientFunds")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: failed to get rows affected by delete for ClientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: failed to get rows affected by delete for ClientFunds")
 	}
 
 	if err := o.doAfterDeleteHooks(ctx, exec); err != nil {
@@ -882,37 +873,37 @@ func (o *ClientAccount) Delete(ctx context.Context, exec boil.ContextExecutor) (
 }
 
 // DeleteAll deletes all matching rows.
-func (q clientAccountQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (q clientFundQuery) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if q.Query == nil {
-		return 0, errors.New("ClientAppModels: no clientAccountQuery provided for delete all")
+		return 0, errors.New("ClientAppModels: no clientFundQuery provided for delete all")
 	}
 
 	queries.SetDelete(q.Query)
 
 	result, err := q.Query.ExecContext(ctx, exec)
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: unable to delete all from ClientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: unable to delete all from ClientFunds")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: failed to get rows affected by deleteall for ClientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: failed to get rows affected by deleteall for ClientFunds")
 	}
 
 	return rowsAff, nil
 }
 
 // DeleteAll deletes all rows in the slice, using an executor.
-func (o ClientAccountSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
+func (o ClientFundSlice) DeleteAll(ctx context.Context, exec boil.ContextExecutor) (int64, error) {
 	if o == nil {
-		return 0, errors.New("ClientAppModels: no ClientAccount slice provided for delete all")
+		return 0, errors.New("ClientAppModels: no ClientFund slice provided for delete all")
 	}
 
 	if len(o) == 0 {
 		return 0, nil
 	}
 
-	if len(clientAccountBeforeDeleteHooks) != 0 {
+	if len(clientFundBeforeDeleteHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doBeforeDeleteHooks(ctx, exec); err != nil {
 				return 0, err
@@ -922,12 +913,12 @@ func (o ClientAccountSlice) DeleteAll(ctx context.Context, exec boil.ContextExec
 
 	var args []interface{}
 	for _, obj := range o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), clientAccountPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), clientFundPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "DELETE FROM `ClientAccount` WHERE " +
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 0, clientAccountPrimaryKeyColumns, len(o))
+	sql := "DELETE FROM `ClientFunds` WHERE " +
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 0, clientFundPrimaryKeyColumns, len(o))
 
 	if boil.DebugMode {
 		fmt.Fprintln(boil.DebugWriter, sql)
@@ -936,15 +927,15 @@ func (o ClientAccountSlice) DeleteAll(ctx context.Context, exec boil.ContextExec
 
 	result, err := exec.ExecContext(ctx, sql, args...)
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: unable to delete all from clientAccount slice")
+		return 0, errors.Wrap(err, "ClientAppModels: unable to delete all from clientFund slice")
 	}
 
 	rowsAff, err := result.RowsAffected()
 	if err != nil {
-		return 0, errors.Wrap(err, "ClientAppModels: failed to get rows affected by deleteall for ClientAccount")
+		return 0, errors.Wrap(err, "ClientAppModels: failed to get rows affected by deleteall for ClientFunds")
 	}
 
-	if len(clientAccountAfterDeleteHooks) != 0 {
+	if len(clientFundAfterDeleteHooks) != 0 {
 		for _, obj := range o {
 			if err := obj.doAfterDeleteHooks(ctx, exec); err != nil {
 				return 0, err
@@ -957,8 +948,8 @@ func (o ClientAccountSlice) DeleteAll(ctx context.Context, exec boil.ContextExec
 
 // Reload refetches the object from the database
 // using the primary keys with an executor.
-func (o *ClientAccount) Reload(ctx context.Context, exec boil.ContextExecutor) error {
-	ret, err := FindClientAccount(ctx, exec, o.ClientAccountID)
+func (o *ClientFund) Reload(ctx context.Context, exec boil.ContextExecutor) error {
+	ret, err := FindClientFund(ctx, exec, o.ClientFundsID)
 	if err != nil {
 		return err
 	}
@@ -969,26 +960,26 @@ func (o *ClientAccount) Reload(ctx context.Context, exec boil.ContextExecutor) e
 
 // ReloadAll refetches every row with matching primary key column values
 // and overwrites the original object slice with the newly updated slice.
-func (o *ClientAccountSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) error {
+func (o *ClientFundSlice) ReloadAll(ctx context.Context, exec boil.ContextExecutor) error {
 	if o == nil || len(*o) == 0 {
 		return nil
 	}
 
-	slice := ClientAccountSlice{}
+	slice := ClientFundSlice{}
 	var args []interface{}
 	for _, obj := range *o {
-		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), clientAccountPrimaryKeyMapping)
+		pkeyArgs := queries.ValuesFromMapping(reflect.Indirect(reflect.ValueOf(obj)), clientFundPrimaryKeyMapping)
 		args = append(args, pkeyArgs...)
 	}
 
-	sql := "SELECT `ClientAccount`.* FROM `ClientAccount` WHERE " +
-		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 0, clientAccountPrimaryKeyColumns, len(*o))
+	sql := "SELECT `ClientFunds`.* FROM `ClientFunds` WHERE " +
+		strmangle.WhereClauseRepeated(string(dialect.LQ), string(dialect.RQ), 0, clientFundPrimaryKeyColumns, len(*o))
 
 	q := queries.Raw(sql, args...)
 
 	err := q.Bind(ctx, exec, &slice)
 	if err != nil {
-		return errors.Wrap(err, "ClientAppModels: unable to reload all in ClientAccountSlice")
+		return errors.Wrap(err, "ClientAppModels: unable to reload all in ClientFundSlice")
 	}
 
 	*o = slice
@@ -996,21 +987,21 @@ func (o *ClientAccountSlice) ReloadAll(ctx context.Context, exec boil.ContextExe
 	return nil
 }
 
-// ClientAccountExists checks if the ClientAccount row exists.
-func ClientAccountExists(ctx context.Context, exec boil.ContextExecutor, clientAccountID int) (bool, error) {
+// ClientFundExists checks if the ClientFund row exists.
+func ClientFundExists(ctx context.Context, exec boil.ContextExecutor, clientFundsID int) (bool, error) {
 	var exists bool
-	sql := "select exists(select 1 from `ClientAccount` where `client_account_id`=? limit 1)"
+	sql := "select exists(select 1 from `ClientFunds` where `client_funds_id`=? limit 1)"
 
 	if boil.DebugMode {
 		fmt.Fprintln(boil.DebugWriter, sql)
-		fmt.Fprintln(boil.DebugWriter, clientAccountID)
+		fmt.Fprintln(boil.DebugWriter, clientFundsID)
 	}
 
-	row := exec.QueryRowContext(ctx, sql, clientAccountID)
+	row := exec.QueryRowContext(ctx, sql, clientFundsID)
 
 	err := row.Scan(&exists)
 	if err != nil {
-		return false, errors.Wrap(err, "ClientAppModels: unable to check if ClientAccount exists")
+		return false, errors.Wrap(err, "ClientAppModels: unable to check if ClientFunds exists")
 	}
 
 	return exists, nil

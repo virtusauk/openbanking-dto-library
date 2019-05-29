@@ -4,9 +4,13 @@
 package ClientAppModels
 
 var TableNames = struct {
+	Application   string
 	ClientAccount string
+	ClientFunds   string
 	ClientPayment string
 }{
+	Application:   "Application",
 	ClientAccount: "ClientAccount",
+	ClientFunds:   "ClientFunds",
 	ClientPayment: "ClientPayment",
 }
