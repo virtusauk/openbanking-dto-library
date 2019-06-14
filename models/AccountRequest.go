@@ -27,6 +27,8 @@ type AccountRequest struct {
 	AccountRequestID             int         `boil:"account_request_id" json:"account_request_id" toml:"account_request_id" yaml:"account_request_id"`
 	AccountIDRef                 string      `boil:"account_id_ref" json:"account_id_ref" toml:"account_id_ref" yaml:"account_id_ref"`
 	AccountRequestReference      string      `boil:"account_request_reference" json:"account_request_reference" toml:"account_request_reference" yaml:"account_request_reference"`
+	TokenJti                     null.String `boil:"token_jti" json:"token_jti,omitempty" toml:"token_jti" yaml:"token_jti,omitempty"`
+	TokenSub                     null.String `boil:"token_sub" json:"token_sub,omitempty" toml:"token_sub" yaml:"token_sub,omitempty"`
 	AccountID                    null.Int    `boil:"account_id" json:"account_id,omitempty" toml:"account_id" yaml:"account_id,omitempty"`
 	SchemeName                   string      `boil:"scheme_name" json:"scheme_name" toml:"scheme_name" yaml:"scheme_name"`
 	AccountIdentification        string      `boil:"account_identification" json:"account_identification" toml:"account_identification" yaml:"account_identification"`
@@ -77,6 +79,8 @@ var AccountRequestColumns = struct {
 	AccountRequestID             string
 	AccountIDRef                 string
 	AccountRequestReference      string
+	TokenJti                     string
+	TokenSub                     string
 	AccountID                    string
 	SchemeName                   string
 	AccountIdentification        string
@@ -122,6 +126,8 @@ var AccountRequestColumns = struct {
 	AccountRequestID:             "account_request_id",
 	AccountIDRef:                 "account_id_ref",
 	AccountRequestReference:      "account_request_reference",
+	TokenJti:                     "token_jti",
+	TokenSub:                     "token_sub",
 	AccountID:                    "account_id",
 	SchemeName:                   "scheme_name",
 	AccountIdentification:        "account_identification",
@@ -171,6 +177,8 @@ var AccountRequestWhere = struct {
 	AccountRequestID             whereHelperint
 	AccountIDRef                 whereHelperstring
 	AccountRequestReference      whereHelperstring
+	TokenJti                     whereHelpernull_String
+	TokenSub                     whereHelpernull_String
 	AccountID                    whereHelpernull_Int
 	SchemeName                   whereHelperstring
 	AccountIdentification        whereHelperstring
@@ -216,6 +224,8 @@ var AccountRequestWhere = struct {
 	AccountRequestID:             whereHelperint{field: `account_request_id`},
 	AccountIDRef:                 whereHelperstring{field: `account_id_ref`},
 	AccountRequestReference:      whereHelperstring{field: `account_request_reference`},
+	TokenJti:                     whereHelpernull_String{field: `token_jti`},
+	TokenSub:                     whereHelpernull_String{field: `token_sub`},
 	AccountID:                    whereHelpernull_Int{field: `account_id`},
 	SchemeName:                   whereHelperstring{field: `scheme_name`},
 	AccountIdentification:        whereHelperstring{field: `account_identification`},
@@ -280,9 +290,9 @@ func (*accountRequestR) NewStruct() *accountRequestR {
 type accountRequestL struct{}
 
 var (
-	accountRequestColumns               = []string{"account_request_id", "account_id_ref", "account_request_reference", "account_id", "scheme_name", "account_identification", "party_id", "bank_id", "name", "status", "read_accounts_basic", "read_accounts_detail", "read_balances", "read_beneficiaries_basic", "read_beneficiaries_detail", "read_direct_debits", "read_offers", "read_pan", "read_party", "read_party_psu", "read_products", "read_scheduled_payments_basic", "read_scheduled_payments_dfetail", "read_standing_orders_basic", "read_standing_orders_detail", "read_statements_basic", "read_statements_detail", "read_transactions_basic", "read_transactions_credits", "read_transactions_debits", "read_transactions_detail", "expiration_date_time", "transaction_from_date_time", "transaction_to_date_time", "consent_id", "creation_date_time", "status_update_date_time", "consent_risk", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	accountRequestColumnsWithoutDefault = []string{"account_id_ref", "account_request_reference", "account_id", "scheme_name", "account_identification", "party_id", "bank_id", "name", "status", "read_accounts_basic", "read_accounts_detail", "read_balances", "read_beneficiaries_basic", "read_beneficiaries_detail", "read_direct_debits", "read_offers", "read_pan", "read_party", "read_party_psu", "read_products", "read_scheduled_payments_basic", "read_scheduled_payments_dfetail", "read_standing_orders_basic", "read_standing_orders_detail", "read_statements_basic", "read_statements_detail", "read_transactions_basic", "read_transactions_credits", "read_transactions_debits", "read_transactions_detail", "expiration_date_time", "transaction_from_date_time", "transaction_to_date_time", "consent_id", "creation_date_time", "status_update_date_time", "consent_risk", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
-	accountRequestColumnsWithDefault    = []string{"account_request_id"}
+	accountRequestColumns               = []string{"account_request_id", "account_id_ref", "account_request_reference", "token_jti", "token_sub", "account_id", "scheme_name", "account_identification", "party_id", "bank_id", "name", "status", "read_accounts_basic", "read_accounts_detail", "read_balances", "read_beneficiaries_basic", "read_beneficiaries_detail", "read_direct_debits", "read_offers", "read_pan", "read_party", "read_party_psu", "read_products", "read_scheduled_payments_basic", "read_scheduled_payments_dfetail", "read_standing_orders_basic", "read_standing_orders_detail", "read_statements_basic", "read_statements_detail", "read_transactions_basic", "read_transactions_credits", "read_transactions_debits", "read_transactions_detail", "expiration_date_time", "transaction_from_date_time", "transaction_to_date_time", "consent_id", "creation_date_time", "status_update_date_time", "consent_risk", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	accountRequestColumnsWithoutDefault = []string{"account_request_id", "account_id_ref", "account_request_reference", "token_jti", "token_sub", "account_id", "scheme_name", "account_identification", "party_id", "bank_id", "name", "status", "read_accounts_basic", "read_accounts_detail", "read_balances", "read_beneficiaries_basic", "read_beneficiaries_detail", "read_direct_debits", "read_offers", "read_pan", "read_party", "read_party_psu", "read_products", "read_scheduled_payments_basic", "read_scheduled_payments_dfetail", "read_standing_orders_basic", "read_standing_orders_detail", "read_statements_basic", "read_statements_detail", "read_transactions_basic", "read_transactions_credits", "read_transactions_debits", "read_transactions_detail", "expiration_date_time", "transaction_from_date_time", "transaction_to_date_time", "consent_id", "creation_date_time", "status_update_date_time", "consent_risk", "maker_date", "checker_date", "maker_id", "checker_id", "modified_by", "modified_date"}
+	accountRequestColumnsWithDefault    = []string{}
 	accountRequestPrimaryKeyColumns     = []string{"account_request_id"}
 )
 
@@ -849,26 +859,15 @@ func (o *AccountRequest) Insert(ctx context.Context, exec boil.ContextExecutor, 
 		fmt.Fprintln(boil.DebugWriter, vals)
 	}
 
-	result, err := exec.ExecContext(ctx, cache.query, vals...)
+	_, err = exec.ExecContext(ctx, cache.query, vals...)
 
 	if err != nil {
 		return errors.Wrap(err, "models: unable to insert into AccountRequest")
 	}
 
-	var lastID int64
 	var identifierCols []interface{}
 
 	if len(cache.retMapping) == 0 {
-		goto CacheNoHooks
-	}
-
-	lastID, err = result.LastInsertId()
-	if err != nil {
-		return ErrSyncFail
-	}
-
-	o.AccountRequestID = int(lastID)
-	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == accountRequestMapping["AccountRequestID"] {
 		goto CacheNoHooks
 	}
 
@@ -1122,27 +1121,16 @@ func (o *AccountRequest) Upsert(ctx context.Context, exec boil.ContextExecutor, 
 		fmt.Fprintln(boil.DebugWriter, vals)
 	}
 
-	result, err := exec.ExecContext(ctx, cache.query, vals...)
+	_, err = exec.ExecContext(ctx, cache.query, vals...)
 
 	if err != nil {
 		return errors.Wrap(err, "models: unable to upsert for AccountRequest")
 	}
 
-	var lastID int64
 	var uniqueMap []uint64
 	var nzUniqueCols []interface{}
 
 	if len(cache.retMapping) == 0 {
-		goto CacheNoHooks
-	}
-
-	lastID, err = result.LastInsertId()
-	if err != nil {
-		return ErrSyncFail
-	}
-
-	o.AccountRequestID = int(lastID)
-	if lastID != 0 && len(cache.retMapping) == 1 && cache.retMapping[0] == accountRequestMapping["account_request_id"] {
 		goto CacheNoHooks
 	}
 
